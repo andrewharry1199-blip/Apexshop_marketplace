@@ -127,6 +127,209 @@
 </body>
 </html>
 
+<!-- APEXSHOP MARKETPLACE: Firebase seller features -->
+<section id="seller-area" style="padding:20px;max-width:700px;margin:auto;color:white;font-family:Arial,sans-serif">
+  <h2 style="color:#ff9d00">Seller Account</h2>
+  <p id="auth-status">Checking login...</p>
+
+  <div id="auth-form">
+    <input id="seller-email" type="email" placeholder="Email address"
+      autocomplete="email" style="padding:12px;width:100%;margin:6px 0">
+    <input id="seller-password" type="password" placeholder="Password (at least 6 characters)"
+      autocomplete="current-password" style="padding:12px;width:100%;margin:6px 0">
+    <button id="register-btn" class="btn" type="button">Register</button>
+    <button id="login-btn" class="btn" type="button">Log in</button>
+  </div>
+
+  <div id="seller-tools" hidden>
+    <button id="logout-btn" class="btn" type="button">Log out</button>
+    <h3>Post a Free Fire account</h3>
+    <form id="listing-form">
+      <input id="listing-title" required maxlength="80"
+        placeholder="Account title" style="padding:12px;width:100%;margin:6px 0">
+      <textarea id="listing-description" required maxlength="1000"
+        placeholder="Account details (never include passwords)"
+        style="padding:12px;width:100%;margin:6px 0"></textarea>
+      <input id="listing-price" type="number" required min="1" max="100000000"
+        step="1" placeholder="Price in naira (₦)"
+        style="padding:12px;width:100%;margin:6px 0">
+      <button class="btn" type="submit">Publish listing</button>
+    </form>
+  </div>
+
+  <p id="listing-message" role="status"></p>
+  <h2 style="color:#ff9d00">Marketplace Listings</h2>
+  <div id="firebase-listings">Loading listings...</div>
+</section>
+
+<script type="module">
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+  import {
+    getAuth, createUserWithEmailAndPassword,
+    signInWithEmailAndPassword, signOut, onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+  import {
+    getFirestore, collection, addDoc, getDocs,
+    query, orderBy, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+  // Replace these example values with your Firebase Web app config.
+  const firebaseConfig = {
+    apiKey: "PASTE_YOUR_API_KEY",
+    authDomain: "PASTE_YOUR_AUTH_DOMAIN",
+    projectId: "apexshop-marketplace",
+    storageBucket: "PASTE_YOUR_STORAGE_BUCKET",
+    messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
+    appId: "PASTE_YOUR_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const el = id => document.getElementById(id);
+  const status = el("auth-status");
+  const message = el("listing-message");
+  const authForm = el("auth-form");
+  const sellerTools = el("seller-tools");
+
+  function showError(error) {
+    const messages = {
+      "auth/email-already-in-use": "That email is already registered. Try logging in.",
+      "auth/invalid-email": "Enter a valid email address.",
+      "auth/weak-password": "Choose a stronger password with at least 6 characters.",
+      "auth/invalid-credential": "Email or password is incorrect.",
+      "auth/too-many-requests": "Too many attempts. Please try again later.",
+      "permission-denied": "Database permission denied. Check Firestore security rules."
+    };
+    message.textContent = messages[error.code] ||
+      "Something went wrong. Check your Firebase setup and try again.";
+  }
+
+  function credentials() {
+    return {
+      email: el("seller-email").value.trim(),
+      password: el("seller-password").value
+    };
+  }
+
+  el("register-btn").addEventListener("click", async () => {
+    try {
+      const { email, password } = credentials();
+      if (!email || password.length < 6) {
+        message.textContent = "Enter an email and password of at least 6 characters.";
+        return;
+      }
+      await createUserWithEmailAndPassword(auth, email, password);
+      message.textContent = "Registration successful!";
+    } catch (error) {
+      showError(error);
+    }
+  });
+
+  el("login-btn").addEventListener("click", async () => {
+    try {
+      const { email, password } = credentials();
+      await signInWithEmailAndPassword(auth, email, password);
+      message.textContent = "Login successful!";
+    } catch (error) {
+      showError(error);
+    }
+  });
+
+  el("logout-btn").addEventListener("click", async () => {
+    try {
+      await signOut(auth);
+      message.textContent = "You have logged out.";
+    } catch (error) {
+      showError(error);
+    }
+  });
+
+  onAuthStateChanged(auth, user => {
+    authForm.hidden = !!user;
+    sellerTools.hidden = !user;
+    status.textContent = user
+      ? "Logged in as " + user.email
+      : "Register or log in to publish an account.";
+  });
+
+  el("listing-form").addEventListener("submit", async event => {
+    event.preventDefault();
+    const user = auth.currentUser;
+    if (!user) {
+      message.textContent = "Please log in first.";
+      return;
+    }
+
+    const title = el("listing-title").value.trim();
+    const description = el("listing-description").value.trim();
+    const price = Number(el("listing-price").value);
+
+    if (!title || !description || !Number.isSafeInteger(price) ||
+        price < 1 || price > 100000000) {
+      message.textContent = "Check the title, description and whole-number price.";
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "listings"), {
+        title, description, price,
+        sellerId: user.uid,
+        createdAt: serverTimestamp()
+      });
+      el("listing-form").reset();
+      message.textContent = "Listing published successfully!";
+      await loadListings();
+    } catch (error) {
+      showError(error);
+    }
+  });
+
+  async function loadListings() {
+    const container = el("firebase-listings");
+    container.textContent = "Loading listings...";
+    try {
+      const result = await getDocs(
+        query(collection(db, "listings"), orderBy("createdAt", "desc"))
+      );
+      container.replaceChildren();
+
+      if (result.empty) {
+        container.textContent = "No seller listings yet.";
+        return;
+      }
+
+      result.forEach(docSnap => {
+        const data = docSnap.data();
+        const card = document.createElement("article");
+        card.style.cssText =
+          "background:#191925;padding:16px;margin:12px 0;border-radius:10px";
+
+        const heading = document.createElement("h3");
+        heading.style.color = "#ff9d00";
+        heading.textContent = data.title || "Free Fire account";
+
+        const details = document.createElement("p");
+        details.textContent = data.description || "";
+
+        const price = document.createElement("p");
+        price.textContent = "Price: ₦" +
+          (Number.isFinite(data.price) ? data.price.toLocaleString("en-NG") : "—");
+
+        card.append(heading, details, price);
+        container.append(card);
+      });
+    } catch (error) {
+      container.textContent =
+        "Could not load listings. Check Firestore security rules and database setup.";
+      console.error("Loading listings failed:", error.code);
+    }
+  }
+
+  loadListings();
+</script>
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBdIItgYib1ajyTYd_o4iXNgO4ZIlQLLyE",
