@@ -127,37 +127,30 @@
 </body>
 </html>
 
-<!-- APEXSHOP MARKETPLACE: Firebase seller features -->
-<section id="seller-area" style="padding:20px;max-width:700px;margin:auto;color:white;font-family:Arial,sans-serif">
+<!-- APEXSHOP MARKETPLACE: Seller features -->
+<section id="seller-area" style="padding:20px;max-width:700px;margin:auto;color:white;font-family:Arial,sans-serif;background:#10101a">
   <h2 style="color:#ff9d00">Seller Account</h2>
   <p id="auth-status">Checking login...</p>
+  <p id="listing-message" role="status"></p>
 
   <div id="auth-form">
-    <input id="seller-email" type="email" placeholder="Email address"
-      autocomplete="email" style="padding:12px;width:100%;margin:6px 0">
-    <input id="seller-password" type="password" placeholder="Password (at least 6 characters)"
-      autocomplete="current-password" style="padding:12px;width:100%;margin:6px 0">
-    <button id="register-btn" class="btn" type="button">Register</button>
-    <button id="login-btn" class="btn" type="button">Log in</button>
+    <input id="seller-email" type="email" placeholder="Email address" autocomplete="email" style="padding:12px;width:90%;margin:6px 0">
+    <input id="seller-password" type="password" placeholder="Password (at least 6 characters)" autocomplete="current-password" style="padding:12px;width:90%;margin:6px 0">
+    <button id="register-btn" type="button">Register</button>
+    <button id="login-btn" type="button">Log in</button>
   </div>
 
   <div id="seller-tools" hidden>
-    <button id="logout-btn" class="btn" type="button">Log out</button>
+    <button id="logout-btn" type="button">Log out</button>
     <h3>Post a Free Fire account</h3>
     <form id="listing-form">
-      <input id="listing-title" required maxlength="80"
-        placeholder="Account title" style="padding:12px;width:100%;margin:6px 0">
-      <textarea id="listing-description" required maxlength="1000"
-        placeholder="Account details (never include passwords)"
-        style="padding:12px;width:100%;margin:6px 0"></textarea>
-      <input id="listing-price" type="number" required min="1" max="100000000"
-        step="1" placeholder="Price in naira (₦)"
-        style="padding:12px;width:100%;margin:6px 0">
-      <button class="btn" type="submit">Publish listing</button>
+      <input id="listing-title" required maxlength="80" placeholder="Account title" style="padding:12px;width:90%;margin:6px 0">
+      <textarea id="listing-description" required maxlength="1000" placeholder="Account details (never include passwords)" style="padding:12px;width:90%;margin:6px 0"></textarea>
+      <input id="listing-price" type="number" required min="1" max="100000000" step="1" placeholder="Price in naira (₦)" style="padding:12px;width:90%;margin:6px 0">
+      <button type="submit">Publish listing</button>
     </form>
   </div>
 
-  <p id="listing-message" role="status"></p>
   <h2 style="color:#ff9d00">Marketplace Listings</h2>
   <div id="firebase-listings">Loading listings...</div>
 </section>
@@ -165,23 +158,34 @@
 <script type="module">
   import { initializeApp }
     from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
   import {
-    getAuth, createUserWithEmailAndPassword,
-    signInWithEmailAndPassword, signOut, onAuthStateChanged
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
   } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
   import {
-    getFirestore, collection, addDoc, getDocs,
-    query, orderBy, serverTimestamp
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    query,
+    orderBy,
+    serverTimestamp
   } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-  // Replace these example values with your Firebase Web app config.
+  // YOUR APEXSHOP FIREBASE CONFIGURATION
   const firebaseConfig = {
-    apiKey: "PASTE_YOUR_API_KEY",
-    authDomain: "PASTE_YOUR_AUTH_DOMAIN",
+    apiKey: "AIzaSyBdIItgYib1ajyTYd_o4iXNgO4ZIlQLLyE",
+    authDomain: "apexshop-marketplace.firebaseapp.com",
     projectId: "apexshop-marketplace",
-    storageBucket: "PASTE_YOUR_STORAGE_BUCKET",
-    messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
-    appId: "PASTE_YOUR_APP_ID"
+    storageBucket: "apexshop-marketplace.firebasestorage.app",
+    messagingSenderId: "181450232472",
+    appId: "1:181450232472:web:71e4ca2d1cb2f12f1cb6ed",
+    measurementId: "G-3MQ8Z40SF2"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -189,22 +193,19 @@
   const db = getFirestore(app);
 
   const el = id => document.getElementById(id);
-  const status = el("auth-status");
   const message = el("listing-message");
-  const authForm = el("auth-form");
-  const sellerTools = el("seller-tools");
 
   function showError(error) {
-    const messages = {
-      "auth/email-already-in-use": "That email is already registered. Try logging in.",
+    const errors = {
+      "auth/email-already-in-use": "This email is already registered. Please log in.",
       "auth/invalid-email": "Enter a valid email address.",
-      "auth/weak-password": "Choose a stronger password with at least 6 characters.",
+      "auth/weak-password": "Use a password with at least 6 characters.",
       "auth/invalid-credential": "Email or password is incorrect.",
-      "auth/too-many-requests": "Too many attempts. Please try again later.",
-      "permission-denied": "Database permission denied. Check Firestore security rules."
+      "auth/operation-not-allowed": "Enable Email/Password sign-in in Firebase Authentication.",
+      "permission-denied": "Firestore permission denied. Check your database rules."
     };
-    message.textContent = messages[error.code] ||
-      "Something went wrong. Check your Firebase setup and try again.";
+    message.textContent = errors[error.code] ||
+      "Something went wrong: " + (error.message || error.code);
   }
 
   function credentials() {
@@ -218,7 +219,7 @@
     try {
       const { email, password } = credentials();
       if (!email || password.length < 6) {
-        message.textContent = "Enter an email and password of at least 6 characters.";
+        message.textContent = "Enter an email and a password of at least 6 characters.";
         return;
       }
       await createUserWithEmailAndPassword(auth, email, password);
@@ -248,9 +249,9 @@
   });
 
   onAuthStateChanged(auth, user => {
-    authForm.hidden = !!user;
-    sellerTools.hidden = !user;
-    status.textContent = user
+    el("auth-form").hidden = !!user;
+    el("seller-tools").hidden = !user;
+    el("auth-status").textContent = user
       ? "Logged in as " + user.email
       : "Register or log in to publish an account.";
   });
@@ -275,7 +276,9 @@
 
     try {
       await addDoc(collection(db, "listings"), {
-        title, description, price,
+        title,
+        description,
+        price,
         sellerId: user.uid,
         createdAt: serverTimestamp()
       });
@@ -290,10 +293,12 @@
   async function loadListings() {
     const container = el("firebase-listings");
     container.textContent = "Loading listings...";
+
     try {
       const result = await getDocs(
         query(collection(db, "listings"), orderBy("createdAt", "desc"))
       );
+
       container.replaceChildren();
 
       if (result.empty) {
@@ -316,26 +321,22 @@
 
         const price = document.createElement("p");
         price.textContent = "Price: ₦" +
-          (Number.isFinite(data.price) ? data.price.toLocaleString("en-NG") : "—");
+          (Number.isFinite(data.price)
+            ? data.price.toLocaleString("en-NG")
+            : "—");
 
         card.append(heading, details, price);
         container.append(card);
       });
     } catch (error) {
       container.textContent =
-        "Could not load listings. Check Firestore security rules and database setup.";
-      console.error("Loading listings failed:", error.code);
+        "Could not load listings. Check Firestore rules and database setup.";
+      console.error("Loading listings failed:", error.code, error.message);
     }
   }
 
   loadListings();
 </script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBdIItgYib1ajyTYd_o4iXNgO4ZIlQLLyE",
-  authDomain: "apexshop-marketplace.firebaseapp.com",
-  projectId: "apexshop-marketplace",
-  storageBucket: "apexshop-marketplace.firebasestorage.app",
-  messagingSenderId: "181450232472",
-  appId: "1:181450232472:web:71e4ca2d1cb2f12f1cb6ed",
-  measurementId: "G-3MQ8Z40SF2"
-};
+
+  
+
