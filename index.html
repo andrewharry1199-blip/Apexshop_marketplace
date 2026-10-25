@@ -332,3 +332,202 @@
       publishButton.disabled = false;
     }
   });
+
+  async function loadListings() {
+    const container = $("firebase-listings");
+    container.replaceChildren();
+
+    const loading = document.createElement("p");
+    loading.className = "sub";
+    loading.textContent = "Loading listings...";
+    container.append(loading);
+
+    try {
+      const result = await getDocs(
+        query(collection(db, "listings"), orderBy("createdAt", "desc"))
+      );
+
+      container.replaceChildren();
+
+      if (result.empty) {
+        const empty = document.createElement("p");
+        empty.className = "sub";
+        empty.textContent = "No seller listings yet.";
+        container.append(empty);
+        return;
+      }
+
+      result.forEach(snapshot => {
+        const data = snapshot.data();
+        const card = document.createElement("article");
+        card.className = "card";
+
+        const imageUrls = Array.isArray(data.imageUrls)
+          ? data.imageUrls
+          : (data.imageUrl ? [data.imageUrl] : []);
+
+        if (imageUrls.length) {
+          const image = document.createElement("img");
+          image.className = "account-image";
+          image.src = imageUrls[0];
+          image.alt = "Account listing picture";
+          image.loading = "lazy";
+          card.append(image);
+        } else {
+          const placeholder = document.createElement("div");
+          placeholder.className = "image-placeholder";
+          placeholder.textContent = "Account picture not provided";
+          card.append(placeholder);
+        }
+
+        const body = document.createElement("div");
+        body.className = "card-body";
+
+        const heading = document.createElement("h3");
+        heading.textContent = data.title || "Free Fire account";
+
+        const badge = document.createElement("span");
+        badge.className = "badge" +
+          (data.verified === true ? " verified" : "");
+        badge.textContent = data.verified === true
+          ? "✓ Verified seller"
+          : "Seller not verified";
+
+        const details = document.createElement("p");
+        details.textContent = data.description || "";
+
+        const price = document.createElement("div");
+        price.className = "price";
+        price.textContent = Number.isFinite(data.price)
+          ? "₦" + data.price.toLocaleString("en-NG")
+          : "Contact seller";
+
+        body.append(heading, badge, details, price);
+
+        const contact = document.createElement("a");
+        contact.className = "btn";
+
+        if (
+          typeof data.sellerWhatsapp === "string" &&
+          /^\d{10,15}$/.test(data.sellerWhatsapp)
+        ) {
+          contact.textContent = "Contact Seller on WhatsApp";
+          contact.href = "https://wa.me/" + data.sellerWhatsapp;
+        } else {
+          contact.textContent = "View Seller Channel";
+          contact.href = "https://t.me/apexshop90";
+        }
+
+        contact.target = "_blank";
+        contact.rel = "noopener";
+        body.append(contact);
+        card.append(body);
+        container.append(card);
+      });
+
+      filterAccounts();
+    } catch (error) {
+      container.replaceChildren();
+
+      const err = document.createElement("p");
+      err.className = "sub";
+      err.textContent =
+        "Could not load listings. Check Firestore rules and database setup.";
+      container.append(err);
+
+      console.error("Loading listings failed:", error.code, error.message);
+    }
+  }
+
+  async function loadAdminSellers() {
+    const container = $("admin-sellers");
+    container.textContent = "Loading seller list...";
+
+    try {
+      const result = await getDocs(collection(db, "listings"));
+      container.replaceChildren();
+
+      const sellers = new Map();
+
+      result.forEach(snapshot => {
+        const data = snapshot.data();
+
+        if (data.sellerId) {
+          const previous = sellers.get(data.sellerId) || {
+            uid: data.sellerId,
+            email: data.sellerEmail || "Email not available",
+            verified: data.verified === true
+          };
+
+          if (data.verified === true) {
+            previous.verified = true;
+          }
+
+          sellers.set(data.sellerId, previous);
+        }
+      });
+
+      if (!sellers.size) {
+        container.textContent = "No sellers with listings yet.";
+        return;
+      }
+
+      for (const seller of sellers.values()) {
+        const row = document.createElement("div");
+        row.style.cssText =
+          "padding:12px 0;border-bottom:1px solid #30303d";
+
+        const label = document.createElement("p");
+        label.textContent = `${seller.email} — ${
+          seller.verified ? "Verified" : "Not verified"
+        }`;
+
+        const button = document.createElement("button");
+        button.className = "btn";
+        button.textContent = seller.verified
+          ? "Unverify seller"
+          : "Verify seller";
+
+        button.addEventListener("click", async () => {
+          button.disabled = true;
+
+          try {
+            const listingSnaps = await getDocs(collection(db, "listings"));
+            const updates = listingSnaps.docs.filter(
+              item => item.data().sellerId === seller.uid
+            );
+
+            for (const item of updates) {
+              await updateDoc(doc(db, "listings", item.id), {
+                verified: !seller.verified
+              });
+            }
+
+            $("admin-message").textContent =
+              "Seller verification updated.";
+
+            await loadAdminSellers();
+            await loadListings();
+          } catch (error) {
+            $("admin-message").textContent =
+              "Could not update verification. Check Firestore security rules.";
+            console.error(error);
+          } finally {
+            button.disabled = false;
+          }
+        });
+
+        row.append(label, button);
+        container.append(row);
+      }
+    } catch (error) {
+      container.textContent =
+        "Could not load sellers. Admin access or Firestore rules may not be configured yet.";
+      console.error(error);
+    }
+  }
+
+  loadListings();
+</script>
+</body>
+</html>
