@@ -459,12 +459,13 @@
           <input
             id="listing-image"
             type="file"
-            accept="image/*"
+            accept="image/jpeg,image/png,image/webp,image/gif"
             multiple
           >
 
           <p class="notice">
-            Picture uploads require Firebase Storage to be enabled.
+            Pictures are uploaded securely over HTTPS using Cloudinary.
+            Only select images you are allowed to share.
           </p>
 
           <button class="btn" id="publish-btn" type="submit">
@@ -564,12 +565,10 @@
     serverTimestamp
   } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-  import {
-    getStorage,
-    ref,
-    uploadBytes,
-    getDownloadURL
-  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
+  // Cloudinary configuration.
+  // An unsigned upload preset is required.
+  const CLOUDINARY_CLOUD_NAME = "web8mltk";
+  const CLOUDINARY_UPLOAD_PRESET = "apexshop_uploads";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBdIItgYib1ajyTYd_o4iXNgO4ZIlQLLyE",
@@ -586,7 +585,6 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
-  const storage = getStorage(app);
 
   let currentUser = null;
   let isAdmin = false;
@@ -609,9 +607,7 @@
       "permission-denied":
         "Firebase permission denied. Check your Firestore rules.",
       "storage/unauthorized":
-        "Image upload blocked. Check Firebase Storage rules.",
-      "storage/bucket-not-found":
-        "Firebase Storage is not set up for this project."
+        "This is an old Firebase Storage error. Check the Cloudinary upload settings instead."
     };
 
     $("listing-message").textContent =
@@ -739,6 +735,49 @@
     }
   });
 
+  // Upload one image directly to Cloudinary.
+  async function uploadImageToCloudinary(file) {
+    const endpoint =
+      "https://api.cloudinary.com/v1_1/" +
+      CLOUDINARY_CLOUD_NAME +
+      "/image/upload";
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      body: formData
+    });
+
+    let result;
+
+    try {
+      result = await response.json();
+    } catch {
+      throw new Error("Cloudinary returned an unreadable response.");
+    }
+
+    if (!response.ok) {
+      console.error("Cloudinary upload error:", result);
+
+      const cloudinaryMessage =
+        result?.error?.message || "Unknown upload error";
+
+      throw new Error(
+        "Cloudinary upload failed: " + cloudinaryMessage +
+        ". Check the cloud name and that the preset is Unsigned."
+      );
+    }
+
+    if (!result.secure_url) {
+      throw new Error("Cloudinary did not return an image URL.");
+    }
+
+    return result.secure_url;
+  }
+
   $("listing-form").addEventListener("submit", async event => {
     event.preventDefault();
 
@@ -772,38 +811,39 @@
       return;
     }
 
+    const allowedTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/gif"
+    ];
+
     if (files.some(file =>
-      !file.type.startsWith("image/") ||
+      !allowedTypes.includes(file.type) ||
       file.size > 5 * 1024 * 1024
     )) {
       $("listing-message").textContent =
-        "Each picture must be an image no larger than 5 MB.";
+        "Use JPG, PNG, WEBP or GIF images no larger than 5 MB each.";
       return;
     }
 
     const publishButton = $("publish-btn");
     publishButton.disabled = true;
-    $("listing-message").textContent = "Publishing listing...";
 
     try {
       const imageUrls = [];
 
-      for (const file of files) {
-        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      for (let i = 0; i < files.length; i++) {
+        $("listing-message").textContent =
+          "Uploading picture " + (i + 1) + " of " + files.length + "...";
 
-        const imageRef = ref(
-          storage,
-          "listing-images/" + currentUser.uid + "/" +
-          Date.now() + "_" + safeName
-        );
-
-        await uploadBytes(imageRef, file, {
-          contentType: file.type
-        });
-
-        imageUrls.push(await getDownloadURL(imageRef));
+        const imageUrl = await uploadImageToCloudinary(files[i]);
+        imageUrls.push(imageUrl);
       }
 
+      $("listing-message").textContent = "Saving listing to Firestore...";
+
+      // Preserve the existing Firestore collection and field names.
       await addDoc(collection(db, "listings"), {
         title,
         description,
@@ -819,7 +859,7 @@
       $("listing-form").reset();
 
       $("listing-message").textContent =
-        "Listing published successfully.";
+        "Listing published successfully! Your pictures are uploaded.";
 
       await loadListings();
 
@@ -863,6 +903,29 @@
           image.alt = "Account listing picture";
           image.loading = "lazy";
           card.append(image);
+
+          // Show additional pictures when a listing has more than one.
+          if (imageUrls.length > 1) {
+            const gallery = document.createElement("div");
+            gallery.style.display = "flex";
+            gallery.style.gap = "6px";
+            gallery.style.padding = "8px";
+            gallery.style.overflowX = "auto";
+
+            imageUrls.slice(1, 4).forEach(url => {
+              const thumb = document.createElement("img");
+              thumb.src = url;
+              thumb.alt = "Additional account picture";
+              thumb.loading = "lazy";
+              thumb.style.width = "76px";
+              thumb.style.height = "60px";
+              thumb.style.objectFit = "cover";
+              thumb.style.borderRadius = "6px";
+              gallery.append(thumb);
+            });
+
+            card.append(gallery);
+          }
         } else {
           const placeholder = document.createElement("div");
           placeholder.className = "image-placeholder";
