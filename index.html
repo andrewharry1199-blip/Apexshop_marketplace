@@ -296,10 +296,7 @@
       const adminSnap = await getDoc(doc(db, "admins", user.uid));
 
       if (!adminSnap.exists()) {
-        $("auth-status").textContent =
-          "Admin document not found. Expected document ID: " + user.uid;
-        return;
-      }
+        $("auth-status").textContent = "Admin document not found. Website UID: " + user.uid;
 console.log("Website signed-in UID:", user.uid);
       if (adminSnap.data().enabled !== true) {
         $("auth-status").textContent =
