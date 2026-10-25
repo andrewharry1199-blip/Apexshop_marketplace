@@ -3,341 +3,308 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0b12">
   <title>APEXSHOP MARKETPLACE</title>
   <style>
+    :root {
+      --bg: #0b0b12;
+      --panel: #151522;
+      --panel2: #191925;
+      --accent: #ff9d00;
+      --muted: #b9b9c6;
+      --line: #30303d;
+    }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0b0b12;
+      background: var(--bg);
       color: white;
+      font-family: Arial, sans-serif;
     }
+    a { color: inherit; }
     header {
-      background: #151522;
-      padding: 20px;
-      text-align: center;
-      border-bottom: 2px solid #ff9d00;
+      background: linear-gradient(135deg, #171722, #251506);
+      border-bottom: 2px solid var(--accent);
+      padding: 18px 16px;
     }
-    header h1 { color: #ff9d00; margin: 0; }
-    header p { color: #ccc; }
-    .hero { text-align: center; padding: 35px 15px; }
-    .hero h2 { font-size: 28px; }
-    .hero span { color: #ff9d00; }
+    .topbar {
+      max-width: 1120px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      font-size: 25px;
+      font-weight: 900;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+    .tagline {
+      margin: 5px 0 0;
+      color: #d0d0d8;
+      font-size: 13px;
+    }
+    nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    nav a {
+      font-size: 13px;
+      text-decoration: none;
+      padding: 9px 11px;
+      border: 1px solid #444;
+      border-radius: 8px;
+    }
+    nav a:hover { border-color: var(--accent); }
+    .hero {
+      padding: 48px 16px 32px;
+      text-align: center;
+      background: radial-gradient(ellipse at top, #33200b 0%, #0b0b12 65%);
+    }
+    .eyebrow {
+      color: var(--accent);
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 12px;
+    }
+    .hero h1 {
+      font-size: clamp(29px, 6vw, 48px);
+      margin: 12px auto;
+      max-width: 760px;
+      line-height: 1.1;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p { color: var(--muted); max-width: 600px; margin: 12px auto; }
     .search {
       display: block;
-      width: 90%;
-      max-width: 450px;
-      margin: 20px auto;
+      width: 100%;
+      max-width: 520px;
+      margin: 22px auto 0;
       padding: 14px;
-      border-radius: 8px;
+      border-radius: 9px;
       border: 1px solid #444;
-      background: #191925;
+      background: #171722;
       color: white;
+      font-size: 16px;
     }
+    .section {
+      max-width: 1120px;
+      margin: auto;
+      padding: 25px 16px;
+    }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    h2 { margin: 0 0 8px; font-size: 23px; }
+    .sub { color: var(--muted); font-size: 14px; margin: 0 0 16px; }
     .listings {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
       gap: 15px;
-      padding: 15px;
-      max-width: 1000px;
-      margin: auto;
     }
-    .card {
-      background: #191925;
-      padding: 18px;
-      border-radius: 12px;
-      border: 1px solid #333;
+    .card, .panel {
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      overflow: hidden;
     }
-    .card h3 { color: #ff9d00; }
-    .price { font-size: 22px; font-weight: bold; }
+    .account-image {
+      width: 100%;
+      height: 185px;
+      object-fit: cover;
+      background: #101018;
+      display: block;
+    }
+    .image-placeholder {
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8d8d9b;
+      background: linear-gradient(135deg, #171722, #29200f);
+      font-size: 14px;
+    }
+    .card-body { padding: 16px; }
+    .card h3 {
+      margin: 0 0 9px;
+      color: var(--accent);
+      font-size: 18px;
+      overflow-wrap: anywhere;
+    }
+    .card p { color: #ddd; line-height: 1.45; overflow-wrap: anywhere; }
+    .price { font-size: 22px; font-weight: bold; color: white; margin: 12px 0; }
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      background: #252536;
+      color: #ddd;
+      border: 1px solid #444;
+    }
+    .verified { color: #80e6a2; border-color: #2c7041; }
     .btn {
       display: inline-block;
-      padding: 12px 16px;
-      background: #ff9d00;
+      padding: 11px 14px;
+      background: var(--accent);
       color: #111;
       text-decoration: none;
       font-weight: bold;
-      border-radius: 7px;
-      border: none;
+      border-radius: 8px;
+      border: 0;
       cursor: pointer;
+      font-size: 14px;
     }
+    .btn.secondary { background: #292938; color: white; border: 1px solid #4b4b5a; }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+    .panel { padding: 18px; margin: 12px 0; }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      margin: 5px 0 10px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #101018;
+      color: white;
+      font: inherit;
+    }
+    textarea { min-height: 100px; resize: vertical; }
+    label { font-size: 13px; color: #ddd; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .message {
+      min-height: 20px;
+      color: #ffd18a;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+    [hidden] { display: none !important; }
     footer {
+      border-top: 1px solid var(--line);
       text-align: center;
-      padding: 25px 10px;
+      padding: 26px 16px;
       color: #aaa;
+      margin-top: 25px;
     }
+    footer a { color: var(--accent); }
+    .notice { font-size: 12px; color: #aaa; line-height: 1.5; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>APEXSHOP</h1>
-    <p>Free Fire Account Marketplace</p>
-  </header>
-
-  <section class="hero">
-    <h2>Find Your Next <span>Gaming Account</span></h2>
-    <p>Explore listings and contact sellers directly.</p>
-    <input id="search" class="search"
-      placeholder="Search accounts..."
-      oninput="filterAccounts()">
-  </section>
-
-  <main class="listings" id="listings">
-    <article class="card">
-      <h3>Premium Free Fire Account</h3>
-      <p>High-level account</p>
-      <p class="price">₦15,000</p>
-      <a class="btn" href="https://t.me/apexshop90"
-        target="_blank">View Seller Channel</a>
-    </article>
-
-    <article class="card">
-      <h3>Budget Free Fire Account</h3>
-      <p>Affordable gaming account</p>
-      <p class="price">₦5,000</p>
-      <a class="btn" href="https://t.me/apexshop90"
-        target="_blank">View Seller Channel</a>
-    </article>
-
-    <article class="card">
-      <h3>Tournament Account</h3>
-      <p>Ask the seller about eligibility</p>
-      <p class="price">Contact Seller</p>
-      <a class="btn" href="https://t.me/apexshop90"
-        target="_blank">View Seller Channel</a>
-    </article>
-  </main>
-
-  <footer>
-    <p>APEXSHOP MARKETPLACE</p>
-    <p>Buy responsibly. Verify account details before payment.</p>
-  </footer>
-
-  <script>
-    function filterAccounts() {
-      const query = document.getElementById("search")
-        .value.toLowerCase();
-      document.querySelectorAll(".card").forEach(card => {
-        card.style.display = card.textContent
-          .toLowerCase().includes(query) ? "" : "none";
-      });
-    }
-  </script>
-</body>
-</html>
-
-<!-- APEXSHOP MARKETPLACE: Seller features -->
-<section id="seller-area" style="padding:20px;max-width:700px;margin:auto;color:white;font-family:Arial,sans-serif;background:#10101a">
-  <h2 style="color:#ff9d00">Seller Account</h2>
-  <p id="auth-status">Checking login...</p>
-  <p id="listing-message" role="status"></p>
-
-  <div id="auth-form">
-    <input id="seller-email" type="email" placeholder="Email address" autocomplete="email" style="padding:12px;width:90%;margin:6px 0">
-    <input id="seller-password" type="password" placeholder="Password (at least 6 characters)" autocomplete="current-password" style="padding:12px;width:90%;margin:6px 0">
-    <button id="register-btn" type="button">Register</button>
-    <button id="login-btn" type="button">Log in</button>
+<header>
+  <div class="topbar">
+    <div>
+      <div class="brand">APEXSHOP</div>
+      <p class="tagline">Free Fire Account Marketplace</p>
+    </div>
+    <nav>
+      <a href="#marketplace">Browse accounts</a>
+      <a href="#account-portal">Buyer / Seller login</a>
+      <a href="#support">Help line</a>
+    </nav>
   </div>
+</header>
 
-  <div id="seller-tools" hidden>
-    <button id="logout-btn" type="button">Log out</button>
-    <h3>Post a Free Fire account</h3>
-    <form id="listing-form">
-      <input id="listing-title" required maxlength="80" placeholder="Account title" style="padding:12px;width:90%;margin:6px 0">
-      <textarea id="listing-description" required maxlength="1000" placeholder="Account details (never include passwords)" style="padding:12px;width:90%;margin:6px 0"></textarea>
-      <input id="listing-price" type="number" required min="1" max="100000000" step="1" placeholder="Price in naira (₦)" style="padding:12px;width:90%;margin:6px 0">
-      <button type="submit">Publish listing</button>
-    </form>
-  </div>
-
-  <h2 style="color:#ff9d00">Marketplace Listings</h2>
-  <div id="firebase-listings">Loading listings...</div>
+<section class="hero">
+  <div class="eyebrow">Your next account starts here</div>
+  <h1>Find Your Next <span>Gaming Account</span></h1>
+  <p>Explore account listings, compare details and contact sellers directly.</p>
+  <input id="search" class="search"
+    placeholder="Search accounts..."
+    aria-label="Search accounts">
 </section>
 
-<script type="module">
-  import { initializeApp }
-    from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+<main>
+  <section class="section" id="marketplace">
+    <div class="section-head">
+      <div>
+        <h2>Featured Accounts</h2>
+        <p class="sub">Browse available seller listings below.</p>
+      </div>
+    </div>
+    <div class="listings" id="firebase-listings">
+      <p class="sub">Loading listings...</p>
+    </div>
+  </section>
 
-  import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged
-  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+  <section class="section" id="account-portal">
+    <h2>Buyer &amp; Seller Portal</h2>
+    <p class="sub">
+      Use one account to sign in. Sellers can publish listings;
+      buyers can sign in to use their account.
+    </p>
+    <div class="panel">
+      <p id="auth-status" class="sub">Checking login...</p>
+      <div id="auth-form">
+        <div class="form-grid">
+          <div>
+            <label for="user-email">Email address</label>
+            <input id="user-email" type="email"
+              placeholder="Email address" autocomplete="email">
+          </div>
+          <div>
+            <label for="user-password">Password</label>
+            <input id="user-password" type="password"
+              placeholder="At least 6 characters"
+              autocomplete="current-password">
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn" id="register-btn" type="button">Create account</button>
+          <button class="btn secondary" id="login-btn" type="button">Log in</button>
+        </div>
+      </div>
 
-  import {
-    getFirestore,
-    collection,
-    addDoc,
-    getDocs,
-    query,
-    orderBy,
-    serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-
-  // YOUR APEXSHOP FIREBASE CONFIGURATION
-  
-const firebaseConfig = {
-  apiKey: "AIzaSyBdIItgYib1ajyTYd_o4iXNgO4ZIlQLLyE",
-  authDomain: "apexshop-marketplace.firebaseapp.com",
-  projectId: "apexshop-marketplace",
-  storageBucket: "apexshop-marketplace.firebasestorage.app",
-  messagingSenderId: "181450232472",
-  appId: "1:181450232472:web:71e4ca2d1cb2f12f1cb6ed",
-  measurementId: "G-3MQ8Z40SF2"
-};
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  const el = id => document.getElementById(id);
-  const message = el("listing-message");
-
-  function showError(error) {
-    const errors = {
-      "auth/email-already-in-use": "This email is already registered. Please log in.",
-      "auth/invalid-email": "Enter a valid email address.",
-      "auth/weak-password": "Use a password with at least 6 characters.",
-      "auth/invalid-credential": "Email or password is incorrect.",
-      "auth/operation-not-allowed": "Enable Email/Password sign-in in Firebase Authentication.",
-      "permission-denied": "Firestore permission denied. Check your database rules."
-    };
-    message.textContent = errors[error.code] ||
-      "Something went wrong: " + (error.message || error.code);
-  }
-
-  function credentials() {
-    return {
-      email: el("seller-email").value.trim(),
-      password: el("seller-password").value
-    };
-  }
-
-  el("register-btn").addEventListener("click", async () => {
-    try {
-      const { email, password } = credentials();
-      if (!email || password.length < 6) {
-        message.textContent = "Enter an email and a password of at least 6 characters.";
-        return;
-      }
-      await createUserWithEmailAndPassword(auth, email, password);
-      message.textContent = "Registration successful!";
-    } catch (error) {
-      showError(error);
-    }
-  });
-
-  el("login-btn").addEventListener("click", async () => {
-    try {
-      const { email, password } = credentials();
-      await signInWithEmailAndPassword(auth, email, password);
-      message.textContent = "Login successful!";
-    } catch (error) {
-      showError(error);
-    }
-  });
-
-  el("logout-btn").addEventListener("click", async () => {
-    try {
-      await signOut(auth);
-      message.textContent = "You have logged out.";
-    } catch (error) {
-      showError(error);
-    }
-  });
-
-  onAuthStateChanged(auth, user => {
-    el("auth-form").hidden = !!user;
-    el("seller-tools").hidden = !user;
-    el("auth-status").textContent = user
-      ? "Logged in as " + user.email
-      : "Register or log in to publish an account.";
-  });
-
-  el("listing-form").addEventListener("submit", async event => {
-    event.preventDefault();
-    const user = auth.currentUser;
-    if (!user) {
-      message.textContent = "Please log in first.";
-      return;
-    }
-
-    const title = el("listing-title").value.trim();
-    const description = el("listing-description").value.trim();
-    const price = Number(el("listing-price").value);
-
-    if (!title || !description || !Number.isSafeInteger(price) ||
-        price < 1 || price > 100000000) {
-      message.textContent = "Check the title, description and whole-number price.";
-      return;
-    }
-
-    try {
-      await addDoc(collection(db, "listings"), {
-        title,
-        description,
-        price,
-        sellerId: user.uid,
-        createdAt: serverTimestamp()
-      });
-      el("listing-form").reset();
-      message.textContent = "Listing published successfully!";
-      await loadListings();
-    } catch (error) {
-      showError(error);
-    }
-  });
-
-  async function loadListings() {
-    const container = el("firebase-listings");
-    container.textContent = "Loading listings...";
-
-    try {
-      const result = await getDocs(
-        query(collection(db, "listings"), orderBy("createdAt", "desc"))
-      );
-
-      container.replaceChildren();
-
-      if (result.empty) {
-        container.textContent = "No seller listings yet.";
-        return;
-      }
-
-      result.forEach(docSnap => {
-        const data = docSnap.data();
-        const card = document.createElement("article");
-        card.style.cssText =
-          "background:#191925;padding:16px;margin:12px 0;border-radius:10px";
-
-        const heading = document.createElement("h3");
-        heading.style.color = "#ff9d00";
-        heading.textContent = data.title || "Free Fire account";
-
-        const details = document.createElement("p");
-        details.textContent = data.description || "";
-
-        const price = document.createElement("p");
-        price.textContent = "Price: ₦" +
-          (Number.isFinite(data.price)
-            ? data.price.toLocaleString("en-NG")
-            : "—");
-
-        card.append(heading, details, price);
-        container.append(card);
-      });
-    } catch (error) {
-      container.textContent =
-        "Could not load listings. Check Firestore rules and database setup.";
-      console.error("Loading listings failed:", error.code, error.message);
-    }
-  }
-
-  loadListings();
-</script>
-
-  
-
+      <div id="signed-in-tools" hidden>
+        <div class="actions">
+          <button class="btn secondary" id="logout-btn" type="button">Log out</button>
+        </div>
+        <h3>Post an account for sale</h3>
+        <form id="listing-form">
+          <div class="form-grid">
+            <div>
+              <label for="listing-title">Listing title</label>
+              <input id="listing-title" required maxlength="80"
+                placeholder="e.g. Premium Free Fire account">
+            </div>
+            <div>
+              <label for="listing-price">Price in naira (₦)</label>
+              <input id="listing-price" type="number" required min="1"
+                max="100000000" step="1" placeholder="Price in naira">
+            </div>
+          </div>
+          <label for="seller-whatsapp">
+            Your WhatsApp number (include country code, e.g. 2348012345678)
+          </label>
+          <input id="seller-whatsapp" inputmode="numeric"
+            maxlength="15" placeholder="2348012345678" required>
+          <label for="listing-description">Account details</label>
+          <textarea id="listing-description" required maxlength="1000"
+            placeholder="Describe level, skins, rank and other details. Never include passwords."></textarea>
+          <label for="listing-image">Account pictures (up to 4 images, max 5 MB each)</label>
+          <input id="listing-image" type="file" accept="image/*" multiple>
+          <p class="notice">
+            Image uploads need Firebase Storage to be enabled and secure
+            Storage rules to be configured. If Storage isn't available in
+            your Firebase project, publishing with pictures will show an
+            error until setup is complete.
+          </p>
+          <button class="btn" id="publish-btn" type="submit">Publish listing</button>
+        </form>
+      </div>
+      <p id="listing-message" class="message" role="status"></p>
+    </div>
+  </section>
+</main>
+</body>
+</html>
