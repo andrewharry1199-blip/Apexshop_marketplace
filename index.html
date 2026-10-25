@@ -300,7 +300,7 @@
           "Admin document not found. Expected document ID: " + user.uid;
         return;
       }
-
+console.log("Website signed-in UID:", user.uid);
       if (adminSnap.data().enabled !== true) {
         $("auth-status").textContent =
           "Admin document found, but its enabled field must be the Boolean true.";
