@@ -254,9 +254,13 @@
       try {
         const adminSnap = await getDoc(doc(db, "admins", user.uid));
         isAdmin = adminSnap.exists() && adminSnap.data().enabled === true;
+      
       } catch (error) {
-        console.warn("Admin status could not be checked. Check Firestore rules.", error);
+        $("admin-message").textContent =
+          "Admin check failed: " + (error.code || error.message);
+        console.error("Admin check failed:", error);
       }
+
 
       $("admin-area").hidden = !isAdmin;
       if (isAdmin) await loadAdminSellers();
