@@ -57,7 +57,10 @@
 <body>
 <header>
   <div class="topbar">
-    <div><div class="brand">APEXSHOP</div><p class="tagline">Free Fire Account Marketplace</p></div>
+    <div>
+      <div class="brand">APEXSHOP</div>
+      <p class="tagline">Free Fire Account Marketplace</p>
+    </div>
     <nav>
       <a href="#marketplace">Browse accounts</a>
       <a href="#account-portal">Buyer / Seller login</a>
@@ -75,49 +78,74 @@
 
 <main>
   <section class="section" id="marketplace">
-    <div class="section-head"><div><h2>Featured Accounts</h2><p class="sub">Browse available seller listings below.</p></div></div>
-    <div class="listings" id="firebase-listings"><p class="sub">Loading listings...</p></div>
+    <div class="section-head">
+      <div>
+        <h2>Featured Accounts</h2>
+        <p class="sub">Browse available seller listings below.</p>
+      </div>
+    </div>
+    <div class="listings" id="firebase-listings">
+      <p class="sub">Loading listings...</p>
+    </div>
   </section>
 
   <section class="section" id="account-portal">
-    <h2>Buyer & Seller Portal</h2>
-    <p class="sub">Use one account to sign in. Sellers can publish listings; buyers can sign in to use their account.</p>
+    <h2>Buyer &amp; Seller Portal</h2>
+    <p class="sub">Sign in to publish account listings or manage your account.</p>
     <div class="panel">
-      <p id="auth-status" class="sub">Checking login...</p>
+      <p id="auth-status" class="sub" role="status" aria-live="polite">Connecting to Firebase...</p>
       <div id="auth-form">
         <div class="form-grid">
-          <div><label for="user-email">Email address</label><input id="user-email" type="email" placeholder="Email address" autocomplete="email"></div>
-          <div><label for="user-password">Password</label><input id="user-password" type="password" placeholder="At least 6 characters" autocomplete="current-password"></div>
+          <div>
+            <label for="user-email">Email address</label>
+            <input id="user-email" type="email" placeholder="Email address" autocomplete="email">
+          </div>
+          <div>
+            <label for="user-password">Password</label>
+            <input id="user-password" type="password" placeholder="At least 6 characters" autocomplete="current-password">
+          </div>
         </div>
-        <div class="actions"><button class="btn" id="register-btn" type="button">Create account</button><button class="btn secondary" id="login-btn" type="button">Log in</button></div>
+        <div class="actions">
+          <button class="btn" id="register-btn" type="button">Create account</button>
+          <button class="btn secondary" id="login-btn" type="button">Log in</button>
+        </div>
       </div>
+
       <div id="signed-in-tools" hidden>
-        <div class="actions"><button class="btn secondary" id="logout-btn" type="button">Log out</button></div>
+        <div class="actions">
+          <button class="btn secondary" id="logout-btn" type="button">Log out</button>
+        </div>
         <h3>Post an account for sale</h3>
         <form id="listing-form">
           <div class="form-grid">
-            <div><label for="listing-title">Listing title</label><input id="listing-title" required maxlength="80" placeholder="e.g. Premium Free Fire account"></div>
-            <div><label for="listing-price">Price in naira (₦)</label><input id="listing-price" type="number" required min="1" max="100000000" step="1" placeholder="Price in naira"></div>
+            <div>
+              <label for="listing-title">Listing title</label>
+              <input id="listing-title" required maxlength="80" placeholder="e.g. Premium Free Fire account">
+            </div>
+            <div>
+              <label for="listing-price">Price in naira (₦)</label>
+              <input id="listing-price" type="number" required min="1" max="100000000" step="1" placeholder="Price in naira">
+            </div>
           </div>
-          <label for="seller-whatsapp">Your WhatsApp number (include country code, e.g. 2348012345678)</label>
+          <label for="seller-whatsapp">WhatsApp number (include country code)</label>
           <input id="seller-whatsapp" inputmode="numeric" maxlength="15" placeholder="2348012345678" required>
           <label for="listing-description">Account details</label>
           <textarea id="listing-description" required maxlength="1000" placeholder="Describe level, skins, rank and other details. Never include passwords."></textarea>
           <label for="listing-image">Account pictures (up to 4 images, max 5 MB each)</label>
           <input id="listing-image" type="file" accept="image/*" multiple>
-          <p class="notice">Image uploads need Firebase Storage to be enabled and secure Storage rules to be configured. If Storage isn't available in your Firebase project, publishing with pictures will show an error until setup is complete.</p>
+          <p class="notice">Picture uploads require Firebase Storage and appropriate Storage security rules.</p>
           <button class="btn" id="publish-btn" type="submit">Publish listing</button>
         </form>
       </div>
-      <p id="listing-message" class="message" role="status"></p>
+      <p id="listing-message" class="message" role="status" aria-live="polite"></p>
     </div>
   </section>
 
   <section class="section" id="admin-area" hidden>
-    <h2>Admin: Seller Verification</h2>
-    <p class="sub">Only an account authorized in Firebase can see and use these controls.</p>
+    <h2>APEXSHOP Admin Dashboard</h2>
+    <p class="sub">Seller verification controls for authorized administrators.</p>
     <div id="admin-sellers" class="panel">Loading seller list...</div>
-    <p id="admin-message" class="message" role="status"></p>
+    <p id="admin-message" class="message" role="status" aria-live="polite"></p>
   </section>
 
   <section class="section" id="support">
@@ -141,20 +169,30 @@
 
 <script>
   const searchInput = document.getElementById("search");
-  searchInput.addEventListener("input", filterAccounts);
+
   function filterAccounts() {
     const query = searchInput.value.toLowerCase().trim();
     document.querySelectorAll("#firebase-listings .card").forEach(card => {
       card.hidden = !card.textContent.toLowerCase().includes(query);
     });
   }
+
+  searchInput.addEventListener("input", filterAccounts);
 </script>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, getDocs, doc, getDoc, updateDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
+  import {
+    getAuth, createUserWithEmailAndPassword,
+    signInWithEmailAndPassword, signOut, onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+  import {
+    getFirestore, collection, addDoc, getDocs, doc, getDoc,
+    updateDoc, query, orderBy, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+  import {
+    getStorage, ref, uploadBytes, getDownloadURL
+  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBdIItgYib1ajyTYd_o4iXNgO4ZIlQLLyE",
@@ -166,12 +204,12 @@
     measurementId: "G-3MQ8Z40SF2"
   };
 
+  const $ = id => document.getElementById(id);
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
   const storage = getStorage(app);
-  const $ = id => document.getElementById(id);
-  const message = $("listing-message");
+
   let currentUser = null;
   let isAdmin = false;
 
@@ -183,13 +221,13 @@
       "auth/weak-password": "Use a password with at least 6 characters.",
       "auth/invalid-credential": "Email or password is incorrect.",
       "auth/operation-not-allowed": "Enable Email/Password sign-in in Firebase Authentication.",
-      "permission-denied": "Firebase permission denied. Check your Firestore and Storage rules.",
-      "storage/unauthorized": "Image upload blocked. Check Firebase Storage setup and rules.",
-      "storage/bucket-not-found": "Firebase Storage is not set up for this project yet.",
-      "storage/unknown": "Image upload failed. Check Storage setup, rules and connection."
+      "permission-denied": "Firebase permission denied. Check your Firestore rules.",
+      "storage/unauthorized": "Image upload blocked. Check Firebase Storage rules.",
+      "storage/bucket-not-found": "Firebase Storage is not set up for this project."
     };
-    message.textContent = known[code] ||
-      ("Something went wrong: " + (error?.message || code || "Please try again."));
+
+    $("listing-message").textContent =
+      known[code] || ("Error: " + (error?.message || code || "Please try again."));
     console.error(error);
   }
 
@@ -204,11 +242,11 @@
     try {
       const { email, password } = credentials();
       if (!email || password.length < 6) {
-        message.textContent = "Enter an email and a password of at least 6 characters.";
+        $("listing-message").textContent = "Enter an email and a password of at least 6 characters.";
         return;
       }
       await createUserWithEmailAndPassword(auth, email, password);
-      message.textContent = "Account created successfully.";
+      $("listing-message").textContent = "Account created successfully.";
     } catch (error) {
       showError(error);
     }
@@ -218,11 +256,11 @@
     try {
       const { email, password } = credentials();
       if (!email || !password) {
-        message.textContent = "Enter your email and password.";
+        $("listing-message").textContent = "Enter your email and password.";
         return;
       }
       await signInWithEmailAndPassword(auth, email, password);
-      message.textContent = "Login successful.";
+      $("listing-message").textContent = "Login successful.";
     } catch (error) {
       showError(error);
     }
@@ -231,7 +269,7 @@
   $("logout-btn").addEventListener("click", async () => {
     try {
       await signOut(auth);
-      message.textContent = "You have logged out.";
+      $("listing-message").textContent = "You have logged out.";
     } catch (error) {
       showError(error);
     }
@@ -239,32 +277,45 @@
 
   onAuthStateChanged(auth, async user => {
     currentUser = user;
+    isAdmin = false;
+
     $("auth-form").hidden = !!user;
     $("signed-in-tools").hidden = !user;
-    $("auth-status").textContent = user
-      ? "Logged in as " + user.email
-      : "Create an account or log in to publish a listing.";
-
-    isAdmin = false;
     $("admin-area").hidden = true;
+    $("admin-message").textContent = "";
 
-    
-        if (!adminSnap.exists()) {
-          $("auth-status").textContent =
-            "Admin document not found for UID: " + user.uid;
-        } else if (adminSnap.data().enabled !== true) {
-          $("auth-status").textContent =
-            "Admin document found, but enabled is not true.";
-        } else {
-          isAdmin = true;
-          $("auth-status").textContent =
-            "Admin access confirmed for " + user.email;
-        }
+    if (!user) {
+      $("auth-status").textContent = "Not signed in. Create an account or log in.";
+      return;
+    }
 
+    $("auth-status").textContent = "Signed in as " + (user.email || user.uid) + ". Checking admin access...";
+    $("admin-sellers").textContent = "Checking administrator permissions...";
 
+    try {
+      const adminSnap = await getDoc(doc(db, "admins", user.uid));
 
-      $("admin-area").hidden = !isAdmin;
-      if (isAdmin) await loadAdminSellers();
+      if (!adminSnap.exists()) {
+        $("auth-status").textContent =
+          "Admin document not found. Expected document ID: " + user.uid;
+        return;
+      }
+
+      if (adminSnap.data().enabled !== true) {
+        $("auth-status").textContent =
+          "Admin document found, but its enabled field must be the Boolean true.";
+        return;
+      }
+
+      isAdmin = true;
+      $("admin-area").hidden = false;
+      $("auth-status").textContent = "Admin access confirmed for " + (user.email || user.uid) + ".";
+      await loadAdminSellers();
+
+    } catch (error) {
+      console.error("Admin check failed:", error);
+      $("auth-status").textContent =
+        "Admin check failed: " + (error.code || error.message || "Unknown error");
     }
   });
 
@@ -272,7 +323,7 @@
     event.preventDefault();
 
     if (!currentUser) {
-      message.textContent = "Please log in first.";
+      $("listing-message").textContent = "Please log in first.";
       return;
     }
 
@@ -285,33 +336,30 @@
     if (!title || !description || sellerWhatsapp.length < 10 ||
         sellerWhatsapp.length > 15 || !Number.isSafeInteger(price) ||
         price < 1 || price > 100000000) {
-      message.textContent = "Check the title, details, WhatsApp number and whole-number price.";
+      $("listing-message").textContent = "Check the title, details, WhatsApp number and price.";
       return;
     }
 
     if (files.length > 4) {
-      message.textContent = "Choose no more than 4 pictures.";
+      $("listing-message").textContent = "Choose no more than 4 pictures.";
       return;
     }
 
     if (files.some(file => !file.type.startsWith("image/") || file.size > 5 * 1024 * 1024)) {
-      message.textContent = "Each file must be an image no larger than 5 MB.";
+      $("listing-message").textContent = "Each picture must be an image no larger than 5 MB.";
       return;
     }
 
     const publishButton = $("publish-btn");
     publishButton.disabled = true;
-    message.textContent = "Publishing listing...";
+    $("listing-message").textContent = "Publishing listing...";
 
     try {
       const imageUrls = [];
 
       for (const file of files) {
         const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-        const imageRef = ref(
-          storage,
-          `listing-images/${currentUser.uid}/${Date.now()}_${safeName}`
-        );
+        const imageRef = ref(storage, `listing-images/${currentUser.uid}/${Date.now()}_${safeName}`);
         await uploadBytes(imageRef, file, { contentType: file.type });
         imageUrls.push(await getDownloadURL(imageRef));
       }
@@ -329,8 +377,9 @@
       });
 
       $("listing-form").reset();
-      message.textContent = "Listing published successfully.";
+      $("listing-message").textContent = "Listing published successfully.";
       await loadListings();
+
     } catch (error) {
       showError(error);
     } finally {
@@ -342,17 +391,10 @@
     const container = $("firebase-listings");
     container.replaceChildren();
 
-    const loading = document.createElement("p");
-    loading.className = "sub";
-    loading.textContent = "Loading listings...";
-    container.append(loading);
-
     try {
       const result = await getDocs(
         query(collection(db, "listings"), orderBy("createdAt", "desc"))
       );
-
-      container.replaceChildren();
 
       if (result.empty) {
         const empty = document.createElement("p");
@@ -392,11 +434,8 @@
         heading.textContent = data.title || "Free Fire account";
 
         const badge = document.createElement("span");
-        badge.className = "badge" +
-          (data.verified === true ? " verified" : "");
-        badge.textContent = data.verified === true
-          ? "✓ Verified seller"
-          : "Seller not verified";
+        badge.className = "badge" + (data.verified === true ? " verified" : "");
+        badge.textContent = data.verified === true ? "✓ Verified seller" : "Seller not verified";
 
         const details = document.createElement("p");
         details.textContent = data.description || "";
@@ -407,16 +446,11 @@
           ? "₦" + data.price.toLocaleString("en-NG")
           : "Contact seller";
 
-        body.append(heading, badge, details, price);
-
         const contact = document.createElement("a");
         contact.className = "btn";
+        contact.textContent = "Contact Seller on WhatsApp";
 
-        if (
-          typeof data.sellerWhatsapp === "string" &&
-          /^\d{10,15}$/.test(data.sellerWhatsapp)
-        ) {
-          contact.textContent = "Contact Seller on WhatsApp";
+        if (typeof data.sellerWhatsapp === "string" && /^\d{10,15}$/.test(data.sellerWhatsapp)) {
           contact.href = "https://wa.me/" + data.sellerWhatsapp;
         } else {
           contact.textContent = "View Seller Channel";
@@ -425,22 +459,20 @@
 
         contact.target = "_blank";
         contact.rel = "noopener";
-        body.append(contact);
+        body.append(heading, badge, details, price, contact);
         card.append(body);
         container.append(card);
       });
 
       filterAccounts();
+
     } catch (error) {
       container.replaceChildren();
-
       const err = document.createElement("p");
       err.className = "sub";
-      err.textContent =
-        "Could not load listings. Check Firestore rules and database setup.";
+      err.textContent = "Could not load listings: " + (error.code || error.message);
       container.append(err);
-
-      console.error("Loading listings failed:", error.code, error.message);
+      console.error("Loading listings failed:", error);
     }
   }
 
@@ -456,20 +488,16 @@
 
       result.forEach(snapshot => {
         const data = snapshot.data();
+        if (!data.sellerId) return;
 
-        if (data.sellerId) {
-          const previous = sellers.get(data.sellerId) || {
-            uid: data.sellerId,
-            email: data.sellerEmail || "Email not available",
-            verified: data.verified === true
-          };
+        const previous = sellers.get(data.sellerId) || {
+          uid: data.sellerId,
+          email: data.sellerEmail || "Email not available",
+          verified: data.verified === true
+        };
 
-          if (data.verified === true) {
-            previous.verified = true;
-          }
-
-          sellers.set(data.sellerId, previous);
-        }
+        if (data.verified === true) previous.verified = true;
+        sellers.set(data.sellerId, previous);
       });
 
       if (!sellers.size) {
@@ -479,28 +507,26 @@
 
       for (const seller of sellers.values()) {
         const row = document.createElement("div");
-        row.style.cssText =
-          "padding:12px 0;border-bottom:1px solid #30303d";
+        row.style.cssText = "padding:12px 0;border-bottom:1px solid #30303d";
 
         const label = document.createElement("p");
-        label.textContent = `${seller.email} — ${
-          seller.verified ? "Verified" : "Not verified"
-        }`;
+        label.textContent = seller.email + " — " + (seller.verified ? "Verified" : "Not verified");
 
         const button = document.createElement("button");
         button.className = "btn";
-        button.textContent = seller.verified
-          ? "Unverify seller"
-          : "Verify seller";
+        button.textContent = seller.verified ? "Unverify seller" : "Verify seller";
 
         button.addEventListener("click", async () => {
+          if (!isAdmin || !auth.currentUser || auth.currentUser.uid !== currentUser.uid) {
+            $("admin-message").textContent = "Admin session is not valid. Please sign in again.";
+            return;
+          }
+
           button.disabled = true;
 
           try {
             const listingSnaps = await getDocs(collection(db, "listings"));
-            const updates = listingSnaps.docs.filter(
-              item => item.data().sellerId === seller.uid
-            );
+            const updates = listingSnaps.docs.filter(item => item.data().sellerId === seller.uid);
 
             for (const item of updates) {
               await updateDoc(doc(db, "listings", item.id), {
@@ -508,14 +534,13 @@
               });
             }
 
-            $("admin-message").textContent =
-              "Seller verification updated.";
-
+            $("admin-message").textContent = "Seller verification updated.";
             await loadAdminSellers();
             await loadListings();
+
           } catch (error) {
             $("admin-message").textContent =
-              "Could not update verification. Check Firestore security rules.";
+              "Verification update failed: " + (error.code || error.message);
             console.error(error);
           } finally {
             button.disabled = false;
@@ -525,10 +550,11 @@
         row.append(label, button);
         container.append(row);
       }
+
     } catch (error) {
       container.textContent =
-        "Could not load sellers. Admin access or Firestore rules may not be configured yet.";
-      console.error(error);
+        "Could not load sellers: " + (error.code || error.message);
+      console.error("Loading admin sellers failed:", error);
     }
   }
 
