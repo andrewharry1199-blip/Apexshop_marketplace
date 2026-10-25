@@ -281,7 +281,7 @@
           <label for="listing-image">Account pictures (up to 4 images, max 4 MB each)</label>
           <input id="listing-image" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" multiple>
           <p class="notice">
-            Pictures are uploaded over HTTPS using PixelHost.
+            Pictures are uploaded over HTTPS using imgdb.io.
             Choose images you are allowed to share. Maximum 4 pictures, 4 MB each.
           </p>
           <button class="btn" id="publish-btn" type="submit">Publish listing</button>
@@ -352,8 +352,9 @@
     serverTimestamp
   } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-  // PixelHost image hosting API. No API key is required by its documented upload endpoint.
-  const PIXELHOST_UPLOAD_ENDPOINT = "https://www.pixelhost.fun/api/upload";
+  // imgdb.io image hosting API.
+  // No API key is required by its documented upload endpoint.
+  const IMAGE_UPLOAD_ENDPOINT = "https://imgdb.io/api/v1/upload?ttl=0";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBdIItgYib1ajyTYd_o4iXNgO4ZIlQLLyE",
@@ -484,44 +485,49 @@
     }
   });
 
-  // Upload one image directly to PixelHost.
-  async function uploadImageToPixelHost(file) {
-    const formData = new FormData();
-    formData.append("files", file);
+  // Upload one image directly to imgdb.io.
+  async function uploadImageToHost(file) {
+    if (!file) {
+      throw new Error("Please select an image first.");
+    }
 
-    const response = await fetch(PIXELHOST_UPLOAD_ENDPOINT, {
-      method: "POST",
-      body: formData
-    });
+    const formData = new FormData();
+    formData.append("file", file);
+
+    let response;
+    try {
+      response = await fetch(IMAGE_UPLOAD_ENDPOINT, {
+        method: "POST",
+        body: formData
+      });
+    } catch (error) {
+      console.error("imgdb.io upload connection error:", error);
+      throw new Error(
+        "Could not connect to imgdb.io. Check your internet connection. If this continues, imgdb.io may block browser uploads from this website."
+      );
+    }
 
     let result;
     try {
       result = await response.json();
     } catch {
-      throw new Error("PixelHost returned an unreadable response.");
+      throw new Error("imgdb.io returned an unreadable response.");
     }
 
-    if (!response.ok || result?.success === false) {
-      console.error("PixelHost upload error:", result);
+    if (!response.ok || result?.error) {
+      console.error("imgdb.io upload error:", result);
       throw new Error(
-        "PixelHost upload failed: " +
-        (result?.message || result?.error || "Unknown upload error")
+        "imgdb.io upload failed: " +
+        (result?.error || ("HTTP " + response.status))
       );
     }
 
-    const imageUrl =
-      result?.direct ||
-      result?.url ||
-      result?.cdn ||
-      result?.data?.direct ||
-      result?.data?.url;
-
-    if (typeof imageUrl !== "string" || !/^https?:\/\//i.test(imageUrl)) {
-      console.error("Unexpected PixelHost response:", result);
-      throw new Error("PixelHost did not return a usable image URL.");
+    if (typeof result?.url !== "string" || !result.url.startsWith("https://")) {
+      console.error("Unexpected imgdb.io response:", result);
+      throw new Error("imgdb.io did not return a usable image URL.");
     }
 
-    return imageUrl;
+    return result.url;
   }
 
   $("listing-form").addEventListener("submit", async event => {
@@ -582,7 +588,7 @@
       for (let i = 0; i < files.length; i++) {
         $("listing-message").textContent =
           "Uploading picture " + (i + 1) + " of " + files.length + "...";
-        const imageUrl = await uploadImageToPixelHost(files[i]);
+        const imageUrl = await uploadImageToHost(files[i]);
         imageUrls.push(imageUrl);
       }
 
