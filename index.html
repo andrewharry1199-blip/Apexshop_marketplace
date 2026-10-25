@@ -248,18 +248,19 @@
     isAdmin = false;
     $("admin-area").hidden = true;
 
-    if (user) {
-      // Admin access depends on a manually controlled admins/{uid} document.
-      // Firestore rules must prevent ordinary users from creating/editing admin documents.
-      try {
-        const adminSnap = await getDoc(doc(db, "admins", user.uid));
-        isAdmin = adminSnap.exists() && adminSnap.data().enabled === true;
-      
-      } catch (error) {
-        $("admin-message").textContent =
-          "Admin check failed: " + (error.code || error.message);
-        console.error("Admin check failed:", error);
-      }
+    
+        if (!adminSnap.exists()) {
+          $("auth-status").textContent =
+            "Admin document not found for UID: " + user.uid;
+        } else if (adminSnap.data().enabled !== true) {
+          $("auth-status").textContent =
+            "Admin document found, but enabled is not true.";
+        } else {
+          isAdmin = true;
+          $("auth-status").textContent =
+            "Admin access confirmed for " + user.email;
+        }
+
 
 
       $("admin-area").hidden = !isAdmin;
