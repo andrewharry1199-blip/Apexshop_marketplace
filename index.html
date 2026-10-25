@@ -149,3 +149,186 @@
     });
   }
 </script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc, getDocs, doc, getDoc, updateDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBdIItgYib1ajyTYd_o4iXNgO4ZIlQLLyE",
+    authDomain: "apexshop-marketplace.firebaseapp.com",
+    projectId: "apexshop-marketplace",
+    storageBucket: "apexshop-marketplace.firebasestorage.app",
+    messagingSenderId: "181450232472",
+    appId: "1:181450232472:web:71e4ca2d1cb2f12f1cb6ed",
+    measurementId: "G-3MQ8Z40SF2"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const storage = getStorage(app);
+  const $ = id => document.getElementById(id);
+  const message = $("listing-message");
+  let currentUser = null;
+  let isAdmin = false;
+
+  function showError(error) {
+    const code = error?.code || "";
+    const known = {
+      "auth/email-already-in-use": "This email is already registered. Please log in.",
+      "auth/invalid-email": "Enter a valid email address.",
+      "auth/weak-password": "Use a password with at least 6 characters.",
+      "auth/invalid-credential": "Email or password is incorrect.",
+      "auth/operation-not-allowed": "Enable Email/Password sign-in in Firebase Authentication.",
+      "permission-denied": "Firebase permission denied. Check your Firestore and Storage rules.",
+      "storage/unauthorized": "Image upload blocked. Check Firebase Storage setup and rules.",
+      "storage/bucket-not-found": "Firebase Storage is not set up for this project yet.",
+      "storage/unknown": "Image upload failed. Check Storage setup, rules and connection."
+    };
+    message.textContent = known[code] ||
+      ("Something went wrong: " + (error?.message || code || "Please try again."));
+    console.error(error);
+  }
+
+  function credentials() {
+    return {
+      email: $("user-email").value.trim(),
+      password: $("user-password").value
+    };
+  }
+
+  $("register-btn").addEventListener("click", async () => {
+    try {
+      const { email, password } = credentials();
+      if (!email || password.length < 6) {
+        message.textContent = "Enter an email and a password of at least 6 characters.";
+        return;
+      }
+      await createUserWithEmailAndPassword(auth, email, password);
+      message.textContent = "Account created successfully.";
+    } catch (error) {
+      showError(error);
+    }
+  });
+
+  $("login-btn").addEventListener("click", async () => {
+    try {
+      const { email, password } = credentials();
+      if (!email || !password) {
+        message.textContent = "Enter your email and password.";
+        return;
+      }
+      await signInWithEmailAndPassword(auth, email, password);
+      message.textContent = "Login successful.";
+    } catch (error) {
+      showError(error);
+    }
+  });
+
+  $("logout-btn").addEventListener("click", async () => {
+    try {
+      await signOut(auth);
+      message.textContent = "You have logged out.";
+    } catch (error) {
+      showError(error);
+    }
+  });
+
+  onAuthStateChanged(auth, async user => {
+    currentUser = user;
+    $("auth-form").hidden = !!user;
+    $("signed-in-tools").hidden = !user;
+    $("auth-status").textContent = user
+      ? "Logged in as " + user.email
+      : "Create an account or log in to publish a listing.";
+
+    isAdmin = false;
+    $("admin-area").hidden = true;
+
+    if (user) {
+      // Admin access depends on a manually controlled admins/{uid} document.
+      // Firestore rules must prevent ordinary users from creating/editing admin documents.
+      try {
+        const adminSnap = await getDoc(doc(db, "admins", user.uid));
+        isAdmin = adminSnap.exists() && adminSnap.data().enabled === true;
+      } catch (error) {
+        console.warn("Admin status could not be checked. Check Firestore rules.", error);
+      }
+
+      $("admin-area").hidden = !isAdmin;
+      if (isAdmin) await loadAdminSellers();
+    }
+  });
+
+  $("listing-form").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    if (!currentUser) {
+      message.textContent = "Please log in first.";
+      return;
+    }
+
+    const title = $("listing-title").value.trim();
+    const description = $("listing-description").value.trim();
+    const price = Number($("listing-price").value);
+    const sellerWhatsapp = $("seller-whatsapp").value.replace(/\D/g, "");
+    const files = Array.from($("listing-image").files || []);
+
+    if (!title || !description || sellerWhatsapp.length < 10 ||
+        sellerWhatsapp.length > 15 || !Number.isSafeInteger(price) ||
+        price < 1 || price > 100000000) {
+      message.textContent = "Check the title, details, WhatsApp number and whole-number price.";
+      return;
+    }
+
+    if (files.length > 4) {
+      message.textContent = "Choose no more than 4 pictures.";
+      return;
+    }
+
+    if (files.some(file => !file.type.startsWith("image/") || file.size > 5 * 1024 * 1024)) {
+      message.textContent = "Each file must be an image no larger than 5 MB.";
+      return;
+    }
+
+    const publishButton = $("publish-btn");
+    publishButton.disabled = true;
+    message.textContent = "Publishing listing...";
+
+    try {
+      const imageUrls = [];
+
+      for (const file of files) {
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+        const imageRef = ref(
+          storage,
+          `listing-images/${currentUser.uid}/${Date.now()}_${safeName}`
+        );
+        await uploadBytes(imageRef, file, { contentType: file.type });
+        imageUrls.push(await getDownloadURL(imageRef));
+      }
+
+      await addDoc(collection(db, "listings"), {
+        title,
+        description,
+        price,
+        imageUrls,
+        sellerWhatsapp,
+        sellerId: currentUser.uid,
+        sellerEmail: currentUser.email || "",
+        verified: false,
+        createdAt: serverTimestamp()
+      });
+
+      $("listing-form").reset();
+      message.textContent = "Listing published successfully.";
+      await loadListings();
+    } catch (error) {
+      showError(error);
+    } finally {
+      publishButton.disabled = false;
+    }
+  });
