@@ -6,54 +6,312 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b0b12">
   <title>APEXSHOP MARKETPLACE</title>
+
   <style>
-    :root{--bg:#0b0b12;--panel:#151522;--panel2:#191925;--accent:#ff9d00;--muted:#b9b9c6;--line:#30303d}
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:#fff;font-family:Arial,sans-serif}
-    a{color:inherit}
-    header{background:linear-gradient(135deg,#171722,#251506);border-bottom:2px solid var(--accent);padding:18px 16px}
-    .topbar{max-width:1120px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-    .brand{font-size:25px;font-weight:900;color:var(--accent);letter-spacing:1px}
-    .tagline{margin:5px 0 0;color:#d0d0d8;font-size:13px}
-    nav{display:flex;gap:8px;flex-wrap:wrap}
-    nav a{font-size:13px;text-decoration:none;padding:9px 11px;border:1px solid #444;border-radius:8px}
-    nav a:hover{border-color:var(--accent)}
-    .hero{padding:48px 16px 32px;text-align:center;background:radial-gradient(ellipse at top,#33200b 0%,#0b0b12 65%)}
-    .eyebrow{color:var(--accent);font-weight:bold;text-transform:uppercase;letter-spacing:2px;font-size:12px}
-    .hero h1{font-size:clamp(29px,6vw,48px);margin:12px auto;max-width:760px;line-height:1.1}
-    .hero h1 span{color:var(--accent)}
-    .hero p{color:var(--muted);max-width:600px;margin:12px auto}
-    .search{display:block;width:100%;max-width:520px;margin:22px auto 0;padding:14px;border-radius:9px;border:1px solid #444;background:#171722;color:white;font-size:16px}
-    .section{max-width:1120px;margin:auto;padding:25px 16px}
-    .section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}
-    h2{margin:0 0 8px;font-size:23px}
-    .sub{color:var(--muted);font-size:14px;margin:0 0 16px}
-    .listings{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:15px}
-    .card,.panel{background:var(--panel2);border:1px solid var(--line);border-radius:13px;overflow:hidden}
-    .account-image{width:100%;height:185px;object-fit:cover;background:#101018;display:block}
-    .image-placeholder{height:150px;display:flex;align-items:center;justify-content:center;color:#8d8d9b;background:linear-gradient(135deg,#171722,#29200f);font-size:14px}
-    .card-body{padding:16px}
-    .card h3{margin:0 0 9px;color:var(--accent);font-size:18px;overflow-wrap:anywhere}
-    .card p{color:#ddd;line-height:1.45;overflow-wrap:anywhere}
-    .price{font-size:22px;font-weight:bold;color:#fff;margin:12px 0}
-    .badge{display:inline-block;padding:4px 8px;border-radius:20px;font-size:11px;background:#252536;color:#ddd;border:1px solid #444}
-    .verified{color:#80e6a2;border-color:#2c7041}
-    .btn{display:inline-block;padding:11px 14px;background:var(--accent);color:#111;text-decoration:none;font-weight:bold;border-radius:8px;border:0;cursor:pointer;font-size:14px}
-    .btn.secondary{background:#292938;color:#fff;border:1px solid #4b4b5a}
-    button:disabled{opacity:.5;cursor:not-allowed}
-    .panel{padding:18px;margin:12px 0}
-    .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-    input,textarea,select{width:100%;padding:12px;margin:5px 0 10px;border-radius:8px;border:1px solid #444;background:#101018;color:#fff;font:inherit}
-    textarea{min-height:100px;resize:vertical}
-    label{font-size:13px;color:#ddd}
-    .actions{display:flex;gap:8px;flex-wrap:wrap}
-    .message{min-height:20px;color:#ffd18a;font-size:14px;overflow-wrap:anywhere}
-    [hidden]{display:none!important}
-    footer{border-top:1px solid var(--line);text-align:center;padding:26px 16px;color:#aaa;margin-top:25px}
-    footer a{color:var(--accent)}
-    .notice{font-size:12px;color:#aaa;line-height:1.5}
+    :root {
+      --bg: #0b0b12;
+      --panel: #151522;
+      --panel2: #191925;
+      --accent: #ff9d00;
+      --muted: #b9b9c6;
+      --line: #30303d;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    a { color: inherit; }
+
+    header {
+      background: linear-gradient(135deg, #171722, #251506);
+      border-bottom: 2px solid var(--accent);
+      padding: 18px 16px;
+    }
+
+    .topbar {
+      max-width: 1120px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-size: 25px;
+      font-weight: 900;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+
+    .tagline {
+      margin: 5px 0 0;
+      color: #d0d0d8;
+      font-size: 13px;
+    }
+
+    nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      font-size: 13px;
+      text-decoration: none;
+      padding: 9px 11px;
+      border: 1px solid #444;
+      border-radius: 8px;
+    }
+
+    nav a:hover { border-color: var(--accent); }
+
+    .hero {
+      padding: 48px 16px 32px;
+      text-align: center;
+      background: radial-gradient(
+        ellipse at top,
+        #33200b 0%,
+        #0b0b12 65%
+      );
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 12px;
+    }
+
+    .hero h1 {
+      font-size: clamp(29px, 6vw, 48px);
+      margin: 12px auto;
+      max-width: 760px;
+      line-height: 1.1;
+    }
+
+    .hero h1 span { color: var(--accent); }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 600px;
+      margin: 12px auto;
+    }
+
+    .search {
+      display: block;
+      width: 100%;
+      max-width: 520px;
+      margin: 22px auto 0;
+      padding: 14px;
+      border-radius: 9px;
+      border: 1px solid #444;
+      background: #171722;
+      color: white;
+      font-size: 16px;
+    }
+
+    .section {
+      max-width: 1120px;
+      margin: auto;
+      padding: 25px 16px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: 23px;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0 0 16px;
+      overflow-wrap: anywhere;
+    }
+
+    .listings {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 15px;
+    }
+
+    .card, .panel {
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      overflow: hidden;
+    }
+
+    .account-image {
+      width: 100%;
+      height: 185px;
+      object-fit: cover;
+      background: #101018;
+      display: block;
+    }
+
+    .image-placeholder {
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8d8d9b;
+      background: linear-gradient(135deg, #171722, #29200f);
+      font-size: 14px;
+    }
+
+    .card-body { padding: 16px; }
+
+    .card h3 {
+      margin: 0 0 9px;
+      color: var(--accent);
+      font-size: 18px;
+      overflow-wrap: anywhere;
+    }
+
+    .card p {
+      color: #ddd;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .price {
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+      margin: 12px 0;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      background: #252536;
+      color: #ddd;
+      border: 1px solid #444;
+    }
+
+    .verified {
+      color: #80e6a2;
+      border-color: #2c7041;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 11px 14px;
+      background: var(--accent);
+      color: #111;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 8px;
+      border: 0;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .btn.secondary {
+      background: #292938;
+      color: #fff;
+      border: 1px solid #4b4b5a;
+    }
+
+    button:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .panel {
+      padding: 18px;
+      margin: 12px 0;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      margin: 5px 0 10px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #101018;
+      color: #fff;
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    label {
+      font-size: 13px;
+      color: #ddd;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .message {
+      min-height: 20px;
+      color: #ffd18a;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    [hidden] { display: none !important; }
+
+    footer {
+      border-top: 1px solid var(--line);
+      text-align: center;
+      padding: 26px 16px;
+      color: #aaa;
+      margin-top: 25px;
+    }
+
+    footer a { color: var(--accent); }
+
+    .notice {
+      font-size: 12px;
+      color: #aaa;
+      line-height: 1.5;
+    }
+
+    .admin-row {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
   </style>
 </head>
+
 <body>
 <header>
   <div class="topbar">
@@ -61,6 +319,7 @@
       <div class="brand">APEXSHOP</div>
       <p class="tagline">Free Fire Account Marketplace</p>
     </div>
+
     <nav>
       <a href="#marketplace">Browse accounts</a>
       <a href="#account-portal">Buyer / Seller login</a>
@@ -73,7 +332,13 @@
   <div class="eyebrow">Your next account starts here</div>
   <h1>Find Your Next <span>Gaming Account</span></h1>
   <p>Explore account listings, compare details and contact sellers directly.</p>
-  <input id="search" class="search" placeholder="Search accounts..." aria-label="Search accounts">
+
+  <input
+    id="search"
+    class="search"
+    placeholder="Search accounts..."
+    aria-label="Search accounts"
+  >
 </section>
 
 <main>
@@ -84,6 +349,7 @@
         <p class="sub">Browse available seller listings below.</p>
       </div>
     </div>
+
     <div class="listings" id="firebase-listings">
       <p class="sub">Loading listings...</p>
     </div>
@@ -91,71 +357,162 @@
 
   <section class="section" id="account-portal">
     <h2>Buyer &amp; Seller Portal</h2>
-    <p class="sub">Sign in to publish account listings or manage your account.</p>
+    <p class="sub">
+      Sign in to publish account listings or manage your account.
+    </p>
+
     <div class="panel">
-      <p id="auth-status" class="sub" role="status" aria-live="polite">Connecting to Firebase...</p>
+      <p id="auth-status" class="sub" role="status" aria-live="polite">
+        Connecting to Firebase...
+      </p>
+
       <div id="auth-form">
         <div class="form-grid">
           <div>
             <label for="user-email">Email address</label>
-            <input id="user-email" type="email" placeholder="Email address" autocomplete="email">
+            <input
+              id="user-email"
+              type="email"
+              placeholder="Email address"
+              autocomplete="email"
+            >
           </div>
+
           <div>
             <label for="user-password">Password</label>
-            <input id="user-password" type="password" placeholder="At least 6 characters" autocomplete="current-password">
+            <input
+              id="user-password"
+              type="password"
+              placeholder="At least 6 characters"
+              autocomplete="current-password"
+            >
           </div>
         </div>
+
         <div class="actions">
-          <button class="btn" id="register-btn" type="button">Create account</button>
-          <button class="btn secondary" id="login-btn" type="button">Log in</button>
+          <button class="btn" id="register-btn" type="button">
+            Create account
+          </button>
+          <button class="btn secondary" id="login-btn" type="button">
+            Log in
+          </button>
         </div>
       </div>
 
       <div id="signed-in-tools" hidden>
         <div class="actions">
-          <button class="btn secondary" id="logout-btn" type="button">Log out</button>
+          <button class="btn secondary" id="logout-btn" type="button">
+            Log out
+          </button>
         </div>
+
         <h3>Post an account for sale</h3>
+
         <form id="listing-form">
           <div class="form-grid">
             <div>
               <label for="listing-title">Listing title</label>
-              <input id="listing-title" required maxlength="80" placeholder="e.g. Premium Free Fire account">
+              <input
+                id="listing-title"
+                required
+                maxlength="80"
+                placeholder="e.g. Premium Free Fire account"
+              >
             </div>
+
             <div>
               <label for="listing-price">Price in naira (₦)</label>
-              <input id="listing-price" type="number" required min="1" max="100000000" step="1" placeholder="Price in naira">
+              <input
+                id="listing-price"
+                type="number"
+                required
+                min="1"
+                max="100000000"
+                step="1"
+                placeholder="Price in naira"
+              >
             </div>
           </div>
-          <label for="seller-whatsapp">WhatsApp number (include country code)</label>
-          <input id="seller-whatsapp" inputmode="numeric" maxlength="15" placeholder="2348012345678" required>
+
+          <label for="seller-whatsapp">
+            WhatsApp number (include country code)
+          </label>
+          <input
+            id="seller-whatsapp"
+            inputmode="numeric"
+            maxlength="15"
+            placeholder="2348012345678"
+            required
+          >
+
           <label for="listing-description">Account details</label>
-          <textarea id="listing-description" required maxlength="1000" placeholder="Describe level, skins, rank and other details. Never include passwords."></textarea>
-          <label for="listing-image">Account pictures (up to 4 images, max 5 MB each)</label>
-          <input id="listing-image" type="file" accept="image/*" multiple>
-          <p class="notice">Picture uploads require Firebase Storage and appropriate Storage security rules.</p>
-          <button class="btn" id="publish-btn" type="submit">Publish listing</button>
+          <textarea
+            id="listing-description"
+            required
+            maxlength="1000"
+            placeholder="Describe level, skins, rank and other details. Never include passwords."
+          ></textarea>
+
+          <label for="listing-image">
+            Account pictures (up to 4 images, max 5 MB each)
+          </label>
+          <input
+            id="listing-image"
+            type="file"
+            accept="image/*"
+            multiple
+          >
+
+          <p class="notice">
+            Picture uploads require Firebase Storage to be enabled.
+          </p>
+
+          <button class="btn" id="publish-btn" type="submit">
+            Publish listing
+          </button>
         </form>
       </div>
+
       <p id="listing-message" class="message" role="status" aria-live="polite"></p>
     </div>
   </section>
 
   <section class="section" id="admin-area" hidden>
     <h2>APEXSHOP Admin Dashboard</h2>
-    <p class="sub">Seller verification controls for authorized administrators.</p>
-    <div id="admin-sellers" class="panel">Loading seller list...</div>
+    <p class="sub">
+      Seller verification controls for authorized administrators.
+    </p>
+
+    <div id="admin-sellers" class="panel">
+      Loading seller list...
+    </div>
+
     <p id="admin-message" class="message" role="status" aria-live="polite"></p>
   </section>
 
   <section class="section" id="support">
     <h2>Need Help?</h2>
-    <p class="sub">Contact APEXSHOP if you have a problem with a listing or seller.</p>
+    <p class="sub">
+      Contact APEXSHOP if you have a problem with a listing or seller.
+    </p>
+
     <div class="panel">
       <p>WhatsApp: <strong>0708 578 5233</strong></p>
+
       <div class="actions">
-        <a class="btn" href="https://wa.me/2347085785233" target="_blank" rel="noopener">Contact Help Line</a>
-        <a class="btn secondary" href="https://t.me/apexshop90" target="_blank" rel="noopener">Telegram Support</a>
+        <a
+          class="btn"
+          href="https://wa.me/2347085785233"
+          target="_blank"
+          rel="noopener"
+        >Contact Help Line</a>
+
+        <a
+          class="btn secondary"
+          href="https://t.me/apexshop90"
+          target="_blank"
+          rel="noopener"
+        >Telegram Support</a>
       </div>
     </div>
   </section>
@@ -164,7 +521,9 @@
 <footer>
   <p><strong>APEXSHOP MARKETPLACE</strong></p>
   <p>Buy responsibly. Verify account details before payment.</p>
-  <p class="notice">Use of this marketplace is subject to game publisher rules and applicable law.</p>
+  <p class="notice">
+    Use of this marketplace is subject to game publisher rules and applicable law.
+  </p>
 </footer>
 
 <script>
@@ -172,6 +531,7 @@
 
   function filterAccounts() {
     const query = searchInput.value.toLowerCase().trim();
+
     document.querySelectorAll("#firebase-listings .card").forEach(card => {
       card.hidden = !card.textContent.toLowerCase().includes(query);
     });
@@ -182,16 +542,33 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
   import {
-    getAuth, createUserWithEmailAndPassword,
-    signInWithEmailAndPassword, signOut, onAuthStateChanged
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
   } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
   import {
-    getFirestore, collection, addDoc, getDocs, doc, getDoc,
-    updateDoc, query, orderBy, serverTimestamp
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    doc,
+    getDoc,
+    updateDoc,
+    query,
+    orderBy,
+    serverTimestamp
   } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
   import {
-    getStorage, ref, uploadBytes, getDownloadURL
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL
   } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
 
   const firebaseConfig = {
@@ -205,6 +582,7 @@
   };
 
   const $ = id => document.getElementById(id);
+
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
@@ -212,22 +590,34 @@
 
   let currentUser = null;
   let isAdmin = false;
+  let authCheckRun = 0;
 
   function showError(error) {
     const code = error?.code || "";
+
     const known = {
-      "auth/email-already-in-use": "This email is already registered. Please log in.",
-      "auth/invalid-email": "Enter a valid email address.",
-      "auth/weak-password": "Use a password with at least 6 characters.",
-      "auth/invalid-credential": "Email or password is incorrect.",
-      "auth/operation-not-allowed": "Enable Email/Password sign-in in Firebase Authentication.",
-      "permission-denied": "Firebase permission denied. Check your Firestore rules.",
-      "storage/unauthorized": "Image upload blocked. Check Firebase Storage rules.",
-      "storage/bucket-not-found": "Firebase Storage is not set up for this project."
+      "auth/email-already-in-use":
+        "This email is already registered. Please log in.",
+      "auth/invalid-email":
+        "Enter a valid email address.",
+      "auth/weak-password":
+        "Use a password with at least 6 characters.",
+      "auth/invalid-credential":
+        "Email or password is incorrect.",
+      "auth/operation-not-allowed":
+        "Enable Email/Password sign-in in Firebase Authentication.",
+      "permission-denied":
+        "Firebase permission denied. Check your Firestore rules.",
+      "storage/unauthorized":
+        "Image upload blocked. Check Firebase Storage rules.",
+      "storage/bucket-not-found":
+        "Firebase Storage is not set up for this project."
     };
 
     $("listing-message").textContent =
-      known[code] || ("Error: " + (error?.message || code || "Please try again."));
+      known[code] ||
+      ("Error: " + (error?.message || code || "Please try again."));
+
     console.error(error);
   }
 
@@ -241,11 +631,15 @@
   $("register-btn").addEventListener("click", async () => {
     try {
       const { email, password } = credentials();
+
       if (!email || password.length < 6) {
-        $("listing-message").textContent = "Enter an email and a password of at least 6 characters.";
+        $("listing-message").textContent =
+          "Enter an email and a password of at least 6 characters.";
         return;
       }
+
       await createUserWithEmailAndPassword(auth, email, password);
+
       $("listing-message").textContent = "Account created successfully.";
     } catch (error) {
       showError(error);
@@ -255,11 +649,14 @@
   $("login-btn").addEventListener("click", async () => {
     try {
       const { email, password } = credentials();
+
       if (!email || !password) {
         $("listing-message").textContent = "Enter your email and password.";
         return;
       }
+
       await signInWithEmailAndPassword(auth, email, password);
+
       $("listing-message").textContent = "Login successful.";
     } catch (error) {
       showError(error);
@@ -276,6 +673,8 @@
   });
 
   onAuthStateChanged(auth, async user => {
+    const thisRun = ++authCheckRun;
+
     currentUser = user;
     isAdmin = false;
 
@@ -285,34 +684,58 @@
     $("admin-message").textContent = "";
 
     if (!user) {
-      $("auth-status").textContent = "Not signed in. Create an account or log in.";
+      $("auth-status").textContent =
+        "Not signed in. Create an account or log in.";
+      $("admin-sellers").textContent = "Sign in to check administrator access.";
       return;
     }
 
-    $("auth-status").textContent = "Signed in as " + (user.email || user.uid) + ". Checking admin access...";
+    $("auth-status").textContent =
+      "Signed in as " + (user.email || user.uid) + ". Checking admin access...";
+
     $("admin-sellers").textContent = "Checking administrator permissions...";
 
     try {
-      const adminSnap = await getDoc(doc(db, "admins", user.uid));
+      const adminRef = doc(db, "admins", user.uid);
+      const adminSnap = await getDoc(adminRef);
+
+      if (thisRun !== authCheckRun) return;
 
       if (!adminSnap.exists()) {
-        $("auth-status").textContent = "Admin document not found. Website UID: " + user.uid;
-console.log("Website signed-in UID:", user.uid);
+        $("auth-status").textContent =
+          "Admin document not found. Website UID: " + user.uid;
+        $("admin-sellers").textContent =
+          "No admin document was found for this signed-in account.";
+        return;
+      }
+
       if (adminSnap.data().enabled !== true) {
         $("auth-status").textContent =
-          "Admin document found, but its enabled field must be the Boolean true.";
+          "Admin document found, but enabled must be Boolean true.";
+        $("admin-sellers").textContent =
+          "Administrator access is disabled for this account.";
         return;
       }
 
       isAdmin = true;
       $("admin-area").hidden = false;
-      $("auth-status").textContent = "Admin access confirmed for " + (user.email || user.uid) + ".";
+
+      $("auth-status").textContent =
+        "Admin access confirmed for " + (user.email || user.uid) + ".";
+
       await loadAdminSellers();
 
     } catch (error) {
+      if (thisRun !== authCheckRun) return;
+
       console.error("Admin check failed:", error);
+
       $("auth-status").textContent =
-        "Admin check failed: " + (error.code || error.message || "Unknown error");
+        "Admin check failed: " +
+        (error.code || error.message || "Unknown error");
+
+      $("admin-sellers").textContent =
+        "Could not check administrator access. See the status message above.";
     }
   });
 
@@ -330,10 +753,17 @@ console.log("Website signed-in UID:", user.uid);
     const sellerWhatsapp = $("seller-whatsapp").value.replace(/\D/g, "");
     const files = Array.from($("listing-image").files || []);
 
-    if (!title || !description || sellerWhatsapp.length < 10 ||
-        sellerWhatsapp.length > 15 || !Number.isSafeInteger(price) ||
-        price < 1 || price > 100000000) {
-      $("listing-message").textContent = "Check the title, details, WhatsApp number and price.";
+    if (
+      !title ||
+      !description ||
+      sellerWhatsapp.length < 10 ||
+      sellerWhatsapp.length > 15 ||
+      !Number.isSafeInteger(price) ||
+      price < 1 ||
+      price > 100000000
+    ) {
+      $("listing-message").textContent =
+        "Check the title, details, WhatsApp number and price.";
       return;
     }
 
@@ -342,8 +772,12 @@ console.log("Website signed-in UID:", user.uid);
       return;
     }
 
-    if (files.some(file => !file.type.startsWith("image/") || file.size > 5 * 1024 * 1024)) {
-      $("listing-message").textContent = "Each picture must be an image no larger than 5 MB.";
+    if (files.some(file =>
+      !file.type.startsWith("image/") ||
+      file.size > 5 * 1024 * 1024
+    )) {
+      $("listing-message").textContent =
+        "Each picture must be an image no larger than 5 MB.";
       return;
     }
 
@@ -356,8 +790,17 @@ console.log("Website signed-in UID:", user.uid);
 
       for (const file of files) {
         const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-        const imageRef = ref(storage, `listing-images/${currentUser.uid}/${Date.now()}_${safeName}`);
-        await uploadBytes(imageRef, file, { contentType: file.type });
+
+        const imageRef = ref(
+          storage,
+          "listing-images/" + currentUser.uid + "/" +
+          Date.now() + "_" + safeName
+        );
+
+        await uploadBytes(imageRef, file, {
+          contentType: file.type
+        });
+
         imageUrls.push(await getDownloadURL(imageRef));
       }
 
@@ -374,7 +817,10 @@ console.log("Website signed-in UID:", user.uid);
       });
 
       $("listing-form").reset();
-      $("listing-message").textContent = "Listing published successfully.";
+
+      $("listing-message").textContent =
+        "Listing published successfully.";
+
       await loadListings();
 
     } catch (error) {
@@ -431,8 +877,10 @@ console.log("Website signed-in UID:", user.uid);
         heading.textContent = data.title || "Free Fire account";
 
         const badge = document.createElement("span");
-        badge.className = "badge" + (data.verified === true ? " verified" : "");
-        badge.textContent = data.verified === true ? "✓ Verified seller" : "Seller not verified";
+        badge.className =
+          "badge" + (data.verified === true ? " verified" : "");
+        badge.textContent =
+          data.verified === true ? "✓ Verified seller" : "Seller not verified";
 
         const details = document.createElement("p");
         details.textContent = data.description || "";
@@ -447,15 +895,19 @@ console.log("Website signed-in UID:", user.uid);
         contact.className = "btn";
         contact.textContent = "Contact Seller on WhatsApp";
 
-        if (typeof data.sellerWhatsapp === "string" && /^\d{10,15}$/.test(data.sellerWhatsapp)) {
+        if (
+          typeof data.sellerWhatsapp === "string" &&
+          /^\d{10,15}$/.test(data.sellerWhatsapp)
+        ) {
           contact.href = "https://wa.me/" + data.sellerWhatsapp;
         } else {
-          contact.textContent = "View Seller Channel";
+          contact.textContent = "Contact APEXSHOP on Telegram";
           contact.href = "https://t.me/apexshop90";
         }
 
         contact.target = "_blank";
         contact.rel = "noopener";
+
         body.append(heading, badge, details, price, contact);
         card.append(body);
         container.append(card);
@@ -465,9 +917,12 @@ console.log("Website signed-in UID:", user.uid);
 
     } catch (error) {
       container.replaceChildren();
+
       const err = document.createElement("p");
       err.className = "sub";
-      err.textContent = "Could not load listings: " + (error.code || error.message);
+      err.textContent =
+        "Could not load listings: " + (error.code || error.message);
+
       container.append(err);
       console.error("Loading listings failed:", error);
     }
@@ -478,6 +933,11 @@ console.log("Website signed-in UID:", user.uid);
     container.textContent = "Loading seller list...";
 
     try {
+      if (!isAdmin || !currentUser) {
+        container.textContent = "Administrator access is required.";
+        return;
+      }
+
       const result = await getDocs(collection(db, "listings"));
       container.replaceChildren();
 
@@ -493,7 +953,10 @@ console.log("Website signed-in UID:", user.uid);
           verified: data.verified === true
         };
 
-        if (data.verified === true) previous.verified = true;
+        if (data.verified === true) {
+          previous.verified = true;
+        }
+
         sellers.set(data.sellerId, previous);
       });
 
@@ -504,18 +967,26 @@ console.log("Website signed-in UID:", user.uid);
 
       for (const seller of sellers.values()) {
         const row = document.createElement("div");
-        row.style.cssText = "padding:12px 0;border-bottom:1px solid #30303d";
+        row.className = "admin-row";
 
         const label = document.createElement("p");
-        label.textContent = seller.email + " — " + (seller.verified ? "Verified" : "Not verified");
+        label.textContent =
+          seller.email + " — " +
+          (seller.verified ? "Verified" : "Not verified");
 
         const button = document.createElement("button");
         button.className = "btn";
-        button.textContent = seller.verified ? "Unverify seller" : "Verify seller";
+        button.textContent =
+          seller.verified ? "Unverify seller" : "Verify seller";
 
         button.addEventListener("click", async () => {
-          if (!isAdmin || !auth.currentUser || auth.currentUser.uid !== currentUser.uid) {
-            $("admin-message").textContent = "Admin session is not valid. Please sign in again.";
+          if (
+            !isAdmin ||
+            !auth.currentUser ||
+            auth.currentUser.uid !== currentUser?.uid
+          ) {
+            $("admin-message").textContent =
+              "Admin session is not valid. Please sign in again.";
             return;
           }
 
@@ -523,7 +994,10 @@ console.log("Website signed-in UID:", user.uid);
 
           try {
             const listingSnaps = await getDocs(collection(db, "listings"));
-            const updates = listingSnaps.docs.filter(item => item.data().sellerId === seller.uid);
+
+            const updates = listingSnaps.docs.filter(
+              item => item.data().sellerId === seller.uid
+            );
 
             for (const item of updates) {
               await updateDoc(doc(db, "listings", item.id), {
@@ -531,13 +1005,17 @@ console.log("Website signed-in UID:", user.uid);
               });
             }
 
-            $("admin-message").textContent = "Seller verification updated.";
+            $("admin-message").textContent =
+              "Seller verification updated.";
+
             await loadAdminSellers();
             await loadListings();
 
           } catch (error) {
             $("admin-message").textContent =
-              "Verification update failed: " + (error.code || error.message);
+              "Verification update failed: " +
+              (error.code || error.message);
+
             console.error(error);
           } finally {
             button.disabled = false;
@@ -551,6 +1029,7 @@ console.log("Website signed-in UID:", user.uid);
     } catch (error) {
       container.textContent =
         "Could not load sellers: " + (error.code || error.message);
+
       console.error("Loading admin sellers failed:", error);
     }
   }
