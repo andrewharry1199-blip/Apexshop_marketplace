@@ -465,11 +465,30 @@
         return;
       }
 
-      if (adminSnap.data().enabled !== true) {
-        $("auth-status").textContent = "Admin document found, but enabled must be Boolean true.";
-        $("admin-sellers").textContent = "Administrator access is disabled for this account.";
+      
+      const adminData = adminSnap.data();
+      const enabledValue = adminData.enabled;
+
+      console.log("Admin diagnostic:", {
+        projectId: firebaseConfig.projectId,
+        uid: user.uid,
+        documentPath: adminSnap.ref.path,
+        enabledValue: enabledValue,
+        enabledType: typeof enabledValue
+      });
+
+      if (enabledValue !== true) {
+        $("auth-status").textContent =
+          "Admin diagnostic: value=" +
+          JSON.stringify(enabledValue) +
+          ", type=" + typeof enabledValue +
+          ", path=" + adminSnap.ref.path;
+
+        $("admin-sellers").textContent =
+          "Please report the diagnostic message shown above.";
         return;
       }
+
 
       isAdmin = true;
       $("admin-area").hidden = false;
