@@ -352,8 +352,6 @@
     serverTimestamp
   } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-  // imgdb.io image hosting API.
-  // No API key is required by its documented upload endpoint.
   const IMAGE_UPLOAD_ENDPOINT = "https://imgdb.io/api/v1/upload?ttl=0";
 
   const firebaseConfig = {
@@ -460,12 +458,18 @@
       if (thisRun !== authCheckRun) return;
 
       if (!adminSnap.exists()) {
-        $("auth-status").textContent = "Admin document not found. Website UID: " + user.uid;
-        $("admin-sellers").textContent = "No admin document was found for this signed-in account.";
+        // Normal accounts are not administrators.
+        // Keep the buyer/seller portal available.
+        isAdmin = false;
+        $("admin-area").hidden = true;
+        $("auth-status").textContent =
+          "Signed in as " + (user.email || user.uid) +
+          ". Normal buyer/seller access is active.";
+        $("admin-sellers").textContent =
+          "Administrator access is restricted to authorized admins.";
         return;
       }
 
-      
       const adminData = adminSnap.data();
       const enabledValue = adminData.enabled;
 
@@ -489,10 +493,10 @@
         return;
       }
 
-
       isAdmin = true;
       $("admin-area").hidden = false;
-      $("auth-status").textContent = "Admin access confirmed for " + (user.email || user.uid) + ".";
+      $("auth-status").textContent =
+        "Admin access confirmed for " + (user.email || user.uid) + ".";
       await loadAdminSellers();
     } catch (error) {
       if (thisRun !== authCheckRun) return;
@@ -504,7 +508,6 @@
     }
   });
 
-  // Upload one image directly to imgdb.io.
   async function uploadImageToHost(file) {
     if (!file) {
       throw new Error("Please select an image first.");
