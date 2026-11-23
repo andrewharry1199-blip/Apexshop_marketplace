@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,58 +6,329 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b0b12">
   <title>APEXSHOP MARKETPLACE</title>
+
   <style>
-    :root{--bg:#0b0b12;--panel:#151522;--panel2:#191925;--accent:#ff9d00;--muted:#b9b9c6;--line:#30303d}
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:#fff;font-family:Arial,sans-serif}
-    a{color:inherit}
-    header{background:linear-gradient(135deg,#171722,#251506);border-bottom:2px solid var(--accent);padding:18px 16px}
-    .topbar{max-width:1120px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-    .brand{font-size:25px;font-weight:900;color:var(--accent);letter-spacing:1px}
-    .tagline{margin:5px 0 0;color:#d0d0d8;font-size:13px}
-    nav{display:flex;gap:8px;flex-wrap:wrap}
-    nav a{font-size:13px;text-decoration:none;padding:9px 11px;border:1px solid #444;border-radius:8px}
-    nav a:hover{border-color:var(--accent)}
-    .hero{padding:48px 16px 32px;text-align:center;background:radial-gradient(ellipse at top,#33200b 0%,#0b0b12 65%)}
-    .eyebrow{color:var(--accent);font-weight:bold;text-transform:uppercase;letter-spacing:2px;font-size:12px}
-    .hero h1{font-size:clamp(29px,6vw,48px);margin:12px auto;max-width:760px;line-height:1.1}
-    .hero h1 span{color:var(--accent)}
-    .hero p{color:var(--muted);max-width:600px;margin:12px auto}
-    .search{display:block;width:100%;max-width:520px;margin:22px auto 0;padding:14px;border-radius:9px;border:1px solid #444;background:#171722;color:white;font-size:16px}
-    .section{max-width:1120px;margin:auto;padding:25px 16px}
-    .section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}
-    h2{margin:0 0 8px;font-size:23px}
-    .sub{color:var(--muted);font-size:14px;margin:0 0 16px}
-    .listings{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:15px}
-    .card,.panel{background:var(--panel2);border:1px solid var(--line);border-radius:13px;overflow:hidden}
-    .account-image{width:100%;height:185px;object-fit:cover;background:#101018;display:block}
-    .image-placeholder{height:150px;display:flex;align-items:center;justify-content:center;color:#8d8d9b;background:linear-gradient(135deg,#171722,#29200f);font-size:14px}
-    .card-body{padding:16px}
-    .card h3{margin:0 0 9px;color:var(--accent);font-size:18px;overflow-wrap:anywhere}
-    .card p{color:#ddd;line-height:1.45;overflow-wrap:anywhere}
-    .price{font-size:22px;font-weight:bold;color:#fff;margin:12px 0}
-    .badge{display:inline-block;padding:4px 8px;border-radius:20px;font-size:11px;background:#252536;color:#ddd;border:1px solid #444}
-    .verified{color:#80e6a2;border-color:#2c7041}
-    .btn{display:inline-block;padding:11px 14px;background:var(--accent);color:#111;text-decoration:none;font-weight:bold;border-radius:8px;border:0;cursor:pointer;font-size:14px}
-    .btn.secondary{background:#292938;color:#fff;border:1px solid #4b4b5a}
-    button:disabled{opacity:.5;cursor:not-allowed}
-    .panel{padding:18px;margin:12px 0}
-    .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-    input,textarea,select{width:100%;padding:12px;margin:5px 0 10px;border-radius:8px;border:1px solid #444;background:#101018;color:#fff;font:inherit}
-    textarea{min-height:100px;resize:vertical}
-    label{font-size:13px;color:#ddd}
-    .actions{display:flex;gap:8px;flex-wrap:wrap}
-    .message{min-height:20px;color:#ffd18a;font-size:14px;overflow-wrap:anywhere}
-    [hidden]{display:none!important}
-    footer{border-top:1px solid var(--line);text-align:center;padding:26px 16px;color:#aaa;margin-top:25px}
-    footer a{color:var(--accent)}
-    .notice{font-size:12px;color:#aaa;line-height:1.5}
+    :root {
+      --bg:#0b0b12;
+      --panel:#151522;
+      --panel2:#191925;
+      --accent:#ff9d00;
+      --muted:#b9b9c6;
+      --line:#30303d;
+    }
+
+    * { box-sizing:border-box; }
+
+    body {
+      margin:0;
+      background:var(--bg);
+      color:#fff;
+      font-family:Arial,sans-serif;
+    }
+
+    a { color:inherit; }
+
+    header {
+      background:linear-gradient(135deg,#171722,#251506);
+      border-bottom:2px solid var(--accent);
+      padding:18px 16px;
+    }
+
+    .topbar {
+      max-width:1120px;
+      margin:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .brand {
+      font-size:25px;
+      font-weight:900;
+      color:var(--accent);
+      letter-spacing:1px;
+    }
+
+    .tagline {
+      margin:5px 0 0;
+      color:#d0d0d8;
+      font-size:13px;
+    }
+
+    nav {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    nav a {
+      font-size:13px;
+      text-decoration:none;
+      padding:9px 11px;
+      border:1px solid #444;
+      border-radius:8px;
+    }
+
+    nav a:hover { border-color:var(--accent); }
+
+    .hero {
+      padding:48px 16px 32px;
+      text-align:center;
+      background:radial-gradient(ellipse at top,#33200b 0%,#0b0b12 65%);
+    }
+
+    .eyebrow {
+      color:var(--accent);
+      font-weight:bold;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      font-size:12px;
+    }
+
+    .hero h1 {
+      font-size:clamp(29px,6vw,48px);
+      margin:12px auto;
+      max-width:760px;
+      line-height:1.1;
+    }
+
+    .hero h1 span { color:var(--accent); }
+
+    .hero p {
+      color:var(--muted);
+      max-width:600px;
+      margin:12px auto;
+    }
+
+    .search {
+      display:block;
+      width:100%;
+      max-width:520px;
+      margin:22px auto 0;
+      padding:14px;
+      border-radius:9px;
+      border:1px solid #444;
+      background:#171722;
+      color:white;
+      font-size:16px;
+    }
+
+    .section {
+      max-width:1120px;
+      margin:auto;
+      padding:25px 16px;
+    }
+
+    .section-head {
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    h2 { margin:0 0 8px; font-size:23px; }
+
+    .sub {
+      color:var(--muted);
+      font-size:14px;
+      margin:0 0 16px;
+    }
+
+    .listings {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+      gap:15px;
+    }
+
+    .card,.panel {
+      background:var(--panel2);
+      border:1px solid var(--line);
+      border-radius:13px;
+      overflow:hidden;
+    }
+
+    .account-image {
+      width:100%;
+      height:185px;
+      object-fit:cover;
+      background:#101018;
+      display:block;
+    }
+
+    .image-placeholder {
+      height:150px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#8d8d9b;
+      background:linear-gradient(135deg,#171722,#29200f);
+      font-size:14px;
+    }
+
+    .card-body { padding:16px; }
+
+    .card h3 {
+      margin:0 0 9px;
+      color:var(--accent);
+      font-size:18px;
+      overflow-wrap:anywhere;
+    }
+
+    .card p {
+      color:#ddd;
+      line-height:1.45;
+      overflow-wrap:anywhere;
+    }
+
+    .price {
+      font-size:22px;
+      font-weight:bold;
+      color:#fff;
+      margin:12px 0;
+    }
+
+    .badge {
+      display:inline-block;
+      padding:4px 8px;
+      border-radius:20px;
+      font-size:11px;
+      background:#252536;
+      color:#ddd;
+      border:1px solid #444;
+    }
+
+    .verified {
+      color:#80e6a2;
+      border-color:#2c7041;
+    }
+
+    .btn {
+      display:inline-block;
+      padding:11px 14px;
+      background:var(--accent);
+      color:#111;
+      text-decoration:none;
+      font-weight:bold;
+      border-radius:8px;
+      border:0;
+      cursor:pointer;
+      font-size:14px;
+    }
+
+    .btn.secondary {
+      background:#292938;
+      color:#fff;
+      border:1px solid #4b4b5a;
+    }
+
+    button:disabled {
+      opacity:.5;
+      cursor:not-allowed;
+    }
+
+    .panel {
+      padding:18px;
+      margin:12px 0;
+    }
+
+    .form-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+    }
+
+    input,textarea,select {
+      width:100%;
+      padding:12px;
+      margin:5px 0 10px;
+      border-radius:8px;
+      border:1px solid #444;
+      background:#101018;
+      color:#fff;
+      font:inherit;
+    }
+
+    textarea {
+      min-height:100px;
+      resize:vertical;
+    }
+
+    label {
+      font-size:13px;
+      color:#ddd;
+    }
+
+    .actions {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .message {
+      min-height:20px;
+      color:#ffd18a;
+      font-size:14px;
+      overflow-wrap:anywhere;
+    }
+
+    [hidden] { display:none!important; }
+
+    footer {
+      border-top:1px solid var(--line);
+      text-align:center;
+      padding:26px 16px;
+      color:#aaa;
+      margin-top:25px;
+    }
+
+    footer a { color:var(--accent); }
+
+    .notice {
+      font-size:12px;
+      color:#aaa;
+      line-height:1.5;
+    }
+
+    .admin-row {
+      padding:13px 0;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .admin-row p { margin:0; }
+
+    .gallery {
+      display:flex;
+      gap:7px;
+      overflow-x:auto;
+      padding:10px 0;
+    }
+
+    .gallery img {
+      width:75px;
+      height:65px;
+      object-fit:cover;
+      border-radius:6px;
+    }
   </style>
 </head>
+
 <body>
+
 <header>
   <div class="topbar">
-    <div><div class="brand">APEXSHOP</div><p class="tagline">Free Fire Account Marketplace</p></div>
+    <div>
+      <div class="brand">APEXSHOP</div>
+      <p class="tagline">Free Fire Account Marketplace</p>
+    </div>
+
     <nav>
       <a href="#marketplace">Browse accounts</a>
       <a href="?portal=buyer#account-portal">Buyer login</a>
@@ -68,97 +340,320 @@
 
 <section class="hero">
   <div class="eyebrow">Your next account starts here</div>
+
   <h1>Find Your Next <span>Gaming Account</span></h1>
+
   <p>Explore account listings, compare details and contact sellers directly.</p>
-  <input id="search" class="search" placeholder="Search accounts..." aria-label="Search accounts">
+
+  <input
+    id="search"
+    class="search"
+    placeholder="Search accounts..."
+    aria-label="Search accounts"
+  >
 </section>
 
 <main>
+
+  <!-- PUBLIC MARKETPLACE -->
+
   <section class="section" id="marketplace">
-    <div class="section-head"><div><h2>Featured Accounts</h2><p class="sub">Browse available seller listings below.</p></div></div>
-    <div class="listings" id="firebase-listings"><p class="sub">Loading listings...</p></div>
+    <div class="section-head">
+      <div>
+        <h2>Featured Accounts</h2>
+        <p class="sub">Browse available seller listings below.</p>
+      </div>
+    </div>
+
+    <div class="listings" id="firebase-listings">
+      <p class="sub">Loading listings...</p>
+    </div>
   </section>
+
+  <!-- BUYER AND SELLER PORTALS -->
 
   <section class="section" id="account-portal">
+
     <h2 id="portal-heading">Buyer Portal</h2>
-    <p class="sub" id="portal-description">Browse available accounts and contact sellers. Buyer accounts cannot publish listings.</p>
+
+    <p class="sub" id="portal-description">
+      Browse available accounts and contact sellers.
+    </p>
+
     <div class="panel">
+
       <p id="auth-status" class="sub">Checking login...</p>
+
       <div id="auth-form">
+
         <div class="form-grid">
-          <div><label for="user-email">Email address</label><input id="user-email" type="email" placeholder="Email address" autocomplete="email"></div>
-          <div><label for="user-password">Password</label><input id="user-password" type="password" placeholder="At least 6 characters" autocomplete="current-password"></div>
-        </div>
-        <div class="actions"><button class="btn" id="register-btn" type="button">Create buyer account</button><button class="btn secondary" id="login-btn" type="button">Log in</button></div>
-        <p class="notice" id="portal-switch">Want to sell? <a href="?portal=seller#account-portal">Register through the seller link</a>.</p>
-      </div>
-      <div id="signed-in-tools" hidden>
-        <div class="actions"><button class="btn secondary" id="logout-btn" type="button">Log out</button></div>
-        <p id="role-status" class="sub"></p>
-        <div id="seller-tools" hidden>
-        <h3>Post an account for sale</h3>
-        <form id="listing-form">
-          <div class="form-grid">
-            <div><label for="listing-title">Listing title</label><input id="listing-title" required maxlength="80" placeholder="e.g. Premium Free Fire account"></div>
-            <div><label for="listing-price">Price in naira (₦)</label><input id="listing-price" type="number" required min="1" max="100000000" step="1" placeholder="Price in naira"></div>
+
+          <div>
+            <label for="user-email">Email address</label>
+            <input
+              id="user-email"
+              type="email"
+              placeholder="Email address"
+              autocomplete="email"
+            >
           </div>
-          <label for="seller-whatsapp">Your WhatsApp number (include country code, e.g. 2348012345678)</label>
-          <input id="seller-whatsapp" inputmode="numeric" maxlength="15" placeholder="2348012345678" required>
-          <label for="listing-description">Account details</label>
-          <textarea id="listing-description" required maxlength="1000" placeholder="Describe level, skins, rank and other details. Never include passwords."></textarea>
-          <label for="listing-image">Account pictures (up to 4 images, max 4 MB each)</label>
-          <input id="listing-image" type="file" accept="image/*" multiple>
-          <p class="notice">Image uploads need Firebase Storage to be enabled and secure Storage rules to be configured. If Storage isn't available in your Firebase project, publishing with pictures will show an error until setup is complete.</p>
-          <button class="btn" id="publish-btn" type="submit">Publish listing</button>
-        </form>
+
+          <div>
+            <label for="user-password">Password</label>
+            <input
+              id="user-password"
+              type="password"
+              placeholder="At least 6 characters"
+              autocomplete="current-password"
+            >
+          </div>
+
         </div>
+
+        <div class="actions">
+          <button class="btn" id="register-btn" type="button">
+            Create buyer account
+          </button>
+
+          <button class="btn secondary" id="login-btn" type="button">
+            Log in
+          </button>
+        </div>
+
+        <p class="notice" id="portal-switch">
+          Want to sell?
+          <a href="?portal=seller#account-portal">
+            Register through the seller link
+          </a>.
+        </p>
+
       </div>
+
+      <!-- SIGNED-IN AREA -->
+
+      <div id="signed-in-tools" hidden>
+
+        <div class="actions">
+          <button class="btn secondary" id="logout-btn" type="button">
+            Log out
+          </button>
+        </div>
+
+        <p id="role-status" class="sub"></p>
+
+        <!-- SELLER LISTING FORM -->
+
+        <div id="seller-tools" hidden>
+
+          <h3>Post an account for sale</h3>
+
+          <form id="listing-form">
+
+            <div class="form-grid">
+
+              <div>
+                <label for="listing-title">Listing title</label>
+                <input
+                  id="listing-title"
+                  required
+                  maxlength="80"
+                  placeholder="e.g. Premium Free Fire account"
+                >
+              </div>
+
+              <div>
+                <label for="listing-price">Price in naira (₦)</label>
+                <input
+                  id="listing-price"
+                  type="number"
+                  required
+                  min="1"
+                  max="100000000"
+                  step="1"
+                  placeholder="Price in naira"
+                >
+              </div>
+
+            </div>
+
+            <label for="seller-whatsapp">
+              WhatsApp number with country code
+            </label>
+
+            <input
+              id="seller-whatsapp"
+              inputmode="numeric"
+              maxlength="15"
+              placeholder="2348012345678"
+              required
+            >
+
+            <label for="listing-description">Account details</label>
+
+            <textarea
+              id="listing-description"
+              required
+              maxlength="1000"
+              placeholder="Describe level, skins, rank and other details. Never include passwords."
+            ></textarea>
+
+            <label for="listing-image">
+              Account pictures (up to 4 images, maximum 4 MB each)
+            </label>
+
+            <input
+              id="listing-image"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              multiple
+            >
+
+            <p class="notice">
+              Pictures are uploaded using Firebase Storage.
+              Firebase Storage must be enabled and its security rules
+              must be configured before image uploads will work.
+            </p>
+
+            <button class="btn" id="publish-btn" type="submit">
+              Publish listing
+            </button>
+
+          </form>
+
+        </div>
+
+      </div>
+
       <p id="listing-message" class="message" role="status"></p>
+
     </div>
   </section>
+
+  <!-- ADMIN AREA -->
 
   <section class="section" id="admin-area" hidden>
+
     <h2>Admin: Seller Verification</h2>
-    <p class="sub">Only an account authorized in Firebase can see and use these controls.</p>
-    <div id="admin-sellers" class="panel">Loading seller list...</div>
+
+    <p class="sub">
+      Review registered sellers and control who can publish listings.
+    </p>
+
+    <div id="admin-sellers" class="panel">
+      Loading seller list...
+    </div>
+
     <p id="admin-message" class="message" role="status"></p>
+
   </section>
 
+  <!-- SUPPORT -->
+
   <section class="section" id="support">
+
     <h2>Need Help?</h2>
-    <p class="sub">Contact APEXSHOP if you have a problem with a listing or seller.</p>
+
+    <p class="sub">
+      Contact APEXSHOP if you have a problem with a listing or seller.
+    </p>
+
     <div class="panel">
+
       <p>WhatsApp: <strong>0708 578 5233</strong></p>
+
       <div class="actions">
-        <a class="btn" href="https://wa.me/2347085785233" target="_blank" rel="noopener">Contact Help Line</a>
-        <a class="btn secondary" href="https://t.me/apexshop90" target="_blank" rel="noopener">Telegram Support</a>
+
+        <a
+          class="btn"
+          href="https://wa.me/2347085785233"
+          target="_blank"
+          rel="noopener"
+        >
+          Contact Help Line
+        </a>
+
+        <a
+          class="btn secondary"
+          href="https://t.me/apexshop90"
+          target="_blank"
+          rel="noopener"
+        >
+          Telegram Support
+        </a>
+
       </div>
+
     </div>
+
   </section>
+
 </main>
 
 <footer>
   <p><strong>APEXSHOP MARKETPLACE</strong></p>
+
   <p>Buy responsibly. Verify account details before payment.</p>
-  <p class="notice">Use of this marketplace is subject to game publisher rules and applicable law.</p>
+
+  <p class="notice">
+    Use of this marketplace is subject to game publisher rules
+    and applicable law.
+  </p>
 </footer>
 
 <script>
   const searchInput = document.getElementById("search");
+
   searchInput.addEventListener("input", filterAccounts);
+
   function filterAccounts() {
     const query = searchInput.value.toLowerCase().trim();
-    document.querySelectorAll("#firebase-listings .card").forEach(card => {
-      card.hidden = !card.textContent.toLowerCase().includes(query);
-    });
+
+    document.querySelectorAll("#firebase-listings .card")
+      .forEach(card => {
+        card.hidden = !card.textContent.toLowerCase().includes(query);
+      });
   }
 </script>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-  import { getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc, updateDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
+
+  // FIREBASE IMPORTS
+
+  import {
+    initializeApp
+  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    doc,
+    getDoc,
+    setDoc,
+    updateDoc,
+    query,
+    orderBy,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+  import {
+    getStorage,
+    ref,
+    uploadBytes,
+    getDownloadURL
+  } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
+
+
+  // YOUR EXISTING FIREBASE CONFIGURATION
 
   const firebaseConfig = {
     apiKey: "AIzaSyBdIItgYib1ajyTYd_o4iXNgO4ZIlQLLyE",
@@ -170,271 +665,1025 @@
     measurementId: "G-3MQ8Z40SF2"
   };
 
+
+  // INITIALIZE FIREBASE
+
   const app = initializeApp(firebaseConfig);
+
   const auth = getAuth(app);
+
   const db = getFirestore(app);
+
   const storage = getStorage(app);
+
   const $ = id => document.getElementById(id);
+
   const message = $("listing-message");
+
+
+  // CURRENT ACCOUNT INFORMATION
+
   let currentUser = null;
-  let isAdmin = false;
+
   let currentRole = null;
-  const portal = new URLSearchParams(location.search).get("portal") === "seller" ? "seller" : "buyer";
-  $("portal-heading").textContent = portal === "seller" ? "Seller Portal" : "Buyer Portal";
-  $("portal-description").textContent = portal === "seller"
-    ? "Register or log in as a seller to manage account listings. Buyer accounts cannot publish listings."
-    : "Browse available accounts and contact sellers. This portal is view-only; buyers cannot publish listings.";
-  $("register-btn").textContent = portal === "seller" ? "Create seller account" : "Create buyer account";
-  $("portal-switch").hidden = portal === "seller";
+
+  let isAdmin = false;
+
+  let isApprovedSeller = false;
+
+  let authCheckRunning = false;
+
+
+  // BUYER OR SELLER PORTAL
+
+  const portal =
+    new URLSearchParams(location.search).get("portal") === "seller"
+      ? "seller"
+      : "buyer";
+
+
+  $("portal-heading").textContent =
+    portal === "seller" ? "Seller Portal" : "Buyer Portal";
+
+
+  $("portal-description").textContent =
+    portal === "seller"
+      ? "Register or log in as a seller. Publishing requires administrator approval."
+      : "Browse available accounts and contact sellers. Buyers cannot publish listings.";
+
+
+  $("register-btn").textContent =
+    portal === "seller"
+      ? "Create seller account"
+      : "Create buyer account";
+
+
+  $("portal-switch").hidden = false;
+
+
   if (portal === "seller") {
-    $("portal-switch").hidden = false;
-    $("portal-switch").innerHTML = 'Want to buy only? <a href="?portal=buyer#account-portal">Use the buyer link</a>.';
+
+    $("portal-switch").innerHTML =
+      'Want to buy only? <a href="?portal=buyer#account-portal">Use the buyer link</a>.';
+
+  } else {
+
+    $("portal-switch").innerHTML =
+      'Want to sell? <a href="?portal=seller#account-portal">Register through the seller link</a>.';
+
   }
+
+
+  // ERROR HANDLING
 
   function showError(error) {
+
     const code = error?.code || "";
+
     const known = {
-      "auth/email-already-in-use":"This email is already registered. Please log in.",
-      "auth/invalid-email":"Enter a valid email address.",
-      "auth/weak-password":"Use a password with at least 6 characters.",
-      "auth/invalid-credential":"Email or password is incorrect.",
-      "auth/operation-not-allowed":"Enable Email/Password sign-in in Firebase Authentication.",
-      "permission-denied":"Firebase permission denied. Check your Firestore and Storage rules.",
-      "storage/unauthorized":"Image upload blocked. Check Firebase Storage setup and rules.",
-      "storage/bucket-not-found":"Firebase Storage is not set up for this project yet.",
-      "storage/unknown":"Image upload failed. Check Storage setup, rules and connection."
+
+      "auth/email-already-in-use":
+        "This email is already registered. Please log in.",
+
+      "auth/invalid-email":
+        "Enter a valid email address.",
+
+      "auth/weak-password":
+        "Use a password with at least 6 characters.",
+
+      "auth/invalid-credential":
+        "Email or password is incorrect.",
+
+      "auth/operation-not-allowed":
+        "Enable Email/Password sign-in in Firebase Authentication.",
+
+      "permission-denied":
+        "Firebase permission denied. Check your Firestore security rules.",
+
+      "storage/unauthorized":
+        "Image upload blocked. Check Firebase Storage rules.",
+
+      "storage/bucket-not-found":
+        "Firebase Storage bucket was not found. Check Storage setup.",
+
+      "storage/unknown":
+        "Image upload failed. Check Storage setup, rules and connection."
+
     };
-    message.textContent = known[code] || ("Something went wrong: " + (error?.message || code || "Please try again."));
+
+    message.textContent =
+      known[code] ||
+      ("Something went wrong: " + (error?.message || code || "Please try again."));
+
     console.error(error);
+
   }
+
 
   function credentials() {
-    return { email: $("user-email").value.trim(), password: $("user-password").value };
+
+    return {
+      email: $("user-email").value.trim(),
+      password: $("user-password").value
+    };
+
   }
+
+
+  // REGISTER BUYER OR SELLER
 
   $("register-btn").addEventListener("click", async () => {
+
+    const button = $("register-btn");
+
+    button.disabled = true;
+
+    message.textContent = "";
+
     try {
-      const {email,password} = credentials();
-      if (!email || password.length < 6) { message.textContent = "Enter an email and a password of at least 6 characters."; return; }
-      const result = await createUserWithEmailAndPassword(auth,email,password);
-      await setDoc(doc(db,"users",result.user.uid), {
-        role: portal,
-        email: result.user.email || "",
-        createdAt: serverTimestamp()
-      });
-      currentRole = portal;
+
+      const { email, password } = credentials();
+
+      if (!email || password.length < 6) {
+
+        message.textContent =
+          "Enter an email and a password of at least 6 characters.";
+
+        return;
+
+      }
+
+      const result = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      await setDoc(
+        doc(db, "users", result.user.uid),
+        {
+          role: portal,
+          email: result.user.email || "",
+          createdAt: serverTimestamp()
+        }
+      );
+
       await updatePortalForUser(result.user);
-      message.textContent = portal === "seller" ? "Seller account created. You can now publish listings." : "Buyer account created. Buyer accounts cannot publish listings.";
-    } catch(error) { showError(error); }
+
+      message.textContent =
+        portal === "seller"
+          ? "Seller account created. Await administrator approval before publishing."
+          : "Buyer account created successfully. Buyer accounts cannot publish listings.";
+
+    } catch (error) {
+
+      showError(error);
+
+    } finally {
+
+      button.disabled = false;
+
+    }
+
   });
+
+
+  // LOGIN
 
   $("login-btn").addEventListener("click", async () => {
+
+    const button = $("login-btn");
+
+    button.disabled = true;
+
+    message.textContent = "";
+
     try {
-      const {email,password} = credentials();
-      if (!email || !password) { message.textContent = "Enter your email and password."; return; }
-      const result = await signInWithEmailAndPassword(auth,email,password);
-      const roleSnap = await getDoc(doc(db,"users",result.user.uid));
-      const savedRole = roleSnap.exists() ? roleSnap.data().role : null;
-      if (!savedRole) {
-        await signOut(auth);
-        message.textContent = "This account has no buyer/seller role yet. Register through the correct buyer or seller link first.";
+
+      const { email, password } = credentials();
+
+      if (!email || !password) {
+
+        message.textContent = "Enter your email and password.";
+
         return;
+
       }
-      currentRole = savedRole;
+
+      const result = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const roleSnap = await getDoc(
+        doc(db, "users", result.user.uid)
+      );
+
+      const savedRole = roleSnap.exists()
+        ? roleSnap.data().role
+        : null;
+
+      if (savedRole !== "buyer" && savedRole !== "seller") {
+
+        await signOut(auth);
+
+        message.textContent =
+          "This account has no valid buyer/seller role. Register through the correct portal.";
+
+        return;
+
+      }
+
       if (portal === "buyer" && savedRole === "seller") {
-        message.textContent = "This is a seller account. Please use the seller link to log in.";
+
         await signOut(auth);
+
+        message.textContent =
+          "This is a seller account. Please use the seller link to log in.";
+
         return;
+
       }
+
       if (portal === "seller" && savedRole !== "seller") {
-        message.textContent = "This is a buyer account and cannot publish listings. Use the seller registration link to create a separate seller account.";
+
         await signOut(auth);
+
+        message.textContent =
+          "This is a buyer account. Buyer accounts cannot publish listings.";
+
         return;
+
       }
+
       await updatePortalForUser(result.user);
+
       message.textContent = "Login successful.";
-    } catch(error) { showError(error); }
+
+    } catch (error) {
+
+      showError(error);
+
+    } finally {
+
+      button.disabled = false;
+
+    }
+
   });
+
+
+  // LOGOUT
 
   $("logout-btn").addEventListener("click", async () => {
-    try { await signOut(auth); message.textContent = "You have logged out."; }
-    catch(error) { showError(error); }
+
+    try {
+
+      await signOut(auth);
+
+      message.textContent = "You have logged out.";
+
+    } catch (error) {
+
+      showError(error);
+
+    }
+
   });
+
+
+  // CHECK USER ROLE AND SELLER APPROVAL
 
   async function updatePortalForUser(user) {
+
     currentUser = user;
-    const roleSnap = await getDoc(doc(db,"users",user.uid));
-    currentRole = roleSnap.exists() ? roleSnap.data().role : null;
-    $("auth-form").hidden = true;
-    $("signed-in-tools").hidden = false;
-    $("seller-tools").hidden = !(portal === "seller" && currentRole === "seller");
-    if (currentRole === "buyer") {
-      $("auth-status").textContent = "Logged in as buyer: " + (user.email || "");
-      $("role-status").textContent = "Buyer access only. You can browse listings but cannot publish accounts.";
-    } else if (currentRole === "seller") {
-      $("auth-status").textContent = "Logged in as seller: " + (user.email || "");
-      $("role-status").textContent = portal === "seller" ? "Seller access enabled. Use the form below to publish an account." : "Seller account detected. Use the seller link to manage listings.";
-    } else {
-      $("auth-status").textContent = "Account role not found. Please register through the buyer or seller link.";
-      $("role-status").textContent = "No publishing access until a valid role is assigned.";
+
+    const roleSnap = await getDoc(
+      doc(db, "users", user.uid)
+    );
+
+    currentRole = roleSnap.exists()
+      ? roleSnap.data().role
+      : null;
+
+    isApprovedSeller = false;
+
+    if (currentRole === "seller") {
+
+      const accessSnap = await getDoc(
+        doc(db, "sellerAccess", user.uid)
+      );
+
+      isApprovedSeller =
+        accessSnap.exists() &&
+        accessSnap.data().approved === true;
+
     }
+
+    $("auth-form").hidden = true;
+
+    $("signed-in-tools").hidden = false;
+
+    // Only an approved seller on the seller portal sees the form.
+    $("seller-tools").hidden = !(
+      portal === "seller" &&
+      currentRole === "seller" &&
+      isApprovedSeller
+    );
+
+
+    if (currentRole === "buyer") {
+
+      $("auth-status").textContent =
+        "Logged in as buyer: " + (user.email || "");
+
+      $("role-status").textContent =
+        "Buyer access only. You can browse listings but cannot publish accounts.";
+
+    } else if (currentRole === "seller") {
+
+      $("auth-status").textContent =
+        "Logged in as seller: " + (user.email || "");
+
+      if (portal !== "seller") {
+
+        $("role-status").textContent =
+          "Use the seller registration link to manage your seller account.";
+
+      } else if (!isApprovedSeller) {
+
+        $("role-status").textContent =
+          "Your seller account is awaiting administrator approval. You cannot publish listings yet.";
+
+      } else {
+
+        $("role-status").textContent =
+          "Your seller account is approved. You can now publish listings.";
+
+      }
+
+    } else {
+
+      $("auth-status").textContent =
+        "Account role not found. Please register through the correct portal.";
+
+      $("role-status").textContent =
+        "No publishing access until a valid role is assigned.";
+
+    }
+
   }
 
+
+  // AUTHENTICATION STATE
+
   onAuthStateChanged(auth, async user => {
+
+    if (authCheckRunning) return;
+
+    authCheckRunning = true;
+
     currentUser = user;
+
     currentRole = null;
-    $("auth-form").hidden = !!user;
-    $("signed-in-tools").hidden = !user;
-    $("seller-tools").hidden = true;
-    $("auth-status").textContent = user ? "Checking account role..." : (portal === "seller" ? "Create a seller account or log in." : "Create a buyer account or log in to browse accounts.");
+
+    isApprovedSeller = false;
+
     isAdmin = false;
+
     $("admin-area").hidden = true;
-    if (user) {
-      await updatePortalForUser(user);
-      // Admin status is granted only by a manually controlled admins/{uid} document.
-      // Firestore rules must prevent users from creating or editing admin documents.
-      try {
-        const adminSnap = await getDoc(doc(db,"admins",user.uid));
-        isAdmin = adminSnap.exists() && adminSnap.data().enabled === true;
-      } catch (error) {
-        console.warn("Admin status could not be checked. Ensure Firestore rules allow users to read only their own admin document.", error);
+
+    $("seller-tools").hidden = true;
+
+    $("auth-form").hidden = !!user;
+
+    $("signed-in-tools").hidden = !user;
+
+    $("auth-status").textContent = user
+      ? "Checking account role..."
+      : (portal === "seller"
+          ? "Create a seller account or log in."
+          : "Create a buyer account or log in to browse accounts.");
+
+    try {
+
+      if (user) {
+
+        await updatePortalForUser(user);
+
+        // ADMIN ACCESS IS CONTROLLED BY admins/{uid}.
+        const adminSnap = await getDoc(
+          doc(db, "admins", user.uid)
+        );
+
+        isAdmin =
+          adminSnap.exists() &&
+          adminSnap.data().enabled === true;
+
+        $("admin-area").hidden = !isAdmin;
+
+        if (isAdmin) {
+
+          await loadAdminSellers();
+
+        }
+
       }
-      $("admin-area").hidden = !isAdmin;
-      if (isAdmin) await loadAdminSellers();
+
+    } catch (error) {
+
+      console.error("Authentication status check failed:", error);
+
+      $("auth-status").textContent =
+        "Could not check account permissions. Please refresh the page.";
+
+    } finally {
+
+      authCheckRunning = false;
+
     }
+
   });
 
+
+  // PUBLISH LISTING
+
   $("listing-form").addEventListener("submit", async event => {
+
     event.preventDefault();
-    if (!currentUser) { message.textContent = "Please log in first."; return; }
-    if (portal !== "seller" || currentRole !== "seller") { message.textContent = "Buyer accounts cannot publish listings. Log in using a seller account on the seller link."; return; }
-    const title = $("listing-title").value.trim();
-    const description = $("listing-description").value.trim();
-    const price = Number($("listing-price").value);
-    const sellerWhatsapp = $("seller-whatsapp").value.replace(/\D/g,"");
-    const files = Array.from($("listing-image").files || []);
-    if (!title || !description || sellerWhatsapp.length < 10 || sellerWhatsapp.length > 15 || !Number.isSafeInteger(price) || price < 1 || price > 100000000) {
-      message.textContent = "Check the title, details and whole-number price."; return;
+
+    if (!currentUser) {
+
+      message.textContent = "Please log in first.";
+
+      return;
+
     }
-    if (files.length > 4) { message.textContent = "Choose no more than 4 pictures."; return; }
-    if (files.some(file => !file.type.startsWith("image/") || file.size > 4*1024*1024)) {
-      message.textContent = "Each file must be an image no larger than 4 MB."; return;
+
+    if (portal !== "seller" || currentRole !== "seller") {
+
+      message.textContent =
+        "Buyer accounts cannot publish listings.";
+
+      return;
+
+    }
+
+    // Check approval again before publishing.
+    const accessSnap = await getDoc(
+      doc(db, "sellerAccess", currentUser.uid)
+    );
+
+    if (!accessSnap.exists() || accessSnap.data().approved !== true) {
+
+      isApprovedSeller = false;
+
+      $("seller-tools").hidden = true;
+
+      $("role-status").textContent =
+        "Your seller approval is missing or has been revoked. Contact APEXSHOP.";
+
+      message.textContent =
+        "You are not an approved seller. Publishing is disabled.";
+
+      return;
+
+    }
+
+    const title = $("listing-title").value.trim();
+
+    const description = $("listing-description").value.trim();
+
+    const price = Number($("listing-price").value);
+
+    const sellerWhatsapp =
+      $("seller-whatsapp").value.replace(/\D/g, "");
+
+    const files = Array.from(
+      $("listing-image").files || []
+    );
+
+    if (
+      !title ||
+      title.length > 80 ||
+      !description ||
+      description.length > 1000 ||
+      sellerWhatsapp.length < 10 ||
+      sellerWhatsapp.length > 15 ||
+      !Number.isSafeInteger(price) ||
+      price < 1 ||
+      price > 100000000
+    ) {
+
+      message.textContent =
+        "Check your title, account details, WhatsApp number and whole-number price.";
+
+      return;
+
+    }
+
+    if (files.length > 4) {
+
+      message.textContent =
+        "You can upload a maximum of 4 pictures.";
+
+      return;
+
+    }
+
+    const allowedTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/gif"
+    ];
+
+    if (files.some(file =>
+      !allowedTypes.includes(file.type) ||
+      file.size > 4 * 1024 * 1024
+    )) {
+
+      message.textContent =
+        "Each picture must be JPEG, PNG, WEBP or GIF and no larger than 4 MB.";
+
+      return;
+
     }
 
     const publishButton = $("publish-btn");
+
     publishButton.disabled = true;
-    message.textContent = "Publishing listing...";
+
+    message.textContent = "Uploading pictures and publishing listing...";
+
     try {
+
       const imageUrls = [];
+
       for (const file of files) {
-        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
-        const imageRef = ref(storage,`listing-images/${currentUser.uid}/${Date.now()}_${safeName}`);
-        await uploadBytes(imageRef,file,{contentType:file.type});
-        imageUrls.push(await getDownloadURL(imageRef));
+
+        const safeName = file.name.replace(
+          /[^a-zA-Z0-9._-]/g,
+          "_"
+        );
+
+        const imageRef = ref(
+          storage,
+          `listing-images/${currentUser.uid}/${Date.now()}_${safeName}`
+        );
+
+        await uploadBytes(
+          imageRef,
+          file,
+          { contentType: file.type }
+        );
+
+        imageUrls.push(
+          await getDownloadURL(imageRef)
+        );
+
       }
-      await addDoc(collection(db,"listings"), {
-        title, description, price, imageUrls, sellerWhatsapp,
-        sellerId: currentUser.uid,
-        sellerEmail: currentUser.email || "",
-        verified: false,
-        createdAt: serverTimestamp()
-      });
+
+      // CHECK APPROVAL AGAIN BEFORE WRITING THE LISTING.
+      const finalAccessSnap = await getDoc(
+        doc(db, "sellerAccess", currentUser.uid)
+      );
+
+      if (
+        !finalAccessSnap.exists() ||
+        finalAccessSnap.data().approved !== true
+      ) {
+
+        throw new Error(
+          "Your seller approval was revoked before publishing completed."
+        );
+
+      }
+
+      await addDoc(
+        collection(db, "listings"),
+        {
+          title,
+          description,
+          price,
+          imageUrls,
+          sellerWhatsapp,
+          sellerId: currentUser.uid,
+          sellerEmail: currentUser.email || "",
+          verified: false,
+          createdAt: serverTimestamp()
+        }
+      );
+
       $("listing-form").reset();
-      message.textContent = "Listing published successfully.";
+
+      message.textContent =
+        "Your listing has been published successfully.";
+
       await loadListings();
-    } catch(error) { showError(error); }
-    finally { publishButton.disabled = false; }
+
+    } catch (error) {
+
+      showError(error);
+
+    } finally {
+
+      publishButton.disabled = false;
+
+    }
+
   });
 
+
+  // LOAD MARKETPLACE LISTINGS
+
   async function loadListings() {
+
     const container = $("firebase-listings");
+
     container.replaceChildren();
+
     const loading = document.createElement("p");
+
     loading.className = "sub";
+
     loading.textContent = "Loading listings...";
+
     container.append(loading);
+
     try {
-      const result = await getDocs(query(collection(db,"listings"),orderBy("createdAt","desc")));
+
+      const result = await getDocs(
+        query(
+          collection(db, "listings"),
+          orderBy("createdAt", "desc")
+        )
+      );
+
       container.replaceChildren();
+
       if (result.empty) {
-        const empty = document.createElement("p"); empty.className = "sub"; empty.textContent = "No seller listings yet."; container.append(empty); return;
+
+        const empty = document.createElement("p");
+
+        empty.className = "sub";
+
+        empty.textContent = "No seller listings yet.";
+
+        container.append(empty);
+
+        return;
+
       }
+
       result.forEach(snapshot => {
+
         const data = snapshot.data();
-        const card = document.createElement("article"); card.className = "card";
-        const imageUrls = Array.isArray(data.imageUrls) ? data.imageUrls : (data.imageUrl ? [data.imageUrl] : []);
+
+        const card = document.createElement("article");
+
+        card.className = "card";
+
+        const imageUrls = Array.isArray(data.imageUrls)
+          ? data.imageUrls
+          : (data.imageUrl ? [data.imageUrl] : []);
+
         if (imageUrls.length) {
-          const image = document.createElement("img"); image.className = "account-image"; image.src = imageUrls[0]; image.alt = "Account listing picture"; image.loading = "lazy"; card.append(image);
+
+          const image = document.createElement("img");
+
+          image.className = "account-image";
+
+          image.src = imageUrls[0];
+
+          image.alt = "Account listing picture";
+
+          image.loading = "lazy";
+
+          card.append(image);
+
+          // Additional pictures.
+          if (imageUrls.length > 1) {
+
+            const gallery = document.createElement("div");
+
+            gallery.className = "gallery";
+
+            imageUrls.slice(1).forEach(url => {
+
+              const smallImage = document.createElement("img");
+
+              smallImage.src = url;
+
+              smallImage.alt = "Additional account picture";
+
+              smallImage.loading = "lazy";
+
+              gallery.append(smallImage);
+
+            });
+
+            card.append(gallery);
+
+          }
+
         } else {
-          const placeholder = document.createElement("div"); placeholder.className = "image-placeholder"; placeholder.textContent = "Account picture not provided"; card.append(placeholder);
+
+          const placeholder = document.createElement("div");
+
+          placeholder.className = "image-placeholder";
+
+          placeholder.textContent = "Account picture not provided";
+
+          card.append(placeholder);
+
         }
-        const body = document.createElement("div"); body.className = "card-body";
-        const heading = document.createElement("h3"); heading.textContent = data.title || "Free Fire account";
-        const badge = document.createElement("span"); badge.className = "badge" + (data.verified === true ? " verified" : ""); badge.textContent = data.verified === true ? "✓ Verified seller" : "Seller not verified";
-        const details = document.createElement("p"); details.textContent = data.description || "";
-        const price = document.createElement("div"); price.className = "price"; price.textContent = Number.isFinite(data.price) ? "₦" + data.price.toLocaleString("en-NG") : "Contact seller";
-        body.append(heading,badge,details,price);
-        const contact = document.createElement("a"); contact.className = "btn";
-        if (typeof data.sellerWhatsapp === "string" && /^\d{10,15}$/.test(data.sellerWhatsapp)) {
+
+        const body = document.createElement("div");
+
+        body.className = "card-body";
+
+        const heading = document.createElement("h3");
+
+        heading.textContent =
+          data.title || "Free Fire account";
+
+        const badge = document.createElement("span");
+
+        badge.className =
+          "badge" + (data.verified === true ? " verified" : "");
+
+        badge.textContent =
+          data.verified === true
+            ? "✓ Verified seller"
+            : "Seller not verified";
+
+        const details = document.createElement("p");
+
+        details.textContent = data.description || "";
+
+        const price = document.createElement("div");
+
+        price.className = "price";
+
+        price.textContent =
+          Number.isFinite(data.price)
+            ? "₦" + data.price.toLocaleString("en-NG")
+            : "Contact seller";
+
+        body.append(heading, badge, details, price);
+
+        const contact = document.createElement("a");
+
+        contact.className = "btn";
+
+        if (
+          typeof data.sellerWhatsapp === "string" &&
+          /^\d{10,15}$/.test(data.sellerWhatsapp)
+        ) {
+
           contact.textContent = "Contact Seller on WhatsApp";
-          contact.href = "https://wa.me/" + data.sellerWhatsapp;
+
+          contact.href =
+            "https://wa.me/" + data.sellerWhatsapp;
+
         } else {
+
           contact.textContent = "View Seller Channel";
+
           contact.href = "https://t.me/apexshop90";
+
         }
-        contact.target = "_blank"; contact.rel = "noopener";
-        body.append(contact); card.append(body); container.append(card);
+
+        contact.target = "_blank";
+
+        contact.rel = "noopener";
+
+        body.append(contact);
+
+        card.append(body);
+
+        container.append(card);
+
       });
+
       filterAccounts();
-    } catch(error) {
+
+    } catch (error) {
+
       container.replaceChildren();
-      const err = document.createElement("p"); err.className = "sub"; err.textContent = "Could not load listings. Check Firestore rules and database setup."; container.append(err);
-      console.error("Loading listings failed:",error.code,error.message);
+
+      const err = document.createElement("p");
+
+      err.className = "sub";
+
+      err.textContent =
+        "Could not load listings. Check Firestore rules and database setup.";
+
+      container.append(err);
+
+      console.error(
+        "Loading listings failed:",
+        error.code,
+        error.message
+      );
+
     }
+
   }
+
+
+  // ADMIN SELLER VERIFICATION
 
   async function loadAdminSellers() {
+
     const container = $("admin-sellers");
-    container.textContent = "Loading seller list...";
-    try {
-      const result = await getDocs(collection(db,"listings"));
-      container.replaceChildren();
-      const sellers = new Map();
-      result.forEach(snap => {
-        const data = snap.data();
-        if (data.sellerId) {
-          const previous = sellers.get(data.sellerId) || {uid:data.sellerId,email:data.sellerEmail || "Email not available",verified:data.verified === true};
-          if (data.verified === true) previous.verified = true;
-          sellers.set(data.sellerId,previous);
-        }
-      });
-      if (!sellers.size) { container.textContent = "No sellers with listings yet."; return; }
-      for (const seller of sellers.values()) {
-        const row = document.createElement("div"); row.style.cssText = "padding:12px 0;border-bottom:1px solid #30303d";
-        const label = document.createElement("p"); label.textContent = `${seller.email} — ${seller.verified ? "Verified" : "Not verified"}`;
-        const button = document.createElement("button"); button.className = "btn"; button.textContent = seller.verified ? "Unverify seller" : "Verify seller";
-        button.addEventListener("click", async () => {
-          button.disabled = true;
-          try {
-            const listingSnaps = await getDocs(collection(db,"listings"));
-            const updates = listingSnaps.docs.filter(item => item.data().sellerId === seller.uid);
-            for (const item of updates) await updateDoc(doc(db,"listings",item.id),{verified:!seller.verified});
-            $("admin-message").textContent = "Seller verification updated.";
-            await loadAdminSellers(); await loadListings();
-          } catch(error) {
-            $("admin-message").textContent = "Could not update verification. Check Firestore security rules.";
-            console.error(error);
-          } finally { button.disabled = false; }
-        });
-        row.append(label,button); container.append(row);
-      }
-    } catch(error) {
-      container.textContent = "Could not load sellers. Admin access or Firestore rules may not be configured yet.";
-      console.error(error);
+
+    container.textContent = "Loading registered sellers...";
+
+    if (!isAdmin) {
+
+      container.textContent = "Administrator access required.";
+
+      return;
+
     }
+
+    try {
+
+      // Get registered user accounts.
+      const usersResult = await getDocs(
+        collection(db, "users")
+      );
+
+      // Only seller accounts appear here.
+      const sellerUsers = usersResult.docs.filter(
+        item => item.data().role === "seller"
+      );
+
+      container.replaceChildren();
+
+      if (!sellerUsers.length) {
+
+        container.textContent =
+          "No registered sellers yet.";
+
+        return;
+
+      }
+
+      const sellers = await Promise.all(
+        sellerUsers.map(async item => {
+
+          const userData = item.data();
+
+          const accessSnap = await getDoc(
+            doc(db, "sellerAccess", item.id)
+          );
+
+          return {
+
+            uid: item.id,
+
+            email: userData.email || "Email not available",
+
+            approved:
+              accessSnap.exists() &&
+              accessSnap.data().approved === true
+
+          };
+
+        })
+      );
+
+      for (const seller of sellers) {
+
+        const row = document.createElement("div");
+
+        row.className = "admin-row";
+
+        const information = document.createElement("div");
+
+        const label = document.createElement("p");
+
+        label.textContent =
+          seller.email + " — " +
+          (seller.approved ? "Approved" : "Awaiting approval");
+
+        information.append(label);
+
+        const button = document.createElement("button");
+
+        button.className = "btn";
+
+        button.textContent = seller.approved
+          ? "Revoke Approval"
+          : "Approve Seller";
+
+        button.addEventListener("click", async () => {
+
+          button.disabled = true;
+
+          const newApproval = !seller.approved;
+
+          try {
+
+            // Recheck administrator access before changing permissions.
+            const adminCheck = await getDoc(
+              doc(db, "admins", currentUser.uid)
+            );
+
+            if (
+              !adminCheck.exists() ||
+              adminCheck.data().enabled !== true
+            ) {
+
+              throw new Error(
+                "Administrator permission is no longer active."
+              );
+
+            }
+
+            // Update seller publishing permission.
+            await setDoc(
+              doc(db, "sellerAccess", seller.uid),
+              {
+                approved: newApproval,
+                email: seller.email,
+                updatedAt: serverTimestamp()
+              },
+              { merge: true }
+            );
+
+            // Update every existing listing's verified badge.
+            const listingsResult = await getDocs(
+              collection(db, "listings")
+            );
+
+            const sellerListings = listingsResult.docs.filter(
+              item => item.data().sellerId === seller.uid
+            );
+
+            for (const item of sellerListings) {
+
+              await updateDoc(
+                doc(db, "listings", item.id),
+                {
+                  verified: newApproval
+                }
+              );
+
+            }
+
+            $("admin-message").textContent =
+              newApproval
+                ? "Seller approved. Publishing access enabled."
+                : "Seller approval revoked. Publishing access disabled.";
+
+            await loadAdminSellers();
+
+            await loadListings();
+
+          } catch (error) {
+
+            $("admin-message").textContent =
+              "Seller approval update failed: " +
+              (error.message || "Check Firestore rules.");
+
+            console.error("Seller approval error:", error);
+
+          } finally {
+
+            button.disabled = false;
+
+          }
+
+        });
+
+        row.append(information, button);
+
+        container.append(row);
+
+      }
+
+    } catch (error) {
+
+      container.textContent =
+        "Could not load sellers. Check administrator permissions and Firestore rules.";
+
+      console.error("Loading sellers failed:", error);
+
+    }
+
   }
 
+
+  // LOAD LISTINGS WHEN WEBSITE OPENS
+
   loadListings();
+
 </script>
+
 </body>
 </html>
