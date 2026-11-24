@@ -9,8 +9,12 @@
 
 <style>
 :root{
---bg:#0b0b12;--panel:#151522;--panel2:#191925;
---accent:#ff9d00;--muted:#b9b9c6;--line:#30303d;
+--bg:#0b0b12;
+--panel:#151522;
+--panel2:#191925;
+--accent:#ff9d00;
+--muted:#b9b9c6;
+--line:#30303d;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:#fff;font-family:Arial,sans-serif}
@@ -22,7 +26,7 @@ header{background:linear-gradient(135deg,#171722,#251506);border-bottom:2px soli
 nav{display:flex;gap:8px;flex-wrap:wrap}
 nav a{font-size:13px;text-decoration:none;padding:9px 11px;border:1px solid #444;border-radius:8px}
 nav a:hover{border-color:var(--accent)}
-.hero{padding:48px 16px 32px;text-align:center;background:radial-gradient(ellipse at top,#33200b 0%,#0b0b12 65%)}
+.hero{padding:40px 16px 32px;text-align:center;background:radial-gradient(ellipse at top,#33200b 0%,#0b0b12 65%)}
 .eyebrow{color:var(--accent);font-weight:bold;text-transform:uppercase;letter-spacing:2px;font-size:12px}
 .hero h1{font-size:clamp(29px,6vw,48px);margin:12px auto;max-width:760px;line-height:1.1}
 .hero h1 span{color:var(--accent)}
@@ -61,6 +65,31 @@ footer a{color:var(--accent)}
 .gallery{display:flex;gap:7px;overflow-x:auto;padding:10px 0}
 .gallery img{width:75px;height:65px;object-fit:cover;border-radius:6px}
 .admin-heading{color:var(--accent)}
+
+/* SHOP PROFILE */
+.shop-profile{
+max-width:850px;margin:25px auto 10px;padding:25px 18px;
+background:linear-gradient(145deg,#191925,#211507);
+border:1px solid #67400e;border-radius:18px;text-align:center;
+}
+.shop-logo{
+width:115px;height:115px;object-fit:cover;border-radius:50%;
+border:3px solid var(--accent);background:#101018;
+display:block;margin:0 auto 15px;
+}
+.shop-logo-placeholder{
+width:115px;height:115px;border-radius:50%;
+border:3px solid var(--accent);background:#101018;
+display:flex;align-items:center;justify-content:center;
+font-size:30px;font-weight:900;color:var(--accent);
+margin:0 auto 15px;
+}
+.shop-name{font-size:27px;font-weight:900;color:var(--accent);margin:8px 0}
+.shop-tagline{font-size:15px;color:#fff;margin:8px 0}
+.shop-description{color:#c7c7d0;line-height:1.6;max-width:620px;margin:12px auto}
+.shop-links{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+.profile-title{color:var(--accent);margin-top:0}
+.profile-preview{width:110px;height:110px;object-fit:cover;border-radius:50%;border:2px solid var(--accent)}
 </style>
 </head>
 
@@ -73,6 +102,7 @@ footer a{color:var(--accent)}
 <p class="tagline">Free Fire Account Marketplace</p>
 </div>
 <nav>
+<a href="#shop-profile">Shop profile</a>
 <a href="#marketplace">Browse accounts</a>
 <a href="?portal=buyer#account-portal">Buyer login</a>
 <a href="?portal=seller#account-portal">Seller registration</a>
@@ -80,6 +110,30 @@ footer a{color:var(--accent)}
 </nav>
 </div>
 </header>
+
+<!-- PUBLIC SHOP PROFILE -->
+
+<section class="section" id="shop-profile">
+<div class="shop-profile">
+<div id="shop-logo-area">
+<div class="shop-logo-placeholder">A</div>
+</div>
+
+<h2 class="shop-name" id="shop-name">APEXSHOP</h2>
+<p class="shop-tagline" id="shop-tagline">
+Premium Free Fire Accounts at the Best Prices
+</p>
+<p class="shop-description" id="shop-description">
+Welcome to APEXSHOP MARKETPLACE. Discover quality gaming accounts,
+premium deals and trusted service.
+</p>
+
+<div class="shop-links">
+<a class="btn" id="shop-whatsapp" href="https://wa.me/2347085785233" target="_blank" rel="noopener">WhatsApp</a>
+<a class="btn secondary" id="shop-telegram" href="https://t.me/apexshop90" target="_blank" rel="noopener">Telegram</a>
+</div>
+</div>
+</section>
 
 <section class="hero">
 <div class="eyebrow">Your next account starts here</div>
@@ -101,6 +155,8 @@ footer a{color:var(--accent)}
 <p class="sub">Loading listings...</p>
 </div>
 </section>
+
+<!-- ACCOUNT PORTAL -->
 
 <section class="section" id="account-portal">
 <h2 id="portal-heading">Buyer Portal</h2>
@@ -134,7 +190,44 @@ footer a{color:var(--accent)}
 </div>
 <p id="role-status" class="sub"></p>
 
+<!-- ADMIN SHOP PROFILE EDITOR -->
+
+<div id="profile-editor" hidden>
+<hr>
+<h3 class="profile-title">Edit APEXSHOP Profile</h3>
+<p class="notice">Only an enabled administrator can update the public shop profile.</p>
+
+<form id="profile-form">
+<label for="profile-name">Shop name</label>
+<input id="profile-name" maxlength="60" required>
+
+<label for="profile-tagline-input">Shop tagline</label>
+<input id="profile-tagline-input" maxlength="120" required>
+
+<label for="profile-description-input">Shop description</label>
+<textarea id="profile-description-input" maxlength="1000" required></textarea>
+
+<label for="profile-whatsapp-input">WhatsApp number with country code</label>
+<input id="profile-whatsapp-input" inputmode="numeric" maxlength="15" required>
+
+<label for="profile-telegram-input">Telegram link</label>
+<input id="profile-telegram-input" type="url" placeholder="https://t.me/apexshop90">
+
+<label for="profile-logo-input">Shop profile picture / logo</label>
+<input id="profile-logo-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+
+<div id="profile-preview-area"></div>
+<p class="notice">Use the cropped APEXSHOP logo image without the phone battery/status bar or navigation buttons. Maximum image size: 4 MB.</p>
+
+<button class="btn" id="save-profile-btn" type="submit">Save Shop Profile</button>
+</form>
+<p id="profile-message" class="message" role="status"></p>
+</div>
+
+<!-- SELLER LISTING FORM -->
+
 <div id="seller-tools" hidden>
+<hr>
 <h3>Post an account for sale</h3>
 <form id="listing-form">
 
@@ -158,7 +251,7 @@ footer a{color:var(--accent)}
 <label for="listing-image">Account pictures (up to 4 images, maximum 4 MB each)</label>
 <input id="listing-image" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
 
-<p class="notice">Images are uploaded using Firebase Storage. Storage must be enabled and configured.</p>
+<p class="notice">Images are uploaded using Firebase Storage.</p>
 <button class="btn" id="publish-btn" type="submit">Publish listing</button>
 </form>
 </div>
@@ -232,7 +325,7 @@ import {
 getStorage,ref,uploadBytes,getDownloadURL
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
 
-// FIREBASE CONFIGURATION
+// YOUR EXISTING FIREBASE CONFIGURATION
 
 const firebaseConfig={
 apiKey:"AIzaSyBdIItgYib1ajyTYd_o4iXNgO4ZIlQLLyE",
@@ -257,6 +350,7 @@ let currentUser=null;
 let currentRole=null;
 let isAdmin=false;
 let isApprovedSeller=false;
+let profileData={};
 
 // PORTAL DISPLAY
 
@@ -272,7 +366,7 @@ $("portal-switch").innerHTML=portal==="seller"
 ?'Want to buy only? <a href="?portal=buyer#account-portal">Use the buyer link</a>.'
 :'Want to sell? <a href="?portal=seller#account-portal">Register through the seller link</a>.';
 
-// ERROR DISPLAY
+// ERRORS
 
 function showError(error){
 console.error(error);
@@ -298,14 +392,189 @@ password:$("user-password").value
 };
 }
 
-// IMPORTANT: CHECK ADMIN BEFORE CHECKING BUYER/SELLER ROLE
+// ADMIN CHECK
 
 async function checkAdmin(user){
-const adminSnap=await getDoc(doc(db,"admins",user.uid));
-return adminSnap.exists()&&adminSnap.data().enabled===true;
+const snap=await getDoc(doc(db,"admins",user.uid));
+return snap.exists()&&snap.data().enabled===true;
 }
 
-// LOAD ACCOUNT PERMISSIONS
+// PUBLIC SHOP PROFILE
+
+function displayShopProfile(data){
+
+profileData=data||{};
+
+$("shop-name").textContent=data.name||"APEXSHOP";
+$("shop-tagline").textContent=data.tagline||"Premium Free Fire Accounts at the Best Prices";
+$("shop-description").textContent=data.description||
+"Welcome to APEXSHOP MARKETPLACE. Discover quality gaming accounts, premium deals and trusted service.";
+
+const logoArea=$("shop-logo-area");
+logoArea.replaceChildren();
+
+if(data.logoUrl){
+const logo=document.createElement("img");
+logo.className="shop-logo";
+logo.src=data.logoUrl;
+logo.alt="APEXSHOP profile logo";
+logo.loading="lazy";
+logoArea.append(logo);
+}else{
+const placeholder=document.createElement("div");
+placeholder.className="shop-logo-placeholder";
+placeholder.textContent="A";
+logoArea.append(placeholder);
+}
+
+const whatsapp=$("shop-whatsapp");
+const number=String(data.whatsapp||"2347085785233").replace(/\D/g,"");
+whatsapp.href="https://wa.me/"+number;
+
+const telegram=$("shop-telegram");
+const telegramLink=data.telegram||"https://t.me/apexshop90";
+
+if(/^https:\/\/t\.me\/[A-Za-z0-9_]+\/?$/.test(telegramLink)){
+telegram.href=telegramLink;
+}else{
+telegram.href="https://t.me/apexshop90";
+}
+
+}
+
+async function loadShopProfile(){
+try{
+const snap=await getDoc(doc(db,"shopProfile","main"));
+displayShopProfile(snap.exists()?snap.data():{});
+}catch(error){
+console.error("Shop profile loading failed:",error);
+}
+}
+
+// FILL ADMIN PROFILE EDITOR
+
+function fillProfileEditor(){
+
+$("profile-name").value=profileData.name||"APEXSHOP";
+$("profile-tagline-input").value=profileData.tagline||
+"Premium Free Fire Accounts at the Best Prices";
+$("profile-description-input").value=profileData.description||
+"Welcome to APEXSHOP MARKETPLACE. Discover quality gaming accounts, premium deals and trusted service.";
+$("profile-whatsapp-input").value=profileData.whatsapp||"2347085785233";
+$("profile-telegram-input").value=profileData.telegram||"https://t.me/apexshop90";
+
+const area=$("profile-preview-area");
+area.replaceChildren();
+
+if(profileData.logoUrl){
+const img=document.createElement("img");
+img.className="profile-preview";
+img.src=profileData.logoUrl;
+img.alt="Current shop logo";
+area.append(img);
+}
+}
+
+// SAVE ADMIN SHOP PROFILE
+
+$("profile-form").addEventListener("submit",async event=>{
+
+event.preventDefault();
+
+if(!currentUser||!isAdmin){
+$("profile-message").textContent="Administrator access required.";
+return;
+}
+
+const button=$("save-profile-btn");
+button.disabled=true;
+$("profile-message").textContent="Saving shop profile...";
+
+try{
+
+if(!(await checkAdmin(currentUser))){
+throw new Error("Administrator permission is no longer active.");
+}
+
+const name=$("profile-name").value.trim();
+const tagline=$("profile-tagline-input").value.trim();
+const description=$("profile-description-input").value.trim();
+const whatsapp=$("profile-whatsapp-input").value.replace(/\D/g,"");
+const telegram=$("profile-telegram-input").value.trim();
+const files=Array.from($("profile-logo-input").files||[]);
+
+if(!name||!tagline||!description||
+name.length>60||tagline.length>120||description.length>1000){
+throw new Error("Please check the shop name, tagline and description.");
+}
+
+if(whatsapp.length<10||whatsapp.length>15){
+throw new Error("Enter a valid WhatsApp number with country code.");
+}
+
+if(telegram&&!/^https:\/\/t\.me\/[A-Za-z0-9_]+\/?$/.test(telegram)){
+throw new Error("Enter a valid Telegram link, such as https://t.me/apexshop90.");
+}
+
+if(files.length>1){
+throw new Error("Select only one profile picture.");
+}
+
+let logoUrl=profileData.logoUrl||"";
+
+if(files.length===1){
+
+const file=files[0];
+const allowed=["image/jpeg","image/png","image/webp","image/gif"];
+
+if(!allowed.includes(file.type)||file.size>4*1024*1024){
+throw new Error("The logo must be JPEG, PNG, WEBP or GIF and no larger than 4 MB.");
+}
+
+const logoRef=ref(storage,
+"shop-profile/"+currentUser.uid+"/logo_"+Date.now());
+
+await uploadBytes(logoRef,file,{contentType:file.type});
+logoUrl=await getDownloadURL(logoRef);
+
+}
+
+// CHECK ADMIN AGAIN BEFORE WRITING
+
+if(!(await checkAdmin(currentUser))){
+throw new Error("Administrator permission is no longer active.");
+}
+
+const newProfile={
+name,
+tagline,
+description,
+whatsapp,
+telegram:telegram||"https://t.me/apexshop90",
+logoUrl,
+updatedAt:serverTimestamp(),
+updatedBy:currentUser.uid
+};
+
+await setDoc(doc(db,"shopProfile","main"),newProfile,{merge:true});
+
+profileData={...newProfile};
+displayShopProfile(profileData);
+fillProfileEditor();
+
+$("profile-logo-input").value="";
+$("profile-message").textContent="Shop profile updated successfully!";
+
+}catch(error){
+$("profile-message").textContent=error.message||"Could not save the shop profile.";
+console.error("Profile save error:",error);
+}finally{
+button.disabled=false;
+}
+
+});
+
+// CHECK PERMISSIONS AND DISPLAY TOOLS
 
 async function updatePortalForUser(user){
 
@@ -313,9 +582,6 @@ currentUser=user;
 currentRole=null;
 isAdmin=false;
 isApprovedSeller=false;
-
-// STEP 1: CHECK ADMIN FIRST.
-// An admin does not need a buyer or seller role.
 
 const adminStatus=await checkAdmin(user);
 
@@ -327,21 +593,22 @@ currentRole="admin";
 $("auth-form").hidden=true;
 $("signed-in-tools").hidden=false;
 $("seller-tools").hidden=true;
+$("profile-editor").hidden=false;
 $("admin-area").hidden=false;
 
 $("auth-status").textContent="Administrator logged in: "+(user.email||"");
-$("role-status").textContent="Full administrator access is active. You can manage seller approvals below.";
+$("role-status").textContent="Full administrator access is active.";
 
+fillProfileEditor();
 await loadAdminSellers();
+
 return "admin";
 }
 
-// STEP 2: ONLY NON-ADMIN ACCOUNTS NEED A BUYER/SELLER ROLE.
-
 $("admin-area").hidden=true;
+$("profile-editor").hidden=true;
 
 const roleSnap=await getDoc(doc(db,"users",user.uid));
-
 currentRole=roleSnap.exists()?roleSnap.data().role:null;
 
 if(currentRole!=="buyer"&&currentRole!=="seller"){
@@ -356,14 +623,9 @@ $("role-status").textContent="This account has no valid buyer/seller role. Pleas
 return "invalid";
 }
 
-// STEP 3: CHECK SELLER APPROVAL.
-
 if(currentRole==="seller"){
-
 const accessSnap=await getDoc(doc(db,"sellerAccess",user.uid));
-
 isApprovedSeller=accessSnap.exists()&&accessSnap.data().approved===true;
-
 }
 
 $("auth-form").hidden=true;
@@ -397,7 +659,7 @@ $("role-status").textContent="Your seller account is approved. You can now publi
 return currentRole;
 }
 
-// REGISTER BUYER OR SELLER
+// REGISTER
 
 $("register-btn").addEventListener("click",async()=>{
 
@@ -434,7 +696,7 @@ button.disabled=false;
 
 });
 
-// LOGIN — ADMIN CHECK MUST COME BEFORE ROLE VALIDATION
+// LOGIN
 
 $("login-btn").addEventListener("click",async()=>{
 
@@ -453,21 +715,14 @@ return;
 
 const result=await signInWithEmailAndPassword(auth,email,password);
 
-// FIRST: check whether this account is an enabled administrator.
-
 const adminStatus=await checkAdmin(result.user);
 
 if(adminStatus){
-
-message.textContent="Administrator login successful. Opening dashboard...";
+message.textContent="Administrator login successful.";
 return;
-
 }
 
-// ONLY NON-ADMIN USERS ARE CHECKED FOR BUYER/SELLER ROLES.
-
 const roleSnap=await getDoc(doc(db,"users",result.user.uid));
-
 const savedRole=roleSnap.exists()?roleSnap.data().role:null;
 
 if(savedRole!=="buyer"&&savedRole!=="seller"){
@@ -509,7 +764,7 @@ showError(error);
 }
 });
 
-// AUTHENTICATION STATE
+// AUTH STATE
 
 onAuthStateChanged(auth,async user=>{
 
@@ -520,6 +775,7 @@ isApprovedSeller=false;
 
 $("admin-area").hidden=true;
 $("seller-tools").hidden=true;
+$("profile-editor").hidden=true;
 $("auth-form").hidden=!!user;
 $("signed-in-tools").hidden=!user;
 
@@ -535,9 +791,7 @@ return;
 $("auth-status").textContent="Checking account permissions...";
 
 try{
-
 await updatePortalForUser(user);
-
 }catch(error){
 
 console.error("Account permission check failed:",error);
@@ -550,6 +804,7 @@ $("role-status").textContent=
 "Please check your Firestore security rules and refresh the page.";
 
 $("seller-tools").hidden=true;
+$("profile-editor").hidden=true;
 $("admin-area").hidden=true;
 
 }
@@ -577,9 +832,10 @@ message.textContent="Buyer accounts cannot publish listings.";
 return;
 }
 
-try{
+const button=$("publish-btn");
+button.disabled=true;
 
-// CHECK SELLER APPROVAL BEFORE PUBLISHING.
+try{
 
 const accessSnap=await getDoc(doc(db,"sellerAccess",currentUser.uid));
 
@@ -588,8 +844,7 @@ if(!accessSnap.exists()||accessSnap.data().approved!==true){
 isApprovedSeller=false;
 $("seller-tools").hidden=true;
 $("role-status").textContent="Your seller approval is missing or has been revoked.";
-message.textContent="You are not an approved seller.";
-return;
+throw new Error("You are not an approved seller.");
 
 }
 
@@ -602,44 +857,33 @@ const files=Array.from($("listing-image").files||[]);
 if(!title||title.length>80||!description||description.length>1000||
 sellerWhatsapp.length<10||sellerWhatsapp.length>15||
 !Number.isSafeInteger(price)||price<1||price>100000000){
-
-message.textContent="Check your title, account details, WhatsApp number and whole-number price.";
-return;
+throw new Error("Check your title, account details, WhatsApp number and whole-number price.");
 }
 
 if(files.length>4){
-message.textContent="You can upload a maximum of 4 pictures.";
-return;
+throw new Error("You can upload a maximum of 4 pictures.");
 }
 
 const allowedTypes=["image/jpeg","image/png","image/webp","image/gif"];
 
 if(files.some(file=>!allowedTypes.includes(file.type)||file.size>4*1024*1024)){
-message.textContent="Each picture must be JPEG, PNG, WEBP or GIF and no larger than 4 MB.";
-return;
+throw new Error("Each picture must be JPEG, PNG, WEBP or GIF and no larger than 4 MB.");
 }
 
-const button=$("publish-btn");
-button.disabled=true;
 message.textContent="Uploading pictures and publishing listing...";
-
-try{
 
 const imageUrls=[];
 
 for(const file of files){
 
 const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
-
 const imageRef=ref(storage,
-`listing-images/${currentUser.uid}/${Date.now()}_${safeName}`);
+"listing-images/"+currentUser.uid+"/"+Date.now()+"_"+safeName);
 
 await uploadBytes(imageRef,file,{contentType:file.type});
 imageUrls.push(await getDownloadURL(imageRef));
 
 }
-
-// CHECK APPROVAL AGAIN BEFORE SAVING.
 
 const finalAccess=await getDoc(doc(db,"sellerAccess",currentUser.uid));
 
@@ -663,17 +907,15 @@ $("listing-form").reset();
 message.textContent="Your listing has been published successfully.";
 await loadListings();
 
+}catch(error){
+showError(error);
 }finally{
 button.disabled=false;
 }
 
-}catch(error){
-showError(error);
-}
-
 });
 
-// LOAD PUBLIC LISTINGS
+// LOAD LISTINGS
 
 async function loadListings(){
 
@@ -687,7 +929,9 @@ container.append(loading);
 
 try{
 
-const result=await getDocs(query(collection(db,"listings"),orderBy("createdAt","desc")));
+const result=await getDocs(
+query(collection(db,"listings"),orderBy("createdAt","desc"))
+);
 
 container.replaceChildren();
 
@@ -813,19 +1057,17 @@ return;
 
 try{
 
-// VERIFY ADMIN ACCESS AGAIN.
-
 const adminSnap=await getDoc(doc(db,"admins",currentUser.uid));
 
 if(!adminSnap.exists()||adminSnap.data().enabled!==true){
 isAdmin=false;
 $("admin-area").hidden=true;
+$("profile-editor").hidden=true;
 container.textContent="Administrator access is no longer active.";
 return;
 }
 
 const usersResult=await getDocs(collection(db,"users"));
-
 const sellerUsers=usersResult.docs.filter(item=>item.data().role==="seller");
 
 container.replaceChildren();
@@ -871,8 +1113,6 @@ const newApproval=!seller.approved;
 
 try{
 
-// CHECK ADMIN PERMISSION BEFORE CHANGING SELLER ACCESS.
-
 const adminCheck=await getDoc(doc(db,"admins",currentUser.uid));
 
 if(!adminCheck.exists()||adminCheck.data().enabled!==true){
@@ -884,8 +1124,6 @@ approved:newApproval,
 email:seller.email,
 updatedAt:serverTimestamp()
 },{merge:true});
-
-// UPDATE THE SELLER'S EXISTING LISTINGS.
 
 const listingsResult=await getDocs(collection(db,"listings"));
 
@@ -935,7 +1173,8 @@ console.error("Loading sellers failed:",error);
 
 // INITIAL LOAD
 
-loadListings();
+await loadShopProfile();
+await loadListings();
 
 </script>
 </body>
