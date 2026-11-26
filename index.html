@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0b0b12">
 <title>APEXSHOP MARKETPLACE</title>
+
 <style>
 :root{--bg:#050609;--panel:#0d1119;--red:#f0142f;--muted:#aab3c2;--line:#252c38}
 *{box-sizing:border-box}
@@ -23,6 +24,7 @@ header{position:sticky;top:0;z-index:20;background:#04060af5;border-bottom:1px s
 .topbar nav a:hover{color:var(--red)}
 .btn{display:inline-flex;align-items:center;justify-content:center;padding:11px 15px;border:0;border-radius:8px;background:var(--red);color:white;font-size:13px;font-weight:800}
 .btn.secondary{background:#111722;border:1px solid #394252;color:#f4f6fa}
+.btn.danger{background:#8c1024}
 .btn:disabled{opacity:.55;cursor:wait}
 .hero{min-height:350px;padding:42px max(4vw,22px);display:grid;grid-template-columns:1fr .7fr;align-items:center;gap:20px;background:radial-gradient(ellipse at 72% 48%,#e1002333,transparent 45%),linear-gradient(105deg,#08090d,#18050b 52%,#07080c);border-bottom:1px solid #35101a}
 .hero h1{font-size:clamp(38px,6vw,76px);line-height:.96;margin:16px 0}
@@ -73,13 +75,20 @@ textarea{min-height:100px;resize:vertical}
 .trust-item{color:#dce1e9;font-size:12px}
 .trust-item strong{display:block;color:var(--red);font-size:20px}
 .seller-manage-card,.admin-row{padding:13px;margin:10px 0;background:#111722;border:1px solid #303b4b;border-radius:9px}
-.seller-manage-card .btn{margin-top:8px}
+.seller-manage-card .btn{margin:5px 5px 0 0}
 .admin-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .admin-row p{margin:0}
 .admin-heading,.profile-title{color:var(--red)}
+.editor-panel{background:#080c13;border:1px solid #465064;border-radius:10px;padding:14px;margin-top:12px}
+.editor-panel h4{margin:0 0 12px;color:#ff5368}
+.current-images{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.current-images img{width:75px;height:65px;object-fit:cover;border-radius:7px;border:1px solid #394252}
+.editor-note{font-size:11px;color:#aab3c2;line-height:1.5}
 footer{border-top:1px solid #272e39;text-align:center;padding:25px 16px;color:var(--muted);margin-top:20px;background:#080a0f}
 .footer-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;font-size:12px;margin:15px 0}
 .notice{font-size:12px}
+hr{border:0;border-top:1px solid #303746;margin:20px 0}
+
 @media(max-width:980px){
 .topbar{flex-wrap:wrap}
 .topbar nav{order:3;width:100%;justify-content:center}
@@ -110,6 +119,7 @@ footer{border-top:1px solid #272e39;text-align:center;padding:25px 16px;color:va
 }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -147,6 +157,7 @@ footer{border-top:1px solid #272e39;text-align:center;padding:25px 16px;color:va
 </section>
 
 <main>
+
 <section class="section section-anchor" id="marketplace">
 <div class="category-bar" id="category-bar">
 <button class="category-btn active" data-category="all"><span>▦</span>All Accounts</button>
@@ -169,7 +180,9 @@ footer{border-top:1px solid #272e39;text-align:center;padding:25px 16px;color:va
 <input id="search" class="search" placeholder="Search Free Fire accounts..." aria-label="Search accounts">
 </div>
 </div>
-<div class="listings" id="firebase-listings"><p class="sub">Loading listings...</p></div>
+<div class="listings" id="firebase-listings">
+<p class="sub">Loading listings...</p>
+</div>
 <p id="listing-count" class="sub"></p>
 </section>
 
@@ -198,8 +211,10 @@ footer{border-top:1px solid #272e39;text-align:center;padding:25px 16px;color:va
 <section class="section section-anchor" id="account-portal">
 <h2 id="portal-heading">Buyer Portal</h2>
 <p class="sub" id="portal-description"></p>
+
 <div class="panel">
 <p id="auth-status" class="sub">Checking login...</p>
+
 <div id="auth-form">
 <div class="form-grid">
 <div>
@@ -271,10 +286,13 @@ footer{border-top:1px solid #272e39;text-align:center;padding:25px 16px;color:va
 <p class="notice">Up to 4 images, 4 MB each. Images upload to Cloudinary.</p>
 <button class="btn" id="publish-btn" type="submit">Publish listing</button>
 </form>
+
 <hr>
 <h3>Manage My Listings</h3>
-<p class="notice">Mark your own accounts SOLD OUT or restore them to AVAILABLE.</p>
-<div id="seller-listings-management"><p class="sub">Your listings will appear here.</p></div>
+<p class="notice">Edit your account details, replace pictures, update prices, mark accounts SOLD OUT or delete your listings.</p>
+<div id="seller-listings-management">
+<p class="sub">Your listings will appear here.</p>
+</div>
 </div>
 </div>
 <p id="listing-message" class="message"></p>
@@ -303,6 +321,7 @@ footer{border-top:1px solid #272e39;text-align:center;padding:25px 16px;color:va
 </div>
 </div>
 </section>
+
 </main>
 
 <footer>
@@ -335,17 +354,20 @@ function categoryForText(text){
 function filterAccounts(){
  const q=(searchInput?.value||"").toLowerCase().trim();
  let visible=0;
+
  document.querySelectorAll("#firebase-listings .card").forEach(card=>{
   const show=card.textContent.toLowerCase().includes(q)&&
-  (activeCategory==="all"||(card.dataset.category||"all")===activeCategory);
+   (activeCategory==="all"||(card.dataset.category||"all")===activeCategory);
   card.hidden=!show;
   if(show)visible++;
  });
+
  const count=document.getElementById("listing-count");
  if(count)count.textContent=visible+" account listing"+(visible===1?"":"s")+" shown";
 }
 
 searchInput?.addEventListener("input",filterAccounts);
+
 document.querySelectorAll(".category-btn").forEach(btn=>{
  btn.addEventListener("click",()=>{
   document.querySelectorAll(".category-btn").forEach(x=>x.classList.remove("active"));
@@ -357,14 +379,17 @@ document.querySelectorAll(".category-btn").forEach(btn=>{
 </script>
 
 <script type="module">
+
 import{initializeApp}from"https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
 import{
  getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,
  signOut,onAuthStateChanged
 }from"https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
 import{
  getFirestore,collection,addDoc,getDocs,doc,getDoc,setDoc,
- updateDoc,query,orderBy,serverTimestamp
+ updateDoc,deleteDoc,query,orderBy,serverTimestamp
 }from"https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
 const firebaseConfig={
@@ -397,6 +422,7 @@ let permissionStep="Waiting for authentication";
 let adminLookupWarning="";
 
 $("portal-heading").textContent=portal==="seller"?"Seller Portal":"Buyer Portal";
+
 $("portal-description").textContent=portal==="seller"
  ?"Register or log in as a seller. Publishing requires administrator approval."
  :"Browse available accounts and contact sellers. Buyers cannot publish listings.";
@@ -409,6 +435,7 @@ $("portal-switch").innerHTML=portal==="seller"
 
 function showError(error){
  console.error("APEXSHOP error:",error);
+
  const known={
   "auth/email-already-in-use":"This email is already registered. Please log in.",
   "auth/invalid-email":"Enter a valid email address.",
@@ -417,6 +444,7 @@ function showError(error){
   "auth/operation-not-allowed":"Enable Email/Password sign-in in Firebase Authentication.",
   "permission-denied":"Firestore permission denied. Check your published security rules."
  };
+
  message.textContent=known[error?.code]||("Error: "+(error?.message||error?.code||"Please try again."));
 }
 
@@ -427,12 +455,6 @@ function credentials(){
  };
 }
 
-/*
- IMPORTANT:
- A missing admin document is normal for buyers and sellers.
- If only the admin lookup is denied, continue to the user's own role document.
- This does NOT grant administrator access.
-*/
 async function checkAdmin(user){
  permissionStep="Checking admin document";
  adminLookupWarning="";
@@ -445,12 +467,16 @@ async function checkAdmin(user){
 
   if(error.code==="permission-denied"){
    adminLookupWarning="Admin document could not be read. Continuing with normal account verification.";
-   console.warn(adminLookupWarning);
    return false;
   }
 
   throw error;
  }
+}
+
+async function verifyApprovedSeller(user){
+ const access=await getDoc(doc(db,"sellerAccess",user.uid));
+ return access.exists()&&access.data().approved===true;
 }
 
 async function uploadToCloudinary(file){
@@ -475,7 +501,7 @@ async function uploadToCloudinary(file){
 
 function validateImage(file){
  return ["image/jpeg","image/png","image/webp","image/gif"].includes(file.type)
- &&file.size<=4*1024*1024;
+  &&file.size<=4*1024*1024;
 }
 
 function displayShopProfile(data){
@@ -566,6 +592,8 @@ $("profile-form").addEventListener("submit",async event=>{
  }
 });
 
+/* ACCOUNT AND PORTAL ACCESS */
+
 async function updatePortalForUser(user){
  currentUser=user;
  currentRole=null;
@@ -575,6 +603,7 @@ async function updatePortalForUser(user){
  if(await checkAdmin(user)){
   isAdmin=true;
   currentRole="admin";
+
   $("auth-form").hidden=true;
   $("signed-in-tools").hidden=false;
   $("seller-tools").hidden=true;
@@ -586,12 +615,13 @@ async function updatePortalForUser(user){
   await loadShopProfile();
   fillProfileEditor();
   await loadAdminSellers();
+
   return"admin";
  }
 
  permissionStep="Reading user role document";
- const roleSnap=await getDoc(doc(db,"users",user.uid));
 
+ const roleSnap=await getDoc(doc(db,"users",user.uid));
  currentRole=roleSnap.exists()?roleSnap.data().role:null;
 
  if(!["buyer","seller"].includes(currentRole)){
@@ -605,13 +635,15 @@ async function updatePortalForUser(user){
 
  if(currentRole==="seller"){
   permissionStep="Checking seller approval";
-  const access=await getDoc(doc(db,"sellerAccess",user.uid));
-  isApprovedSeller=access.exists()&&access.data().approved===true;
+  isApprovedSeller=await verifyApprovedSeller(user);
  }
 
  $("auth-form").hidden=true;
  $("signed-in-tools").hidden=false;
- $("seller-tools").hidden=!(portal==="seller"&&currentRole==="seller"&&isApprovedSeller);
+
+ $("seller-tools").hidden=!(
+  portal==="seller"&&currentRole==="seller"&&isApprovedSeller
+ );
 
  $("profile-editor").hidden=true;
  $("admin-area").hidden=true;
@@ -621,6 +653,7 @@ async function updatePortalForUser(user){
   $("role-status").textContent="Buyer access only. You cannot publish accounts.";
  }else{
   $("auth-status").textContent="Logged in as seller: "+(user.email||"");
+
   $("role-status").textContent=
    portal!=="seller"?"Use the seller link to manage your seller account.":
    !isApprovedSeller?"Your seller account is awaiting administrator approval.":
@@ -684,15 +717,12 @@ $("login-btn").addEventListener("click",async()=>{
   }
 
   const result=await signInWithEmailAndPassword(auth,email,password);
-
   const role=await updatePortalForUser(result.user);
 
   if(role==="invalid"){
    message.textContent="No valid buyer/seller role. Register through the correct portal.";
   }else{
-   message.textContent=role==="admin"
-    ?"Administrator login successful."
-    :"Login successful.";
+   message.textContent=role==="admin"?"Administrator login successful.":"Login successful.";
   }
 
  }catch(error){
@@ -754,6 +784,151 @@ onAuthStateChanged(auth,async user=>{
 
 /* SELLER LISTING MANAGEMENT */
 
+async function checkSellerPermission(){
+ const user=auth.currentUser;
+
+ if(!user||!currentUser||user.uid!==currentUser.uid)
+  throw new Error("Please log in again.");
+
+ if(portal!=="seller"||currentRole!=="seller"||isAdmin)
+  throw new Error("Seller account access required.");
+
+ if(!(await verifyApprovedSeller(user))){
+  isApprovedSeller=false;
+  $("seller-tools").hidden=true;
+  throw new Error("Your seller approval is no longer active.");
+ }
+
+ return user;
+}
+
+function createEditorInput(labelText,value,type="text"){
+ const wrapper=document.createElement("div");
+ const label=document.createElement("label");
+ label.textContent=labelText;
+
+ const input=document.createElement("input");
+ input.type=type;
+ input.value=value??"";
+ input.required=true;
+
+ wrapper.append(label,input);
+ return{wrapper,input};
+}
+
+async function saveListingChanges(item,editor,button){
+ button.disabled=true;
+ editor.status.textContent="Checking seller permissions...";
+
+ try{
+  const user=await checkSellerPermission();
+
+  const fresh=await getDoc(doc(db,"listings",item.id));
+
+  if(!fresh.exists()||fresh.data().sellerId!==user.uid)
+   throw new Error("You can only edit your own listings.");
+
+  const title=editor.title.value.trim();
+  const description=editor.description.value.trim();
+  const price=Number(editor.price.value);
+  const whatsapp=editor.whatsapp.value.replace(/\D/g,"");
+  const files=Array.from(editor.images.files||[]);
+
+  if(!title||title.length>80)
+   throw new Error("Title must contain 1–80 characters.");
+
+  if(!description||description.length>1000)
+   throw new Error("Account details must contain 1–1000 characters.");
+
+  if(!Number.isSafeInteger(price)||price<1||price>100000000)
+   throw new Error("Enter a valid whole-number price.");
+
+  if(whatsapp.length<10||whatsapp.length>15)
+   throw new Error("Enter a valid WhatsApp number with country code.");
+
+  if(files.length>4)
+   throw new Error("Maximum 4 replacement pictures allowed.");
+
+  if(files.some(file=>!validateImage(file)))
+   throw new Error("Each replacement image must be JPEG, PNG, WEBP or GIF and no larger than 4 MB.");
+
+  let imageUrls=Array.isArray(fresh.data().imageUrls)
+   ?fresh.data().imageUrls.slice()
+   :(fresh.data().imageUrl?[fresh.data().imageUrl]:[]);
+
+  // If new images are selected, replace the previous gallery.
+  // If no images are selected, retain the existing gallery.
+  if(files.length){
+   imageUrls=[];
+
+   for(let i=0;i<files.length;i++){
+    editor.status.textContent="Uploading replacement picture "+(i+1)+" of "+files.length+"...";
+    imageUrls.push(await uploadToCloudinary(files[i]));
+   }
+  }
+
+  // Check approval and ownership again before saving.
+  await checkSellerPermission();
+
+  const latest=await getDoc(doc(db,"listings",item.id));
+
+  if(!latest.exists()||latest.data().sellerId!==user.uid)
+   throw new Error("Listing ownership could not be verified.");
+
+  editor.status.textContent="Saving your changes...";
+
+  await updateDoc(doc(db,"listings",item.id),{
+   title,
+   description,
+   price,
+   imageUrls,
+   sellerWhatsapp:whatsapp
+  });
+
+  message.textContent="Your listing has been updated successfully.";
+
+  await loadListings();
+  await loadSellerListings();
+
+ }catch(error){
+  console.error("Listing edit failed:",error);
+  editor.status.textContent="Update failed: "+(error.message||"Please try again.");
+ }finally{
+  button.disabled=false;
+ }
+}
+
+async function deleteSellerListing(item,button){
+ const confirmed=confirm(
+  "Are you sure you want to permanently delete this listing?\n\nThis action cannot be undone."
+ );
+
+ if(!confirmed)return;
+
+ button.disabled=true;
+
+ try{
+  const user=await checkSellerPermission();
+
+  const fresh=await getDoc(doc(db,"listings",item.id));
+
+  if(!fresh.exists()||fresh.data().sellerId!==user.uid)
+   throw new Error("You can only delete your own listings.");
+
+  await deleteDoc(doc(db,"listings",item.id));
+
+  message.textContent="Listing deleted successfully.";
+
+  await loadListings();
+  await loadSellerListings();
+
+ }catch(error){
+  message.textContent="Could not delete listing: "+error.message;
+  console.error(error);
+  button.disabled=false;
+ }
+}
+
 async function loadSellerListings(){
  const area=$("seller-listings-management");
  area.replaceChildren();
@@ -765,22 +940,24 @@ async function loadSellerListings(){
 
  try{
   const result=await getDocs(collection(db,"listings"));
-  const mine=result.docs.filter(item=>item.data().sellerId===currentUser.uid);
+
+  const mine=result.docs.filter(item=>
+   item.data().sellerId===currentUser.uid
+  );
 
   if(!mine.length){
    area.textContent="You have not published any accounts yet.";
    return;
   }
 
-  mine.sort((a,b)=>{
-   const ta=a.data().createdAt?.seconds||0;
-   const tb=b.data().createdAt?.seconds||0;
-   return tb-ta;
-  });
+  mine.sort((a,b)=>
+   (b.data().createdAt?.seconds||0)-(a.data().createdAt?.seconds||0)
+  );
 
   mine.forEach(item=>{
    const data=item.data();
    const sold=data.status==="sold_out";
+
    const card=document.createElement("div");
    card.className="seller-manage-card";
 
@@ -794,34 +971,22 @@ async function loadSellerListings(){
    const price=document.createElement("p");
    price.textContent="₦"+Number(data.price||0).toLocaleString("en-NG");
 
-   const button=document.createElement("button");
-   button.type="button";
-   button.className="btn "+(sold?"secondary":"");
-   button.textContent=sold?"Mark as AVAILABLE":"Mark as SOLD OUT";
+   const statusButton=document.createElement("button");
+   statusButton.type="button";
+   statusButton.className="btn "+(sold?"secondary":"");
+   statusButton.textContent=sold?"Mark as AVAILABLE":"Mark as SOLD OUT";
 
-   button.addEventListener("click",async()=>{
-    button.disabled=true;
+   statusButton.addEventListener("click",async()=>{
+    statusButton.disabled=true;
 
     try{
-     const freshUser=auth.currentUser;
+     const user=await checkSellerPermission();
+     const fresh=await getDoc(doc(db,"listings",item.id));
 
-     if(!freshUser||freshUser.uid!==currentUser.uid)
-      throw new Error("Please log in again.");
-
-     const access=await getDoc(doc(db,"sellerAccess",freshUser.uid));
-
-     if(!access.exists()||access.data().approved!==true){
-      isApprovedSeller=false;
-      $("seller-tools").hidden=true;
-      throw new Error("Your seller approval is no longer active.");
-     }
-
-     const freshListing=await getDoc(doc(db,"listings",item.id));
-
-     if(!freshListing.exists()||freshListing.data().sellerId!==freshUser.uid)
+     if(!fresh.exists()||fresh.data().sellerId!==user.uid)
       throw new Error("You can only update your own listings.");
 
-     const newStatus=freshListing.data().status==="sold_out"?"available":"sold_out";
+     const newStatus=fresh.data().status==="sold_out"?"available":"sold_out";
 
      await updateDoc(doc(db,"listings",item.id),{
       status:newStatus,
@@ -829,17 +994,164 @@ async function loadSellerListings(){
      });
 
      message.textContent="Listing status updated successfully.";
+
      await loadSellerListings();
      await loadListings();
 
     }catch(error){
-     message.textContent="Could not update listing: "+(error.message||"Check Firestore rules.");
+     message.textContent="Could not update listing: "+error.message;
      console.error(error);
-     button.disabled=false;
+     statusButton.disabled=false;
     }
    });
 
-   card.append(title,status,price,button);
+   // EDIT BUTTON
+   const editButton=document.createElement("button");
+   editButton.type="button";
+   editButton.className="btn secondary";
+   editButton.textContent="✏️ Edit Listing";
+
+   // DELETE BUTTON
+   const deleteButton=document.createElement("button");
+   deleteButton.type="button";
+   deleteButton.className="btn danger";
+   deleteButton.textContent="🗑 Delete Listing";
+
+   const editorPanel=document.createElement("div");
+   editorPanel.className="editor-panel";
+   editorPanel.hidden=true;
+
+   const editorHeading=document.createElement("h4");
+   editorHeading.textContent="Edit Your Account Listing";
+
+   const titleField=createEditorInput("Listing title",data.title||"");
+   titleField.input.maxLength=80;
+
+   const priceField=createEditorInput("Price in naira (₦)",data.price||"", "number");
+   priceField.input.min="1";
+   priceField.input.max="100000000";
+   priceField.input.step="1";
+
+   const whatsappField=createEditorInput(
+    "WhatsApp number with country code",
+    data.sellerWhatsapp||""
+   );
+   whatsappField.input.maxLength=15;
+   whatsappField.input.inputMode="numeric";
+
+   const descriptionLabel=document.createElement("label");
+   descriptionLabel.textContent="Account details";
+
+   const descriptionField=document.createElement("textarea");
+   descriptionField.value=data.description||"";
+   descriptionField.maxLength=1000;
+   descriptionField.required=true;
+
+   const currentImageUrls=Array.isArray(data.imageUrls)
+    ?data.imageUrls:(data.imageUrl?[data.imageUrl]:[]);
+
+   const imageHeading=document.createElement("p");
+   imageHeading.className="notice";
+   imageHeading.textContent="Current listing pictures:";
+
+   const currentImages=document.createElement("div");
+   currentImages.className="current-images";
+
+   if(currentImageUrls.length){
+    currentImageUrls.forEach(url=>{
+     const image=document.createElement("img");
+     image.src=url;
+     image.alt="Current listing picture";
+     currentImages.append(image);
+    });
+   }else{
+    currentImages.textContent="No existing pictures.";
+   }
+
+   const imageLabel=document.createElement("label");
+   imageLabel.textContent="Replace pictures (up to 4, maximum 4 MB each)";
+
+   const imageField=document.createElement("input");
+   imageField.type="file";
+   imageField.accept="image/jpeg,image/png,image/webp,image/gif";
+   imageField.multiple=true;
+
+   const imageNote=document.createElement("p");
+   imageNote.className="editor-note";
+   imageNote.textContent="Leave this empty to keep your current pictures. Selecting new pictures replaces the existing gallery.";
+
+   const editorStatus=document.createElement("p");
+   editorStatus.className="message";
+
+   const saveButton=document.createElement("button");
+   saveButton.type="button";
+   saveButton.className="btn";
+   saveButton.textContent="Save Changes";
+
+   const cancelButton=document.createElement("button");
+   cancelButton.type="button";
+   cancelButton.className="btn secondary";
+   cancelButton.textContent="Cancel";
+
+   const editorActions=document.createElement("div");
+   editorActions.className="actions";
+
+   editorActions.append(saveButton,cancelButton);
+
+   editorPanel.append(
+    editorHeading,
+    titleField.wrapper,
+    priceField.wrapper,
+    whatsappField.wrapper,
+    descriptionLabel,
+    descriptionField,
+    imageHeading,
+    currentImages,
+    imageLabel,
+    imageField,
+    imageNote,
+    editorStatus,
+    editorActions
+   );
+
+   const editor={
+    title:titleField.input,
+    price:priceField.input,
+    whatsapp:whatsappField.input,
+    description:descriptionField,
+    images:imageField,
+    status:editorStatus
+   };
+
+   editButton.addEventListener("click",()=>{
+    editorPanel.hidden=!editorPanel.hidden;
+    editButton.textContent=editorPanel.hidden?"✏️ Edit Listing":"Close Editor";
+   });
+
+   cancelButton.addEventListener("click",()=>{
+    editorPanel.hidden=true;
+    editButton.textContent="✏️ Edit Listing";
+    editorStatus.textContent="";
+   });
+
+   saveButton.addEventListener("click",()=>{
+    saveListingChanges(item,editor,saveButton);
+   });
+
+   deleteButton.addEventListener("click",()=>{
+    deleteSellerListing(item,deleteButton);
+   });
+
+   card.append(
+    title,
+    status,
+    price,
+    statusButton,
+    editButton,
+    deleteButton,
+    editorPanel
+   );
+
    area.append(card);
   });
 
@@ -868,15 +1180,7 @@ $("listing-form").addEventListener("submit",async event=>{
  button.disabled=true;
 
  try{
-  permissionStep="Verifying seller publishing approval";
-
-  const access=await getDoc(doc(db,"sellerAccess",currentUser.uid));
-
-  if(!access.exists()||access.data().approved!==true){
-   isApprovedSeller=false;
-   $("seller-tools").hidden=true;
-   throw new Error("You are not an approved seller.");
-  }
+  const user=await checkSellerPermission();
 
   const title=$("listing-title").value.trim();
   const description=$("listing-description").value.trim();
@@ -902,12 +1206,7 @@ $("listing-form").addEventListener("submit",async event=>{
    imageUrls.push(await uploadToCloudinary(files[i]));
   }
 
-  const finalAccess=await getDoc(doc(db,"sellerAccess",currentUser.uid));
-
-  if(!finalAccess.exists()||finalAccess.data().approved!==true)
-   throw new Error("Seller approval was revoked before publishing.");
-
-  permissionStep="Publishing listing";
+  await checkSellerPermission();
 
   await addDoc(collection(db,"listings"),{
    title,
@@ -915,8 +1214,8 @@ $("listing-form").addEventListener("submit",async event=>{
    price,
    imageUrls,
    sellerWhatsapp,
-   sellerId:currentUser.uid,
-   sellerEmail:currentUser.email||"",
+   sellerId:user.uid,
+   sellerEmail:user.email||"",
    verified:false,
    status:"available",
    createdAt:serverTimestamp()
@@ -963,9 +1262,10 @@ async function loadListings(){
   result.forEach(snapshot=>{
    const data=snapshot.data();
    const soldOut=data.status==="sold_out";
-   const card=document.createElement("article");
 
+   const card=document.createElement("article");
    card.className="card";
+
    card.dataset.category=categoryForText(
     [data.category,data.title,data.description].filter(Boolean).join(" ")
    );
