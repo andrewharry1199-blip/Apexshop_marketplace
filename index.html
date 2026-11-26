@@ -16,6 +16,9 @@ a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer}
 header{position:sticky;top:0;z-index:20;background:#04060af5;border-bottom:1px solid #64101e}
 .topbar{max-width:1280px;margin:auto;min-height:76px;padding:10px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand-link{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-avatar-wrap[hidden]{display:none!important}
+.brand-avatar{width:48px;height:48px;object-fit:cover;border-radius:50%;border:2px solid var(--red);background:#151b27}
 .brand-mark{font-weight:1000;font-size:25px;letter-spacing:1px}
 .brand-mark span{color:var(--red)}
 .brand-sub{font-size:10px;letter-spacing:4px;margin-top:5px}
@@ -84,6 +87,7 @@ textarea{min-height:100px;resize:vertical}
 .current-images{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
 .current-images img{width:75px;height:65px;object-fit:cover;border-radius:7px;border:1px solid #394252}
 .editor-note{font-size:11px;color:#aab3c2;line-height:1.5}
+.header-image-preview{width:110px;height:110px;object-fit:cover;border-radius:50%;border:2px solid var(--red);background:#151b27;margin:8px 0}
 footer{border-top:1px solid #272e39;text-align:center;padding:25px 16px;color:var(--muted);margin-top:20px;background:#080a0f}
 .footer-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;font-size:12px;margin:15px 0}
 .notice{font-size:12px}
@@ -103,6 +107,7 @@ hr{border:0;border-top:1px solid #303746;margin:20px 0}
 .topbar nav a{font-size:11px}
 .top-actions .btn{padding:8px 10px;font-size:11px}
 .brand-mark{font-size:21px}
+.brand-avatar{width:40px;height:40px}
 .hero{padding:34px 18px;min-height:300px}
 .hero h1{font-size:44px}
 .section{padding:22px 14px}
@@ -124,9 +129,14 @@ hr{border:0;border-top:1px solid #303746;margin:20px 0}
 
 <header>
 <div class="topbar">
-<a href="#home">
-<div class="brand-mark"><span>♛ APEX</span>SHOP</div>
-<div class="brand-sub">MARKETPLACE</div>
+<a href="#home" class="brand-link">
+ <div id="header-brand-image-wrap" hidden>
+  <img id="header-brand-image" class="brand-avatar" alt="APEXSHOP character">
+ </div>
+ <div>
+  <div class="brand-mark"><span>♛ APEX</span>SHOP</div>
+  <div class="brand-sub">MARKETPLACE</div>
+ </div>
 </a>
 <nav>
 <a href="#home">Home</a>
@@ -301,7 +311,26 @@ hr{border:0;border-top:1px solid #303746;margin:20px 0}
 
 <section class="section" id="admin-area" hidden>
 <h2 class="admin-heading">APEXSHOP ADMIN DASHBOARD</h2>
-<p class="sub">Manage seller verification and publishing permissions.</p>
+<p class="sub">Manage seller verification, publishing permissions and your public header image.</p>
+
+<!-- ADMIN-ONLY HEADER IMAGE UPLOADER -->
+<div class="panel">
+<h3>Header Character Image</h3>
+<p class="notice">Upload the character image that appears beside APEXSHOP in the website header. This uploader is available only to an enabled administrator.</p>
+<div id="header-image-current-area">
+<p class="notice">Current header image:</p>
+<img id="header-image-current-preview" class="header-image-preview" alt="Current header character" hidden>
+<p id="header-image-current-empty" class="notice">No header character image has been uploaded yet.</p>
+</div>
+<form id="header-image-form">
+<label for="header-image-file">Choose character image</label>
+<input id="header-image-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif" required>
+<p class="notice">One image only. JPEG, PNG, WEBP or GIF. Maximum size: 4 MB.</p>
+<button class="btn" id="save-header-image-btn" type="submit">Upload Header Image</button>
+</form>
+<p id="header-image-message" class="message"></p>
+</div>
+
 <div class="panel">
 <h3>Seller Verification</h3>
 <p class="notice">Approve trusted sellers to allow publishing. Revoking approval disables publishing access.</p>
@@ -354,20 +383,17 @@ function categoryForText(text){
 function filterAccounts(){
  const q=(searchInput?.value||"").toLowerCase().trim();
  let visible=0;
-
  document.querySelectorAll("#firebase-listings .card").forEach(card=>{
   const show=card.textContent.toLowerCase().includes(q)&&
    (activeCategory==="all"||(card.dataset.category||"all")===activeCategory);
   card.hidden=!show;
   if(show)visible++;
  });
-
  const count=document.getElementById("listing-count");
  if(count)count.textContent=visible+" account listing"+(visible===1?"":"s")+" shown";
 }
 
 searchInput?.addEventListener("input",filterAccounts);
-
 document.querySelectorAll(".category-btn").forEach(btn=>{
  btn.addEventListener("click",()=>{
   document.querySelectorAll(".category-btn").forEach(x=>x.classList.remove("active"));
@@ -422,20 +448,16 @@ let permissionStep="Waiting for authentication";
 let adminLookupWarning="";
 
 $("portal-heading").textContent=portal==="seller"?"Seller Portal":"Buyer Portal";
-
 $("portal-description").textContent=portal==="seller"
  ?"Register or log in as a seller. Publishing requires administrator approval."
  :"Browse available accounts and contact sellers. Buyers cannot publish listings.";
-
 $("register-btn").textContent=portal==="seller"?"Create seller account":"Create buyer account";
-
 $("portal-switch").innerHTML=portal==="seller"
  ?'Want to buy only? <a href="?portal=buyer#account-portal">Use the buyer link</a>.'
  :'Want to sell? <a href="?portal=seller#account-portal">Register through the seller link</a>.';
 
 function showError(error){
  console.error("APEXSHOP error:",error);
-
  const known={
   "auth/email-already-in-use":"This email is already registered. Please log in.",
   "auth/invalid-email":"Enter a valid email address.",
@@ -444,32 +466,25 @@ function showError(error){
   "auth/operation-not-allowed":"Enable Email/Password sign-in in Firebase Authentication.",
   "permission-denied":"Firestore permission denied. Check your published security rules."
  };
-
  message.textContent=known[error?.code]||("Error: "+(error?.message||error?.code||"Please try again."));
 }
 
 function credentials(){
- return{
-  email:$("user-email").value.trim(),
-  password:$("user-password").value
- };
+ return{email:$("user-email").value.trim(),password:$("user-password").value};
 }
 
 async function checkAdmin(user){
  permissionStep="Checking admin document";
  adminLookupWarning="";
-
  try{
   const snap=await getDoc(doc(db,"admins",user.uid));
   return snap.exists()&&snap.data().enabled===true;
  }catch(error){
   console.error("Admin lookup failed:",error);
-
   if(error.code==="permission-denied"){
    adminLookupWarning="Admin document could not be read. Continuing with normal account verification.";
    return false;
   }
-
   throw error;
  }
 }
@@ -483,19 +498,15 @@ async function uploadToCloudinary(file){
  const form=new FormData();
  form.append("file",file);
  form.append("upload_preset",CLOUDINARY_UPLOAD_PRESET);
-
  const response=await fetch(
   "https://api.cloudinary.com/v1_1/"+CLOUDINARY_CLOUD_NAME+"/image/upload",
   {method:"POST",body:form}
  );
-
  let result={};
  try{result=await response.json();}catch(_){}
-
  if(!response.ok||!result.secure_url){
   throw new Error(result?.error?.message||"Cloudinary upload failed. Check cloud name and unsigned preset.");
  }
-
  return result.secure_url;
 }
 
@@ -503,6 +514,116 @@ function validateImage(file){
  return ["image/jpeg","image/png","image/webp","image/gif"].includes(file.type)
   &&file.size<=4*1024*1024;
 }
+
+/* HEADER IMAGE DISPLAY */
+
+function applyHeaderImage(url){
+ const image=$("header-brand-image");
+ const wrap=$("header-brand-image-wrap");
+ if(url){
+  image.src=url;
+  image.hidden=false;
+  wrap.hidden=false;
+ }else{
+  image.removeAttribute("src");
+  image.hidden=true;
+  wrap.hidden=true;
+ }
+}
+
+function showHeaderImagePreview(url){
+ const preview=$("header-image-current-preview");
+ const empty=$("header-image-current-empty");
+ if(url){
+  preview.src=url;
+  preview.hidden=false;
+  empty.hidden=true;
+ }else{
+  preview.removeAttribute("src");
+  preview.hidden=true;
+  empty.hidden=false;
+ }
+}
+
+/* PUBLIC HEADER IMAGE LOAD
+   The public website reads only the image URL from shopProfile/main.
+   Upload controls remain inside the hidden admin dashboard.
+*/
+
+async function loadPublicHeaderImage(){
+ try{
+  const snap=await getDoc(doc(db,"shopProfile","main"));
+  const url=snap.exists()?(snap.data().headerImageUrl||""):"";
+  applyHeaderImage(url);
+ }catch(error){
+  console.warn("Public header image could not be loaded:",error);
+  applyHeaderImage("");
+ }
+}
+
+/* ADMIN-ONLY HEADER IMAGE UPLOAD */
+
+$("header-image-form").addEventListener("submit",async event=>{
+ event.preventDefault();
+
+ const status=$("header-image-message");
+ const button=$("save-header-image-btn");
+ const file=$("header-image-file").files?.[0];
+
+ if(!currentUser||!isAdmin){
+  status.textContent="Administrator access is required to upload this image.";
+  return;
+ }
+
+ if(!file){
+  status.textContent="Please choose an image first.";
+  return;
+ }
+
+ if(!validateImage(file)){
+  status.textContent="Choose a JPEG, PNG, WEBP or GIF image no larger than 4 MB.";
+  return;
+ }
+
+ button.disabled=true;
+ status.textContent="Verifying administrator access...";
+
+ try{
+  if(!(await checkAdmin(currentUser))){
+   isAdmin=false;
+   $("admin-area").hidden=true;
+   throw new Error("Administrator permission is no longer active.");
+  }
+
+  status.textContent="Uploading image to Cloudinary...";
+  const imageUrl=await uploadToCloudinary(file);
+
+  // Verify admin access again immediately before saving.
+  if(!(await checkAdmin(currentUser))){
+   isAdmin=false;
+   $("admin-area").hidden=true;
+   throw new Error("Administrator permission was removed. The image was uploaded but not published.");
+  }
+
+  status.textContent="Saving header image...";
+  await setDoc(doc(db,"shopProfile","main"),{
+   headerImageUrl:imageUrl,
+   headerImageUpdatedAt:serverTimestamp(),
+   headerImageUpdatedBy:currentUser.uid
+  },{merge:true});
+
+  applyHeaderImage(imageUrl);
+  showHeaderImagePreview(imageUrl);
+  $("header-image-file").value="";
+  status.textContent="Header character image uploaded and published successfully.";
+
+ }catch(error){
+  console.error("Header image upload failed:",error);
+  status.textContent="Upload failed: "+(error.message||"Please try again.");
+ }finally{
+  button.disabled=false;
+ }
+});
 
 function displayShopProfile(data){
  profileData=data||{};
@@ -579,7 +700,7 @@ $("profile-form").addEventListener("submit",async event=>{
   };
 
   await setDoc(doc(db,"shopProfile","main"),data,{merge:true});
-  profileData=data;
+  profileData={...profileData,...data};
   fillProfileEditor();
   $("profile-logo-input").value="";
   $("profile-message").textContent="Shop profile saved successfully.";
@@ -614,13 +735,13 @@ async function updatePortalForUser(user){
 
   await loadShopProfile();
   fillProfileEditor();
+  showHeaderImagePreview(profileData.headerImageUrl||"");
   await loadAdminSellers();
 
   return"admin";
  }
 
  permissionStep="Reading user role document";
-
  const roleSnap=await getDoc(doc(db,"users",user.uid));
  currentRole=roleSnap.exists()?roleSnap.data().role:null;
 
@@ -640,7 +761,6 @@ async function updatePortalForUser(user){
 
  $("auth-form").hidden=true;
  $("signed-in-tools").hidden=false;
-
  $("seller-tools").hidden=!(
   portal==="seller"&&currentRole==="seller"&&isApprovedSeller
  );
@@ -653,7 +773,6 @@ async function updatePortalForUser(user){
   $("role-status").textContent="Buyer access only. You cannot publish accounts.";
  }else{
   $("auth-status").textContent="Logged in as seller: "+(user.email||"");
-
   $("role-status").textContent=
    portal!=="seller"?"Use the seller link to manage your seller account.":
    !isApprovedSeller?"Your seller account is awaiting administrator approval.":
@@ -662,10 +781,7 @@ async function updatePortalForUser(user){
   if(portal==="seller"&&isApprovedSeller)await loadSellerListings();
  }
 
- if(adminLookupWarning){
-  $("role-status").textContent+=" "+adminLookupWarning;
- }
-
+ if(adminLookupWarning)$("role-status").textContent+=" "+adminLookupWarning;
  return currentRole;
 }
 
@@ -673,72 +789,50 @@ $("register-btn").addEventListener("click",async()=>{
  const button=$("register-btn");
  button.disabled=true;
  message.textContent="";
-
  try{
   const{email,password}=credentials();
-
   if(!email||password.length<6){
    message.textContent="Enter an email and password of at least 6 characters.";
    return;
   }
-
   const result=await createUserWithEmailAndPassword(auth,email,password);
-
   await setDoc(doc(db,"users",result.user.uid),{
-   role:portal,
-   email:result.user.email||"",
-   createdAt:serverTimestamp()
+   role:portal,email:result.user.email||"",createdAt:serverTimestamp()
   });
-
   await updatePortalForUser(result.user);
-
   message.textContent=portal==="seller"
    ?"Seller account created. Await administrator approval."
    :"Buyer account created. Buyer accounts cannot publish listings.";
-
- }catch(error){
-  showError(error);
- }finally{
-  button.disabled=false;
- }
+ }catch(error){showError(error);}
+ finally{button.disabled=false;}
 });
 
 $("login-btn").addEventListener("click",async()=>{
  const button=$("login-btn");
  button.disabled=true;
  message.textContent="";
-
  try{
   const{email,password}=credentials();
-
   if(!email||!password){
    message.textContent="Enter your email and password.";
    return;
   }
-
   const result=await signInWithEmailAndPassword(auth,email,password);
   const role=await updatePortalForUser(result.user);
-
   if(role==="invalid"){
    message.textContent="No valid buyer/seller role. Register through the correct portal.";
   }else{
    message.textContent=role==="admin"?"Administrator login successful.":"Login successful.";
   }
-
- }catch(error){
-  showError(error);
- }finally{
-  button.disabled=false;
- }
+ }catch(error){showError(error);}
+ finally{button.disabled=false;}
 });
 
 $("logout-btn").addEventListener("click",async()=>{
  try{
   await signOut(auth);
   message.textContent="You have logged out.";
- }catch(error){
-  showError(error);
- }
+ }catch(error){showError(error);}
 });
 
 onAuthStateChanged(auth,async user=>{
@@ -768,14 +862,11 @@ onAuthStateChanged(auth,async user=>{
   await updatePortalForUser(user);
  }catch(error){
   console.error("Permission check failed at:",permissionStep,error);
-
   $("auth-status").textContent=
    "Could not check permissions at: "+permissionStep+
    " ("+(error.code||error.message)+")";
-
   $("role-status").textContent=
    "Your account is signed in, but Firestore blocked this request. Check the published rules.";
-
   $("seller-tools").hidden=true;
   $("profile-editor").hidden=true;
   $("admin-area").hidden=true;
@@ -786,19 +877,15 @@ onAuthStateChanged(auth,async user=>{
 
 async function checkSellerPermission(){
  const user=auth.currentUser;
-
  if(!user||!currentUser||user.uid!==currentUser.uid)
   throw new Error("Please log in again.");
-
  if(portal!=="seller"||currentRole!=="seller"||isAdmin)
   throw new Error("Seller account access required.");
-
  if(!(await verifyApprovedSeller(user))){
   isApprovedSeller=false;
   $("seller-tools").hidden=true;
   throw new Error("Your seller approval is no longer active.");
  }
-
  return user;
 }
 
@@ -806,12 +893,10 @@ function createEditorInput(labelText,value,type="text"){
  const wrapper=document.createElement("div");
  const label=document.createElement("label");
  label.textContent=labelText;
-
  const input=document.createElement("input");
  input.type=type;
  input.value=value??"";
  input.required=true;
-
  wrapper.append(label,input);
  return{wrapper,input};
 }
@@ -819,12 +904,9 @@ function createEditorInput(labelText,value,type="text"){
 async function saveListingChanges(item,editor,button){
  button.disabled=true;
  editor.status.textContent="Checking seller permissions...";
-
  try{
   const user=await checkSellerPermission();
-
   const fresh=await getDoc(doc(db,"listings",item.id));
-
   if(!fresh.exists()||fresh.data().sellerId!==user.uid)
    throw new Error("You can only edit your own listings.");
 
@@ -834,21 +916,13 @@ async function saveListingChanges(item,editor,button){
   const whatsapp=editor.whatsapp.value.replace(/\D/g,"");
   const files=Array.from(editor.images.files||[]);
 
-  if(!title||title.length>80)
-   throw new Error("Title must contain 1–80 characters.");
-
-  if(!description||description.length>1000)
-   throw new Error("Account details must contain 1–1000 characters.");
-
+  if(!title||title.length>80)throw new Error("Title must contain 1–80 characters.");
+  if(!description||description.length>1000)throw new Error("Account details must contain 1–1000 characters.");
   if(!Number.isSafeInteger(price)||price<1||price>100000000)
    throw new Error("Enter a valid whole-number price.");
-
   if(whatsapp.length<10||whatsapp.length>15)
    throw new Error("Enter a valid WhatsApp number with country code.");
-
-  if(files.length>4)
-   throw new Error("Maximum 4 replacement pictures allowed.");
-
+  if(files.length>4)throw new Error("Maximum 4 replacement pictures allowed.");
   if(files.some(file=>!validateImage(file)))
    throw new Error("Each replacement image must be JPEG, PNG, WEBP or GIF and no larger than 4 MB.");
 
@@ -856,72 +930,45 @@ async function saveListingChanges(item,editor,button){
    ?fresh.data().imageUrls.slice()
    :(fresh.data().imageUrl?[fresh.data().imageUrl]:[]);
 
-  // If new images are selected, replace the previous gallery.
-  // If no images are selected, retain the existing gallery.
   if(files.length){
    imageUrls=[];
-
    for(let i=0;i<files.length;i++){
     editor.status.textContent="Uploading replacement picture "+(i+1)+" of "+files.length+"...";
     imageUrls.push(await uploadToCloudinary(files[i]));
    }
   }
 
-  // Check approval and ownership again before saving.
   await checkSellerPermission();
-
   const latest=await getDoc(doc(db,"listings",item.id));
-
   if(!latest.exists()||latest.data().sellerId!==user.uid)
    throw new Error("Listing ownership could not be verified.");
 
   editor.status.textContent="Saving your changes...";
-
   await updateDoc(doc(db,"listings",item.id),{
-   title,
-   description,
-   price,
-   imageUrls,
-   sellerWhatsapp:whatsapp
+   title,description,price,imageUrls,sellerWhatsapp:whatsapp
   });
-
   message.textContent="Your listing has been updated successfully.";
-
   await loadListings();
   await loadSellerListings();
-
  }catch(error){
   console.error("Listing edit failed:",error);
   editor.status.textContent="Update failed: "+(error.message||"Please try again.");
- }finally{
-  button.disabled=false;
- }
+ }finally{button.disabled=false;}
 }
 
 async function deleteSellerListing(item,button){
- const confirmed=confirm(
-  "Are you sure you want to permanently delete this listing?\n\nThis action cannot be undone."
- );
-
+ const confirmed=confirm("Are you sure you want to permanently delete this listing?\n\nThis action cannot be undone.");
  if(!confirmed)return;
-
  button.disabled=true;
-
  try{
   const user=await checkSellerPermission();
-
   const fresh=await getDoc(doc(db,"listings",item.id));
-
   if(!fresh.exists()||fresh.data().sellerId!==user.uid)
    throw new Error("You can only delete your own listings.");
-
   await deleteDoc(doc(db,"listings",item.id));
-
   message.textContent="Listing deleted successfully.";
-
   await loadListings();
   await loadSellerListings();
-
  }catch(error){
   message.textContent="Could not delete listing: "+error.message;
   console.error(error);
@@ -932,32 +979,22 @@ async function deleteSellerListing(item,button){
 async function loadSellerListings(){
  const area=$("seller-listings-management");
  area.replaceChildren();
-
  if(!currentUser||currentRole!=="seller"||!isApprovedSeller){
   area.textContent="Approved seller access required.";
   return;
  }
-
  try{
   const result=await getDocs(collection(db,"listings"));
-
-  const mine=result.docs.filter(item=>
-   item.data().sellerId===currentUser.uid
-  );
-
+  const mine=result.docs.filter(item=>item.data().sellerId===currentUser.uid);
   if(!mine.length){
    area.textContent="You have not published any accounts yet.";
    return;
   }
-
-  mine.sort((a,b)=>
-   (b.data().createdAt?.seconds||0)-(a.data().createdAt?.seconds||0)
-  );
+  mine.sort((a,b)=>(b.data().createdAt?.seconds||0)-(a.data().createdAt?.seconds||0));
 
   mine.forEach(item=>{
    const data=item.data();
    const sold=data.status==="sold_out";
-
    const card=document.createElement("div");
    card.className="seller-manage-card";
 
@@ -978,26 +1015,18 @@ async function loadSellerListings(){
 
    statusButton.addEventListener("click",async()=>{
     statusButton.disabled=true;
-
     try{
      const user=await checkSellerPermission();
      const fresh=await getDoc(doc(db,"listings",item.id));
-
      if(!fresh.exists()||fresh.data().sellerId!==user.uid)
       throw new Error("You can only update your own listings.");
-
      const newStatus=fresh.data().status==="sold_out"?"available":"sold_out";
-
      await updateDoc(doc(db,"listings",item.id),{
-      status:newStatus,
-      statusUpdatedAt:serverTimestamp()
+      status:newStatus,statusUpdatedAt:serverTimestamp()
      });
-
      message.textContent="Listing status updated successfully.";
-
      await loadSellerListings();
      await loadListings();
-
     }catch(error){
      message.textContent="Could not update listing: "+error.message;
      console.error(error);
@@ -1005,13 +1034,11 @@ async function loadSellerListings(){
     }
    });
 
-   // EDIT BUTTON
    const editButton=document.createElement("button");
    editButton.type="button";
    editButton.className="btn secondary";
    editButton.textContent="✏️ Edit Listing";
 
-   // DELETE BUTTON
    const deleteButton=document.createElement("button");
    deleteButton.type="button";
    deleteButton.className="btn danger";
@@ -1027,21 +1054,17 @@ async function loadSellerListings(){
    const titleField=createEditorInput("Listing title",data.title||"");
    titleField.input.maxLength=80;
 
-   const priceField=createEditorInput("Price in naira (₦)",data.price||"", "number");
+   const priceField=createEditorInput("Price in naira (₦)",data.price||"","number");
    priceField.input.min="1";
    priceField.input.max="100000000";
    priceField.input.step="1";
 
-   const whatsappField=createEditorInput(
-    "WhatsApp number with country code",
-    data.sellerWhatsapp||""
-   );
+   const whatsappField=createEditorInput("WhatsApp number with country code",data.sellerWhatsapp||"");
    whatsappField.input.maxLength=15;
    whatsappField.input.inputMode="numeric";
 
    const descriptionLabel=document.createElement("label");
    descriptionLabel.textContent="Account details";
-
    const descriptionField=document.createElement("textarea");
    descriptionField.value=data.description||"";
    descriptionField.maxLength=1000;
@@ -1056,7 +1079,6 @@ async function loadSellerListings(){
 
    const currentImages=document.createElement("div");
    currentImages.className="current-images";
-
    if(currentImageUrls.length){
     currentImageUrls.forEach(url=>{
      const image=document.createElement("img");
@@ -1064,13 +1086,10 @@ async function loadSellerListings(){
      image.alt="Current listing picture";
      currentImages.append(image);
     });
-   }else{
-    currentImages.textContent="No existing pictures.";
-   }
+   }else{currentImages.textContent="No existing pictures.";}
 
    const imageLabel=document.createElement("label");
    imageLabel.textContent="Replace pictures (up to 4, maximum 4 MB each)";
-
    const imageField=document.createElement("input");
    imageField.type="file";
    imageField.accept="image/jpeg,image/png,image/webp,image/gif";
@@ -1095,32 +1114,18 @@ async function loadSellerListings(){
 
    const editorActions=document.createElement("div");
    editorActions.className="actions";
-
    editorActions.append(saveButton,cancelButton);
 
    editorPanel.append(
-    editorHeading,
-    titleField.wrapper,
-    priceField.wrapper,
-    whatsappField.wrapper,
-    descriptionLabel,
-    descriptionField,
-    imageHeading,
-    currentImages,
-    imageLabel,
-    imageField,
-    imageNote,
-    editorStatus,
-    editorActions
+    editorHeading,titleField.wrapper,priceField.wrapper,whatsappField.wrapper,
+    descriptionLabel,descriptionField,imageHeading,currentImages,
+    imageLabel,imageField,imageNote,editorStatus,editorActions
    );
 
    const editor={
-    title:titleField.input,
-    price:priceField.input,
-    whatsapp:whatsappField.input,
-    description:descriptionField,
-    images:imageField,
-    status:editorStatus
+    title:titleField.input,price:priceField.input,
+    whatsapp:whatsappField.input,description:descriptionField,
+    images:imageField,status:editorStatus
    };
 
    editButton.addEventListener("click",()=>{
@@ -1134,27 +1139,12 @@ async function loadSellerListings(){
     editorStatus.textContent="";
    });
 
-   saveButton.addEventListener("click",()=>{
-    saveListingChanges(item,editor,saveButton);
-   });
+   saveButton.addEventListener("click",()=>saveListingChanges(item,editor,saveButton));
+   deleteButton.addEventListener("click",()=>deleteSellerListing(item,deleteButton));
 
-   deleteButton.addEventListener("click",()=>{
-    deleteSellerListing(item,deleteButton);
-   });
-
-   card.append(
-    title,
-    status,
-    price,
-    statusButton,
-    editButton,
-    deleteButton,
-    editorPanel
-   );
-
+   card.append(title,status,price,statusButton,editButton,deleteButton,editorPanel);
    area.append(card);
   });
-
  }catch(error){
   console.error("Seller listing loading failed:",error);
   area.textContent="Could not load your listings. Check Firestore permissions.";
@@ -1165,12 +1155,7 @@ async function loadSellerListings(){
 
 $("listing-form").addEventListener("submit",async event=>{
  event.preventDefault();
-
- if(!currentUser){
-  message.textContent="Please log in first.";
-  return;
- }
-
+ if(!currentUser){message.textContent="Please log in first.";return;}
  if(isAdmin||portal!=="seller"||currentRole!=="seller"){
   message.textContent="Only seller accounts can publish listings.";
   return;
@@ -1178,10 +1163,8 @@ $("listing-form").addEventListener("submit",async event=>{
 
  const button=$("publish-btn");
  button.disabled=true;
-
  try{
   const user=await checkSellerPermission();
-
   const title=$("listing-title").value.trim();
   const description=$("listing-description").value.trim();
   const price=Number($("listing-price").value);
@@ -1193,45 +1176,29 @@ $("listing-form").addEventListener("submit",async event=>{
    !Number.isSafeInteger(price)||price<1||price>100000000){
    throw new Error("Check your title, account details, WhatsApp number and whole-number price.");
   }
-
   if(files.length>4)throw new Error("Maximum 4 pictures allowed.");
-
   if(files.some(file=>!validateImage(file)))
    throw new Error("Each image must be JPEG, PNG, WEBP or GIF and no larger than 4 MB.");
 
   const imageUrls=[];
-
   for(let i=0;i<files.length;i++){
    message.textContent="Uploading picture "+(i+1)+" of "+files.length+"...";
    imageUrls.push(await uploadToCloudinary(files[i]));
   }
 
   await checkSellerPermission();
-
   await addDoc(collection(db,"listings"),{
-   title,
-   description,
-   price,
-   imageUrls,
-   sellerWhatsapp,
-   sellerId:user.uid,
-   sellerEmail:user.email||"",
-   verified:false,
-   status:"available",
-   createdAt:serverTimestamp()
+   title,description,price,imageUrls,sellerWhatsapp,
+   sellerId:user.uid,sellerEmail:user.email||"",
+   verified:false,status:"available",createdAt:serverTimestamp()
   });
 
   $("listing-form").reset();
   message.textContent="Listing published successfully.";
-
   await loadListings();
   await loadSellerListings();
-
- }catch(error){
-  showError(error);
- }finally{
-  button.disabled=false;
- }
+ }catch(error){showError(error);}
+ finally{button.disabled=false;}
 });
 
 /* PUBLIC MARKETPLACE LISTINGS */
@@ -1239,7 +1206,6 @@ $("listing-form").addEventListener("submit",async event=>{
 async function loadListings(){
  const container=$("firebase-listings");
  container.replaceChildren();
-
  const loading=document.createElement("p");
  loading.className="sub";
  loading.textContent="Loading listings...";
@@ -1247,7 +1213,6 @@ async function loadListings(){
 
  try{
   const result=await getDocs(query(collection(db,"listings"),orderBy("createdAt","desc")));
-
   container.replaceChildren();
 
   if(result.empty){
@@ -1262,10 +1227,8 @@ async function loadListings(){
   result.forEach(snapshot=>{
    const data=snapshot.data();
    const soldOut=data.status==="sold_out";
-
    const card=document.createElement("article");
    card.className="card";
-
    card.dataset.category=categoryForText(
     [data.category,data.title,data.description].filter(Boolean).join(" ")
    );
@@ -1284,7 +1247,6 @@ async function loadListings(){
     if(imageUrls.length>1){
      const gallery=document.createElement("div");
      gallery.className="gallery";
-
      imageUrls.slice(1).forEach(url=>{
       const small=document.createElement("img");
       small.src=url;
@@ -1292,7 +1254,6 @@ async function loadListings(){
       small.loading="lazy";
       gallery.append(small);
      });
-
      card.append(gallery);
     }
    }else{
@@ -1305,11 +1266,9 @@ async function loadListings(){
    if(soldOut){
     const overlay=document.createElement("div");
     overlay.className="sold-out-overlay";
-
     const label=document.createElement("span");
     label.className="sold-out-label";
     label.textContent="SOLD OUT";
-
     overlay.append(label);
     card.append(overlay);
    }
@@ -1330,18 +1289,15 @@ async function loadListings(){
    const price=document.createElement("div");
    price.className="price";
    price.textContent=Number.isFinite(data.price)
-    ?"₦"+data.price.toLocaleString("en-NG")
-    :"Contact seller";
+    ?"₦"+data.price.toLocaleString("en-NG"):"Contact seller";
 
    body.append(heading,verified);
-
    if(soldOut){
     const status=document.createElement("span");
     status.className="badge status-sold";
     status.textContent="SOLD OUT";
     body.append(status);
    }
-
    body.append(details,price);
 
    const favorite=document.createElement("button");
@@ -1350,7 +1306,6 @@ async function loadListings(){
    favorite.setAttribute("aria-label","Save account to favourites");
 
    let favorites=[];
-
    try{
     favorites=JSON.parse(localStorage.getItem("apexshop-favorites")||"[]");
     if(!Array.isArray(favorites))favorites=[];
@@ -1361,17 +1316,13 @@ async function loadListings(){
 
    favorite.addEventListener("click",()=>{
     let ids=[];
-
     try{
      ids=JSON.parse(localStorage.getItem("apexshop-favorites")||"[]");
      if(!Array.isArray(ids))ids=[];
     }catch(_){}
-
     const index=ids.indexOf(snapshot.id);
-
     if(index>=0)ids.splice(index,1);
     else ids.push(snapshot.id);
-
     localStorage.setItem("apexshop-favorites",JSON.stringify(ids));
     favorite.classList.toggle("saved",index<0);
     favorite.textContent=index<0?"♥":"♡";
@@ -1411,14 +1362,11 @@ async function loadListings(){
   });
 
   filterAccounts();
-
  }catch(error){
   container.replaceChildren();
-
   const err=document.createElement("p");
   err.className="sub";
   err.textContent="Could not load listings. Check Firestore rules and database setup.";
-
   container.append(err);
   console.error("Loading listings failed:",error);
  }
@@ -1429,7 +1377,6 @@ async function loadListings(){
 async function loadAdminSellers(){
  const container=$("admin-sellers");
  container.textContent="Loading registered sellers...";
-
  if(!isAdmin||!currentUser){
   container.textContent="Administrator access required.";
   return;
@@ -1437,7 +1384,6 @@ async function loadAdminSellers(){
 
  try{
   const adminSnap=await getDoc(doc(db,"admins",currentUser.uid));
-
   if(!adminSnap.exists()||adminSnap.data().enabled!==true){
    isAdmin=false;
    $("admin-area").hidden=true;
@@ -1448,7 +1394,6 @@ async function loadAdminSellers(){
 
   const users=await getDocs(collection(db,"users"));
   const sellerUsers=users.docs.filter(item=>item.data().role==="seller");
-
   container.replaceChildren();
 
   if(!sellerUsers.length){
@@ -1458,7 +1403,6 @@ async function loadAdminSellers(){
 
   const sellers=await Promise.all(sellerUsers.map(async item=>{
    const access=await getDoc(doc(db,"sellerAccess",item.id));
-
    return{
     uid:item.id,
     email:item.data().email||"Email not available",
@@ -1469,7 +1413,6 @@ async function loadAdminSellers(){
   for(const seller of sellers){
    const row=document.createElement("div");
    row.className="admin-row";
-
    const info=document.createElement("p");
    info.textContent=seller.email+" — "+(seller.approved?"Approved":"Awaiting approval");
 
@@ -1479,23 +1422,17 @@ async function loadAdminSellers(){
 
    button.addEventListener("click",async()=>{
     button.disabled=true;
-
     try{
      const check=await getDoc(doc(db,"admins",currentUser.uid));
-
      if(!check.exists()||check.data().enabled!==true)
       throw new Error("Administrator permission is no longer active.");
 
      const newApproval=!seller.approved;
-
      await setDoc(doc(db,"sellerAccess",seller.uid),{
-      approved:newApproval,
-      email:seller.email,
-      updatedAt:serverTimestamp()
+      approved:newApproval,email:seller.email,updatedAt:serverTimestamp()
      },{merge:true});
 
      const listings=await getDocs(collection(db,"listings"));
-
      for(const item of listings.docs.filter(x=>x.data().sellerId===seller.uid)){
       await updateDoc(doc(db,"listings",item.id),{verified:newApproval});
      }
@@ -1506,19 +1443,15 @@ async function loadAdminSellers(){
 
      await loadAdminSellers();
      await loadListings();
-
     }catch(error){
      $("admin-message").textContent="Seller approval update failed: "+error.message;
      console.error(error);
-    }finally{
-     button.disabled=false;
-    }
+    }finally{button.disabled=false;}
    });
 
    row.append(info,button);
    container.append(row);
   }
-
  }catch(error){
   container.textContent="Could not load sellers. Check administrator permissions and Firestore rules.";
   console.error(error);
@@ -1527,6 +1460,7 @@ async function loadAdminSellers(){
 
 /* INITIAL LOAD */
 
+await loadPublicHeaderImage();
 await loadListings();
 
 </script>
