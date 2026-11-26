@@ -6,427 +6,86 @@
 <meta name="theme-color" content="#0b0b12">
 <title>APEXSHOP MARKETPLACE</title>
 <style>
-:root{--bg:#050609;--panel:#0d1119;--panel2:#111722;--red:#f0142f;--red2:#a9001d;--muted:#aab3c2;--line:#252c38;--gold:#ffbd45}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:#f7f8fb;font-family:Arial,Helvetica,sans-serif}a{color:inherit;text-decoration:none}button{font:inherit}header{position:sticky;top:0;z-index:20;background:rgba(4,6,10,.96);border-bottom:1px solid #64101e;backdrop-filter:blur(12px)}.topbar{max-width:1280px;margin:auto;min-height:76px;padding:10px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand-wrap{display:flex;align-items:center;gap:10px}.brand-mark{font-weight:1000;font-size:25px;letter-spacing:1px;color:#fff;line-height:1}.brand-mark span{color:var(--red)}.brand-sub{font-size:10px;letter-spacing:4px;color:#d8dce4;margin-top:5px}.topbar nav{display:flex;align-items:center;gap:20px;flex-wrap:wrap}.topbar nav a{font-size:12px;font-weight:700;color:#dce0e8;padding:10px 0}.topbar nav a:hover,.topbar nav a.active{color:var(--red)}.top-actions{display:flex;align-items:center;gap:8px}.top-actions .btn{padding:10px 13px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 17px;border:0;border-radius:8px;background:var(--red);color:white;font-size:13px;font-weight:800;cursor:pointer;transition:.2s}.btn:hover{background:#ff3049;transform:translateY(-1px)}.btn.secondary{background:#111722;border:1px solid #394252;color:#f4f6fa}.btn.secondary:hover{border-color:var(--red);background:#171d29}.hero{position:relative;isolation:isolate;overflow:hidden;min-height:380px;padding:42px max(4vw,22px);display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:20px;background:radial-gradient(ellipse at 72% 48%,rgba(225,0,35,.3),transparent 45%),linear-gradient(105deg,#08090d 0%,#18050b 52%,#07080c 100%);border-bottom:1px solid #35101a}.hero:before{content:"FREE FIRE";position:absolute;right:20%;top:20px;font-weight:1000;font-size:clamp(60px,12vw,150px);letter-spacing:-8px;color:rgba(255,255,255,.035);z-index:-1}.hero-copy{max-width:610px}.eyebrow{font-size:12px;font-weight:900;letter-spacing:3px;color:#fff}.hero h1{font-size:clamp(38px,6vw,76px);line-height:.96;letter-spacing:-2px;margin:16px 0}.hero h1 span{color:var(--red);display:block}.hero p{color:#d2d6df;font-size:16px;line-height:1.55}.hero-ribbon{display:inline-block;background:var(--red);padding:10px 18px;margin:8px 0 18px;font-weight:900;transform:skew(-8deg);box-shadow:0 8px 30px #f0142f33}.hero-art{min-height:270px;display:flex;align-items:center;justify-content:center;position:relative}.hero-emblem{width:min(100%,440px);height:280px;border-radius:24px;background:radial-gradient(circle at 50% 35%,#9e1428 0,#3b0a16 40%,transparent 72%);display:flex;align-items:center;justify-content:center;font-size:clamp(85px,15vw,170px);filter:drop-shadow(0 15px 28px #f0142f44)}.hero-benefits{position:absolute;right:24px;top:50%;transform:translateY(-50%);display:grid;gap:18px}.benefit{display:flex;gap:10px;align-items:center;font-size:12px;font-weight:800}.benefit b{display:block;color:#fff}.benefit small{display:block;color:var(--muted);font-weight:400;margin-top:4px}.benefit-icon{width:38px;height:38px;border:1px solid #7e1024;color:var(--red);border-radius:50%;display:grid;place-items:center;font-size:19px}.hero-cta{display:flex;gap:10px;flex-wrap:wrap}.section{max-width:1280px;margin:auto;padding:28px 22px}.category-bar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0;background:#0b0f16;border:1px solid #252d3a;border-radius:12px;margin-top:-1px;overflow:hidden}.category-btn{background:transparent;color:#aab3c2;border:0;border-bottom:3px solid transparent;padding:15px 6px;cursor:pointer;font-size:11px;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:7px}.category-btn span{font-size:21px}.category-btn:hover,.category-btn.active{color:var(--red);border-bottom-color:var(--red);background:#141923}.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:16px}h2{font-size:25px;margin:0 0 6px}h2 .accent{color:var(--red)}.sub{color:var(--muted);font-size:13px;margin:0;line-height:1.5}.search-row{display:flex;gap:10px;max-width:450px;width:100%}.search{width:100%;padding:12px 14px;border-radius:8px;border:1px solid #333d4d;background:#0e131c;color:#fff;font-size:14px}.listings{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}.card,.panel{background:#0d121b;border:1px solid #27303e;border-radius:12px;overflow:hidden}.card{position:relative;transition:.2s}.card:hover{transform:translateY(-3px);border-color:#8d1a2d;box-shadow:0 12px 30px #0008}.account-image{width:100%;height:165px;object-fit:cover;background:#111722;display:block}.image-placeholder{height:165px;display:flex;align-items:center;justify-content:center;color:#8d98a9;background:linear-gradient(135deg,#151b27,#270b14);font-size:13px}.card-body{padding:13px}.card h3{font-size:15px;margin:0 0 9px;color:#f3f5f8;overflow-wrap:anywhere}.card p{color:#b8c0cd;line-height:1.45;font-size:12px;overflow-wrap:anywhere}.price{font-size:19px;font-weight:900;color:var(--red);margin:10px 0}.badge{display:inline-block;padding:4px 8px;border-radius:20px;font-size:10px;background:#222b38;color:#e5e9f0;border:1px solid #3a4658;margin:0 4px 5px 0}.verified{color:#80e6a2;border-color:#2c7041}.card .btn{width:100%;padding:10px;font-size:12px}.favorite-btn{position:absolute;right:9px;top:9px;width:33px;height:33px;border-radius:50%;border:1px solid #687184;background:#080b11cc;color:#fff;font-size:18px;cursor:pointer}.favorite-btn.saved{color:#ff3049;border-color:#ff3049}.gallery{display:flex;gap:6px;overflow-x:auto;padding:8px}.gallery img{width:58px;height:48px;object-fit:cover;border-radius:5px}.trust-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:10px 22px 26px;max-width:1280px;margin:auto}.trust-item{display:flex;align-items:center;gap:10px;color:#dce1e9;font-size:12px;font-weight:800}.trust-item strong{display:block;color:var(--red);font-size:20px}.promo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.promo{min-height:150px;padding:22px;border:1px solid #6e1425;border-radius:12px;background:radial-gradient(circle at 85% 50%,#501020,#10121a 65%);display:flex;align-items:center;justify-content:space-between;gap:14px}.promo.blue{border-color:#164a78;background:radial-gradient(circle at 85% 50%,#0d3b69,#10121a 65%)}.promo h3{font-size:22px;margin:5px 0}.promo p{font-size:12px;color:#c2c9d4;line-height:1.5}.promo .kicker{color:var(--red);font-weight:900;font-size:11px}.promo.blue .kicker{color:#4bb8ff}.promo-art{font-size:52px}.section-anchor{scroll-margin-top:90px}.panel{padding:18px;margin:12px 0}.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}input,textarea,select{width:100%;padding:12px;margin:5px 0 10px;border-radius:8px;border:1px solid #394252;background:#090d14;color:#fff;font:inherit}textarea{min-height:100px;resize:vertical}label{font-size:13px;color:#d9dee7}.actions{display:flex;gap:8px;flex-wrap:wrap}.message{min-height:20px;color:#ffd18a;font-size:13px;overflow-wrap:anywhere}[hidden]{display:none!important}footer{border-top:1px solid #272e39;text-align:center;padding:25px 16px;color:#aab3c2;margin-top:20px;background:#080a0f}footer a{color:#fff}.notice{font-size:12px;color:#aab3c2;line-height:1.5}.admin-row{padding:13px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.admin-row p{margin:0}.admin-heading,.profile-title{color:var(--red)}.shop-profile{display:none}.shop-logo{width:80px;height:80px;object-fit:cover;border-radius:50%}.shop-logo-placeholder{display:none}.shop-name,.shop-tagline,.shop-description{display:none}.shop-links{display:none}.profile-preview{width:110px;height:110px;object-fit:cover;border-radius:50%;border:2px solid var(--red)}.portal-note{font-size:12px;color:#aab3c2}.footer-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;font-size:12px;margin:15px 0}.message{color:#ffd18a}
-@media(max-width:980px){.topbar{flex-wrap:wrap}.topbar nav{order:3;width:100%;justify-content:center;gap:15px}.hero{grid-template-columns:1fr}.hero-art{display:none}.hero-benefits{position:static;transform:none;display:flex;flex-wrap:wrap;margin-top:18px}.listings{grid-template-columns:repeat(2,minmax(0,1fr))}.category-bar{grid-template-columns:repeat(4,1fr)}}
-@media(max-width:560px){.topbar{padding:12px}.topbar nav{gap:12px}.topbar nav a{font-size:11px}.top-actions{margin-left:auto}.top-actions .btn{padding:8px 10px;font-size:11px}.brand-mark{font-size:21px}.hero{padding:34px 18px;min-height:300px}.hero h1{font-size:44px}.hero p{font-size:14px}.section{padding:22px 14px}.listings{gap:9px}.account-image,.image-placeholder{height:125px}.card-body{padding:10px}.card h3{font-size:13px}.price{font-size:16px}.card .btn{font-size:11px;padding:9px 5px}.category-btn{font-size:9px;padding:11px 3px}.category-btn span{font-size:18px}.category-bar{grid-template-columns:repeat(4,1fr)}.promo-grid{grid-template-columns:1fr}.trust-strip{grid-template-columns:repeat(2,1fr);padding:8px 14px 22px}.search-row{max-width:none}}
+:root{--bg:#050609;--panel:#0d1119;--red:#f0142f;--muted:#aab3c2;--line:#252c38}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:#f7f8fb;font-family:Arial,Helvetica,sans-serif}a{color:inherit;text-decoration:none}button{font:inherit;cursor:pointer}
+header{position:sticky;top:0;z-index:20;background:#04060af5;border-bottom:1px solid #64101e}.topbar{max-width:1280px;margin:auto;min-height:76px;padding:10px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand-mark{font-weight:1000;font-size:25px;letter-spacing:1px}.brand-mark span{color:var(--red)}.brand-sub{font-size:10px;letter-spacing:4px;margin-top:5px}.topbar nav,.top-actions,.actions,.hero-cta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.topbar nav a{font-size:12px;font-weight:bold;padding:10px 0}.topbar nav a:hover{color:var(--red)}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:11px 15px;border:0;border-radius:8px;background:var(--red);color:white;font-size:13px;font-weight:800}.btn.secondary{background:#111722;border:1px solid #394252;color:#f4f6fa}.btn:disabled{opacity:.55;cursor:wait}
+.hero{min-height:350px;padding:42px max(4vw,22px);display:grid;grid-template-columns:1fr .7fr;align-items:center;gap:20px;background:radial-gradient(ellipse at 72% 48%,#e1002333,transparent 45%),linear-gradient(105deg,#08090d,#18050b 52%,#07080c);border-bottom:1px solid #35101a}.hero h1{font-size:clamp(38px,6vw,76px);line-height:.96;margin:16px 0}.hero h1 span,.accent{color:var(--red)}.hero p{color:#d2d6df;line-height:1.55}.hero-art{text-align:center;font-size:130px}.eyebrow{font-size:12px;font-weight:900;letter-spacing:3px}.hero-ribbon{display:inline-block;background:var(--red);padding:10px 18px;margin:8px 0 18px;font-weight:900}
+.section{max-width:1280px;margin:auto;padding:26px 22px}.section-anchor{scroll-margin-top:90px}.category-bar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));background:#0b0f16;border:1px solid #252d3a;border-radius:12px;overflow:hidden}.category-btn{background:transparent;color:var(--muted);border:0;border-bottom:3px solid transparent;padding:14px 5px;font-size:11px;font-weight:800}.category-btn span{display:block;font-size:21px;margin-bottom:5px}.category-btn.active{color:var(--red);border-bottom-color:var(--red);background:#141923}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:16px}h2{font-size:25px;margin:0 0 6px}.sub,.notice,.portal-note{color:var(--muted);font-size:13px;line-height:1.5}.search-row{max-width:450px;width:100%}.search,input,textarea,select{width:100%;padding:12px;margin:5px 0 10px;border-radius:8px;border:1px solid #394252;background:#090d14;color:#fff;font:inherit}.listings{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}.card,.panel{background:var(--panel);border:1px solid #27303e;border-radius:12px;overflow:hidden}.card{position:relative}.account-image,.image-placeholder{width:100%;height:165px;object-fit:cover;display:flex;align-items:center;justify-content:center;background:#151b27;color:#9aa5b5}.gallery{display:flex;gap:6px;overflow:auto;padding:8px}.gallery img{width:58px;height:48px;object-fit:cover;border-radius:5px}.card-body{padding:13px}.card h3{font-size:15px;margin:0 0 9px;overflow-wrap:anywhere}.card p{color:#b8c0cd;line-height:1.45;font-size:12px;overflow-wrap:anywhere}.price{font-size:19px;font-weight:900;color:var(--red);margin:10px 0}.badge{display:inline-block;padding:4px 8px;border-radius:20px;font-size:10px;background:#222b38;color:#e5e9f0;border:1px solid #3a4658;margin:0 4px 5px 0}.verified,.status-available{color:#80e6a2;border-color:#2c7041}.status-sold{color:#ff7183;border-color:#b90027}.card .btn{width:100%;margin-top:5px}.favorite-btn{position:absolute;right:9px;top:9px;width:34px;height:34px;border-radius:50%;border:1px solid #687184;background:#080b11cc;color:white;font-size:18px;z-index:3}.favorite-btn.saved{color:#ff3049}.sold-out-overlay{position:absolute;inset:0;height:165px;background:#0009;display:flex;align-items:center;justify-content:center;pointer-events:none}.sold-out-label{background:#e00025;color:white;padding:12px 25px;font-size:20px;font-weight:1000;border-radius:8px;transform:rotate(-8deg)}
+.panel{padding:18px;margin:12px 0}.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}label{font-size:13px;color:#d9dee7}textarea{min-height:100px;resize:vertical}.message{min-height:20px;color:#ffd18a;font-size:13px;overflow-wrap:anywhere}[hidden]{display:none!important}.promo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.promo{padding:22px;border:1px solid #6e1425;border-radius:12px;background:radial-gradient(circle at 85% 50%,#501020,#10121a 65%)}.promo.blue{border-color:#164a78;background:radial-gradient(circle at 85% 50%,#0d3b69,#10121a 65%)}.trust-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:10px 22px 26px;max-width:1280px;margin:auto}.trust-item{color:#dce1e9;font-size:12px}.trust-item strong{display:block;color:var(--red);font-size:20px}.seller-manage-card,.admin-row{padding:13px;margin:10px 0;background:#111722;border:1px solid #303b4b;border-radius:9px}.seller-manage-card .btn{margin-top:8px}.admin-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.admin-row p{margin:0}.admin-heading,.profile-title{color:var(--red)}footer{border-top:1px solid #272e39;text-align:center;padding:25px 16px;color:var(--muted);margin-top:20px;background:#080a0f}.footer-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;font-size:12px;margin:15px 0}.notice{font-size:12px}
+@media(max-width:980px){.topbar{flex-wrap:wrap}.topbar nav{order:3;width:100%;justify-content:center}.hero{grid-template-columns:1fr}.hero-art{display:none}.listings{grid-template-columns:repeat(2,minmax(0,1fr))}.category-bar{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:560px){.topbar{padding:12px}.topbar nav{gap:12px}.topbar nav a{font-size:11px}.top-actions .btn{padding:8px 10px;font-size:11px}.brand-mark{font-size:21px}.hero{padding:34px 18px;min-height:300px}.hero h1{font-size:44px}.section{padding:22px 14px}.listings{gap:9px}.account-image,.image-placeholder{height:125px}.sold-out-overlay{height:125px}.card-body{padding:10px}.card h3{font-size:13px}.price{font-size:16px}.category-btn{font-size:9px;padding:11px 3px}.category-btn span{font-size:18px}.promo-grid{grid-template-columns:1fr}.trust-strip{grid-template-columns:repeat(2,1fr);padding:8px 14px 22px}}
 </style>
 </head>
 <body>
 <header><div class="topbar">
- <a class="brand-wrap" href="#home"><div><div class="brand-mark"><span>♛ APEX</span>SHOP</div><div class="brand-sub">MARKETPLACE</div></div></a>
- <nav><a class="active" href="#home">Home</a><a href="#marketplace">Buy Accounts</a><a href="?portal=seller#account-portal">Sell Account</a><a href="#how-it-works">How It Works</a><a href="#support">Support</a></nav>
- <div class="top-actions"><a class="btn secondary" href="?portal=buyer#account-portal">♙ Login</a><a class="btn" href="?portal=buyer#account-portal">Register</a></div>
+<a href="#home"><div class="brand-mark"><span>♛ APEX</span>SHOP</div><div class="brand-sub">MARKETPLACE</div></a>
+<nav><a href="#home">Home</a><a href="#marketplace">Buy Accounts</a><a href="?portal=seller#account-portal">Sell Account</a><a href="#how-it-works">How It Works</a><a href="#support">Support</a></nav>
+<div class="top-actions"><a class="btn secondary" href="?portal=buyer#account-portal">♙ Login</a><a class="btn" href="?portal=buyer#account-portal">Register</a></div>
 </div></header>
-<section id="shop-profile" class="shop-profile" aria-hidden="true"><div id="shop-logo-area"><div class="shop-logo-placeholder">A</div></div><h2 id="shop-name" class="shop-name">APEXSHOP</h2><p id="shop-tagline" class="shop-tagline">Premium Free Fire Accounts</p><p id="shop-description" class="shop-description">Trusted Free Fire account marketplace</p><a id="shop-whatsapp" href="https://wa.me/2347085785233">WhatsApp</a><a id="shop-telegram" href="https://t.me/apexshop90">Telegram</a></section>
-<section class="hero" id="home"><div class="hero-copy"><div class="eyebrow">FREE FIRE ACCOUNT MARKETPLACE</div><h1><span>APEXSHOP</span> MARKETPLACE</h1><p>Buy &amp; Sell <b style="color:#ff3049">Free Fire Accounts</b> Safely<br>Fast&nbsp; • &nbsp;Secure&nbsp; • &nbsp;Trusted</p><div class="hero-ribbon">Your Trusted Free Fire Account Marketplace!</div><div class="hero-cta"><a class="btn" href="#marketplace">BROWSE ACCOUNTS&nbsp; →</a><a class="btn secondary" href="?portal=seller#account-portal">START SELLING</a></div></div>
- <div class="hero-art"><div class="hero-emblem">🔥</div></div><div class="hero-benefits"><div class="benefit"><span class="benefit-icon">♢</span><div><b>Verified Sellers</b><small>Safe &amp; genuine accounts</small></div></div><div class="benefit"><span class="benefit-icon">ϟ</span><div><b>Instant Delivery</b><small>Get your account fast</small></div></div><div class="benefit"><span class="benefit-icon">◉</span><div><b>24/7 Support</b><small>We're always here</small></div></div><div class="benefit"><span class="benefit-icon">▣</span><div><b>Secure Payments</b><small>Multiple payment options</small></div></div></div>
-</section>
+<section class="hero" id="home"><div><div class="eyebrow">FREE FIRE ACCOUNT MARKETPLACE</div><h1><span>APEXSHOP</span> MARKETPLACE</h1><p>Buy &amp; Sell <b style="color:#ff3049">Free Fire Accounts</b> Safely<br>Fast • Secure • Trusted</p><div class="hero-ribbon">Your Trusted Free Fire Account Marketplace!</div><div class="hero-cta"><a class="btn" href="#marketplace">BROWSE ACCOUNTS →</a><a class="btn secondary" href="?portal=seller#account-portal">START SELLING</a></div></div><div class="hero-art">🔥</div></section>
 <main>
 <section class="section section-anchor" id="marketplace"><div class="category-bar" id="category-bar">
 <button class="category-btn active" data-category="all"><span>▦</span>All Accounts</button><button class="category-btn" data-category="beginner"><span>♟</span>Beginner Accounts</button><button class="category-btn" data-category="mid"><span>✧</span>Mid Range Accounts</button><button class="category-btn" data-category="pro"><span>♛</span>Pro Accounts</button><button class="category-btn" data-category="tournament"><span>🏆</span>Tournament Ready</button><button class="category-btn" data-category="rare"><span>♢</span>Rare Bundles</button><button class="category-btn" data-category="skins"><span>♜</span>Special Skins</button>
 </div></section>
-<section class="section"><div class="section-head"><div><h2>Featured <span class="accent">Accounts</span></h2><p class="sub">Handpicked accounts from trusted sellers</p></div><div class="search-row"><input id="search" class="search" placeholder="Search Free Fire accounts..." aria-label="Search accounts"></div><a class="btn secondary" href="#marketplace">View All&nbsp; →</a></div><div class="listings" id="firebase-listings"><p class="sub">Loading listings...</p></div><p id="listing-count" class="sub" style="margin-top:12px"></p></section>
-<section class="section" id="how-it-works"><div class="promo-grid"><div class="promo"><div><div class="kicker">SELL YOUR ACCOUNT</div><h3>EARN CASH</h3><p>List your Free Fire account and reach thousands of buyers. It's fast, safe and easy!</p><a class="btn" href="?portal=seller#account-portal">Start Selling&nbsp; →</a></div><div class="promo-art">🎮</div></div><div class="promo blue"><div><div class="kicker">NEED HELP?</div><h3>OUR SUPPORT IS ALWAYS ONLINE</h3><p>Chat with us on WhatsApp or Telegram for quick assistance.</p><a class="btn secondary" href="#support">Contact Support&nbsp; →</a></div><div class="promo-art">🎧</div></div></div></section>
-<div class="trust-strip"><div class="trust-item"><strong>♧</strong><div>100% Secure<small class="sub">Your safety is our priority</small></div></div><div class="trust-item"><strong>ϟ</strong><div>Fast Delivery<small class="sub">Get your account within minutes</small></div></div><div class="trust-item"><strong>♟</strong><div>Trusted by Gamers<small class="sub">Thousands of happy customers</small></div></div><div class="trust-item"><strong>☆</strong><div>Best Prices<small class="sub">Premium accounts at fair rates</small></div></div></div>
-<section class="section section-anchor" id="account-portal"><h2 id="portal-heading">Buyer Portal</h2><p class="sub" id="portal-description"></p><div class="panel"><p id="auth-status" class="sub">Checking login...</p><div id="auth-form"><div class="form-grid"><div><label for="user-email">Email address</label><input id="user-email" type="email" placeholder="Email address" autocomplete="email"></div><div><label for="user-password">Password</label><input id="user-password" type="password" placeholder="At least 6 characters" autocomplete="current-password"></div></div><div class="actions"><button class="btn" id="register-btn" type="button">Create buyer account</button><button class="btn secondary" id="login-btn" type="button">Log in</button></div><p class="portal-note" id="portal-switch"></p></div>
+<section class="section"><div class="section-head"><div><h2>Featured <span class="accent">Accounts</span></h2><p class="sub">Handpicked accounts from trusted sellers</p></div><div class="search-row"><input id="search" class="search" placeholder="Search Free Fire accounts..." aria-label="Search accounts"></div></div><div class="listings" id="firebase-listings"><p class="sub">Loading listings...</p></div><p id="listing-count" class="sub"></p></section>
+<section class="section" id="how-it-works"><div class="promo-grid"><div class="promo"><h3>SELL YOUR ACCOUNT — EARN CASH</h3><p>List your Free Fire account and reach buyers. Fast and easy!</p><a class="btn" href="?portal=seller#account-portal">Start Selling →</a></div><div class="promo blue"><h3>NEED HELP?</h3><p>Chat with us on WhatsApp or Telegram for assistance.</p><a class="btn secondary" href="#support">Contact Support →</a></div></div></section>
+<div class="trust-strip"><div class="trust-item"><strong>♧</strong>100% Secure</div><div class="trust-item"><strong>ϟ</strong>Fast Delivery</div><div class="trust-item"><strong>♟</strong>Trusted by Gamers</div><div class="trust-item"><strong>☆</strong>Best Prices</div></div>
+<section class="section section-anchor" id="account-portal"><h2 id="portal-heading">Buyer Portal</h2><p class="sub" id="portal-description"></p><div class="panel"><p id="auth-status" class="sub">Checking login...</p>
+<div id="auth-form"><div class="form-grid"><div><label for="user-email">Email address</label><input id="user-email" type="email" placeholder="Email address" autocomplete="email"></div><div><label for="user-password">Password</label><input id="user-password" type="password" placeholder="At least 6 characters" autocomplete="current-password"></div></div><div class="actions"><button class="btn" id="register-btn" type="button">Create buyer account</button><button class="btn secondary" id="login-btn" type="button">Log in</button></div><p class="portal-note" id="portal-switch"></p></div>
 <div id="signed-in-tools" hidden><div class="actions"><button class="btn secondary" id="logout-btn" type="button">Log out</button></div><p id="role-status" class="sub"></p>
-<div id="profile-editor" hidden><hr><h3 class="profile-title">Edit APEXSHOP Profile</h3><p class="notice">Only an enabled administrator can update the public shop profile.</p><form id="profile-form"><label for="profile-name">Shop name</label><input id="profile-name" maxlength="60" required><label for="profile-tagline-input">Shop tagline</label><input id="profile-tagline-input" maxlength="120" required><label for="profile-description-input">Shop description</label><textarea id="profile-description-input" maxlength="1000" required></textarea><label for="profile-whatsapp-input">WhatsApp number with country code</label><input id="profile-whatsapp-input" inputmode="numeric" maxlength="15" required><label for="profile-telegram-input">Telegram link</label><input id="profile-telegram-input" type="url" placeholder="https://t.me/apexshop90"><label for="profile-logo-input">Shop profile picture / logo</label><input id="profile-logo-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif"><div id="profile-preview-area"></div><p class="notice">Maximum image size: 4 MB. The logo is uploaded to Cloudinary.</p><button class="btn" id="save-profile-btn" type="submit">Save Shop Profile</button></form><p id="profile-message" class="message" role="status"></p></div>
-<div id="seller-tools" hidden><hr><h3>Post an account for sale</h3><form id="listing-form"><div class="form-grid"><div><label for="listing-title">Listing title</label><input id="listing-title" required maxlength="80" placeholder="e.g. Premium Free Fire account"></div><div><label for="listing-price">Price in naira (₦)</label><input id="listing-price" type="number" required min="1" max="100000000" step="1" placeholder="Price in naira"></div></div><label for="seller-whatsapp">WhatsApp number with country code</label><input id="seller-whatsapp" inputmode="numeric" maxlength="15" placeholder="2348012345678" required><label for="listing-description">Account details</label><textarea id="listing-description" required maxlength="1000" placeholder="Describe level, skins, rank and other details. Never include passwords."></textarea><label for="listing-image">Account pictures (up to 4 images, maximum 4 MB each)</label><input id="listing-image" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple><p class="notice">Images are uploaded to Cloudinary. Up to 4 images are allowed, with a 4 MB limit per image.</p><button class="btn" id="publish-btn" type="submit">Publish listing</button></form></div></div><p id="listing-message" class="message" role="status"></p></div></section>
-<section class="section" id="admin-area" hidden><h2 class="admin-heading">APEXSHOP ADMIN DASHBOARD</h2><p class="sub">Administrator control panel — manage seller verification and publishing permissions.</p><div class="panel"><h3>Seller Verification</h3><p class="notice">Approve trusted sellers to allow publishing. Revoking approval disables their publishing access.</p><div id="admin-sellers">Loading registered sellers...</div><p id="admin-message" class="message" role="status"></p></div></section>
-<section class="section section-anchor" id="support"><h2>Need <span class="accent">Help?</span></h2><p class="sub">Our support team is available to help with listings, account questions and seller issues.</p><div class="panel"><p>WhatsApp: <strong>0708 578 5233</strong></p><div class="actions"><a class="btn" href="https://wa.me/2347085785233" target="_blank" rel="noopener">WhatsApp Support</a><a class="btn secondary" href="https://t.me/apexshop90" target="_blank" rel="noopener">Telegram Support</a></div></div></section>
-</main><footer><p><strong>♛ APEXSHOP MARKETPLACE</strong></p><div class="footer-links"><a href="#home">Home</a><a href="#marketplace">Buy Accounts</a><a href="?portal=seller#account-portal">Sell Account</a><a href="#how-it-works">How It Works</a><a href="#support">Support</a><a href="#terms">Terms &amp; Conditions</a><a href="#privacy">Privacy Policy</a></div><p class="notice">© 2026 APEXSHOP MARKETPLACE. All rights reserved. Buy responsibly and verify account details before payment.</p></footer>
+<div id="profile-editor" hidden><hr><h3 class="profile-title">Edit APEXSHOP Profile</h3><p class="notice">Only an enabled administrator can update the public shop profile.</p><form id="profile-form"><label for="profile-name">Shop name</label><input id="profile-name" maxlength="60" required><label for="profile-tagline-input">Shop tagline</label><input id="profile-tagline-input" maxlength="120" required><label for="profile-description-input">Shop description</label><textarea id="profile-description-input" maxlength="1000" required></textarea><label for="profile-whatsapp-input">WhatsApp number with country code</label><input id="profile-whatsapp-input" inputmode="numeric" maxlength="15" required><label for="profile-telegram-input">Telegram link</label><input id="profile-telegram-input" type="url" placeholder="https://t.me/apexshop90"><label for="profile-logo-input">Shop profile picture / logo</label><input id="profile-logo-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif"><div id="profile-preview-area"></div><p class="notice">Maximum image size: 4 MB. Logo uploads to Cloudinary.</p><button class="btn" id="save-profile-btn" type="submit">Save Shop Profile</button></form><p id="profile-message" class="message"></p></div>
+<div id="seller-tools" hidden><hr><h3>Post an account for sale</h3><form id="listing-form"><div class="form-grid"><div><label for="listing-title">Listing title</label><input id="listing-title" required maxlength="80" placeholder="e.g. Premium Free Fire account"></div><div><label for="listing-price">Price in naira (₦)</label><input id="listing-price" type="number" required min="1" max="100000000" step="1" placeholder="Price in naira"></div></div><label for="seller-whatsapp">WhatsApp number with country code</label><input id="seller-whatsapp" inputmode="numeric" maxlength="15" placeholder="2348012345678" required><label for="listing-description">Account details</label><textarea id="listing-description" required maxlength="1000" placeholder="Describe level, skins, rank and other details. Never include passwords."></textarea><label for="listing-image">Account pictures (up to 4 images, maximum 4 MB each)</label><input id="listing-image" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple><p class="notice">Up to 4 images, 4 MB each. Images upload to Cloudinary.</p><button class="btn" id="publish-btn" type="submit">Publish listing</button></form>
+<hr><h3>Manage My Listings</h3><p class="notice">Mark your own accounts SOLD OUT or restore them to AVAILABLE.</p><div id="seller-listings-management"><p class="sub">Your listings will appear here.</p></div></div>
+</div><p id="listing-message" class="message"></p></div></section>
+<section class="section" id="admin-area" hidden><h2 class="admin-heading">APEXSHOP ADMIN DASHBOARD</h2><p class="sub">Manage seller verification and publishing permissions.</p><div class="panel"><h3>Seller Verification</h3><p class="notice">Approve trusted sellers to allow publishing. Revoking approval disables publishing access.</p><div id="admin-sellers">Loading registered sellers...</div><p id="admin-message" class="message"></p></div></section>
+<section class="section section-anchor" id="support"><h2>Need <span class="accent">Help?</span></h2><p class="sub">Our support team can help with listings and account questions.</p><div class="panel"><p>WhatsApp: <strong>0708 578 5233</strong></p><div class="actions"><a class="btn" href="https://wa.me/2347085785233" target="_blank" rel="noopener">WhatsApp Support</a><a class="btn secondary" href="https://t.me/apexshop90" target="_blank" rel="noopener">Telegram Support</a></div></div></section>
+</main>
+<footer><p><strong>♛ APEXSHOP MARKETPLACE</strong></p><div class="footer-links"><a href="#home">Home</a><a href="#marketplace">Buy Accounts</a><a href="?portal=seller#account-portal">Sell Account</a><a href="#how-it-works">How It Works</a><a href="#support">Support</a></div><p class="notice">© 2026 APEXSHOP MARKETPLACE. All rights reserved. Verify account details before payment.</p></footer>
 <script>
 const searchInput=document.getElementById("search");let activeCategory="all";
 function categoryForText(text){const t=(text||"").toLowerCase();if(/tournament|competition|esports/.test(t))return"tournament";if(/rare bundle|rare bundles|bundle/.test(t))return"rare";if(/special skin|skin|emote|gun skin/.test(t))return"skins";if(/beginner|starter|low level|level [1-3][0-9]/.test(t))return"beginner";if(/mid range|mid-range|level [4-6][0-9]/.test(t))return"mid";if(/pro|heroic|grandmaster|master|level [7-9][0-9]/.test(t))return"pro";return"all";}
-function filterAccounts(){const q=(searchInput?.value||"").toLowerCase().trim();let visible=0;document.querySelectorAll("#firebase-listings .card").forEach(card=>{const text=card.textContent.toLowerCase();const cat=card.dataset.category||"all";const categoryOK=activeCategory==="all"||cat===activeCategory;const show=text.includes(q)&&categoryOK;card.hidden=!show;if(show)visible++;});const count=document.getElementById("listing-count");if(count)count.textContent=visible+" account listing"+(visible===1?"":"s")+" shown";}
+function filterAccounts(){const q=(searchInput?.value||"").toLowerCase().trim();let visible=0;document.querySelectorAll("#firebase-listings .card").forEach(card=>{const show=card.textContent.toLowerCase().includes(q)&&(activeCategory==="all"||(card.dataset.category||"all")===activeCategory);card.hidden=!show;if(show)visible++;});const count=document.getElementById("listing-count");if(count)count.textContent=visible+" account listing"+(visible===1?"":"s")+" shown";}
 searchInput?.addEventListener("input",filterAccounts);document.querySelectorAll(".category-btn").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(".category-btn").forEach(x=>x.classList.remove("active"));btn.classList.add("active");activeCategory=btn.dataset.category||"all";filterAccounts();}));
 </script>
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-import {getFirestore,collection,addDoc,getDocs,doc,getDoc,setDoc,updateDoc,query,orderBy,serverTimestamp} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-
-const firebaseConfig={
- apiKey:"AIzaSyBdIItgYib1ajyTYd_o4iXNgO4ZIlQLLyE",
- authDomain:"apexshop-marketplace.firebaseapp.com",
- projectId:"apexshop-marketplace",
- storageBucket:"apexshop-marketplace.firebasestorage.app",
- messagingSenderId:"181450232472",
- appId:"1:181450232472:web:71e4ca2d1cb2f12f1cb6ed",
- measurementId:"G-3MQ8Z40SF2"
-};
-
-// Cloudinary configuration — your confirmed account details.
-const CLOUDINARY_CLOUD_NAME="web8mltk";
-const CLOUDINARY_UPLOAD_PRESET="apexshop_uploads";
-
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=getFirestore(app);
-const $=id=>document.getElementById(id);
-const message=$("listing-message");
+import{initializeApp}from"https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import{getFirestore,collection,addDoc,getDocs,doc,getDoc,setDoc,updateDoc,query,orderBy,serverTimestamp}from"https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyBdIItgYib1ajyTYd_o4iXNgO4ZIlQLLyE",authDomain:"apexshop-marketplace.firebaseapp.com",projectId:"apexshop-marketplace",storageBucket:"apexshop-marketplace.firebasestorage.app",messagingSenderId:"181450232472",appId:"1:181450232472:web:71e4ca2d1cb2f12f1cb6ed",measurementId:"G-3MQ8Z40SF2"};
+const CLOUDINARY_CLOUD_NAME="web8mltk",CLOUDINARY_UPLOAD_PRESET="apexshop_uploads";
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),$=id=>document.getElementById(id),message=$("listing-message");
 const portal=new URLSearchParams(location.search).get("portal")==="seller"?"seller":"buyer";
-
 let currentUser=null,currentRole=null,isAdmin=false,isApprovedSeller=false,profileData={};
-
 $("portal-heading").textContent=portal==="seller"?"Seller Portal":"Buyer Portal";
 $("portal-description").textContent=portal==="seller"?"Register or log in as a seller. Publishing requires administrator approval.":"Browse available accounts and contact sellers. Buyers cannot publish listings.";
 $("register-btn").textContent=portal==="seller"?"Create seller account":"Create buyer account";
 $("portal-switch").innerHTML=portal==="seller"?'Want to buy only? <a href="?portal=buyer#account-portal">Use the buyer link</a>.':'Want to sell? <a href="?portal=seller#account-portal">Register through the seller link</a>.';
-
-function showError(error){
- console.error(error);
- const code=error?.code||"";
- const known={
-  "auth/email-already-in-use":"This email is already registered. Please log in.",
-  "auth/invalid-email":"Enter a valid email address.",
-  "auth/weak-password":"Use a password with at least 6 characters.",
-  "auth/invalid-credential":"Email or password is incorrect.",
-  "auth/operation-not-allowed":"Enable Email/Password sign-in in Firebase Authentication.",
-  "permission-denied":"Firestore permission denied. Check your Firestore security rules."
- };
- message.textContent=known[code]||("Error: "+(error?.message||code||"Please try again."));
-}
-
+function showError(error){console.error(error);const known={"auth/email-already-in-use":"This email is already registered. Please log in.","auth/invalid-email":"Enter a valid email address.","auth/weak-password":"Use a password with at least 6 characters.","auth/invalid-credential":"Email or password is incorrect.","auth/operation-not-allowed":"Enable Email/Password sign-in in Firebase Authentication.","permission-denied":"Firestore permission denied. Check your Firestore security rules."};message.textContent=known[error?.code]||("Error: "+(error?.message||error?.code||"Please try again."));}
 function credentials(){return{email:$("user-email").value.trim(),password:$("user-password").value};}
-
-async function checkAdmin(user){
- const snap=await getDoc(doc(db,"admins",user.uid));
- return snap.exists()&&snap.data().enabled===true;
-}
-
-// Uploads an image directly to Cloudinary; Firebase Storage is no longer used.
-async function uploadToCloudinary(file){
- const formData=new FormData();
- formData.append("file",file);
- formData.append("upload_preset",CLOUDINARY_UPLOAD_PRESET);
- const endpoint="https://api.cloudinary.com/v1_1/"+CLOUDINARY_CLOUD_NAME+"/image/upload";
- const response=await fetch(endpoint,{method:"POST",body:formData});
- let result={};
- try{result=await response.json();}catch(_){}
- if(!response.ok||!result.secure_url){
-  throw new Error(result?.error?.message||"Cloudinary image upload failed. Check the Cloudinary cloud name and unsigned upload preset.");
- }
- return result.secure_url;
-}
-
-function validateImage(file){
- const allowed=["image/jpeg","image/png","image/webp","image/gif"];
- return allowed.includes(file.type)&&file.size<=4*1024*1024;
-}
-
-// SHOP PROFILE DISPLAY
-function displayShopProfile(data){
- profileData=data||{};
- $("shop-name").textContent=data.name||"APEXSHOP";
- $("shop-tagline").textContent=data.tagline||"Premium Free Fire Accounts at the Best Prices";
- $("shop-description").textContent=data.description||"Welcome to APEXSHOP MARKETPLACE. Discover quality gaming accounts, premium deals and trusted service.";
- const logoArea=$("shop-logo-area");
- logoArea.replaceChildren();
- if(data.logoUrl){
-  const logo=document.createElement("img");
-  logo.className="shop-logo";logo.src=data.logoUrl;logo.alt="APEXSHOP profile logo";logo.loading="lazy";
-  logoArea.append(logo);
- }else{
-  const placeholder=document.createElement("div");
-  placeholder.className="shop-logo-placeholder";placeholder.textContent="A";logoArea.append(placeholder);
- }
- const number=String(data.whatsapp||"2347085785233").replace(/\D/g,"");
- $("shop-whatsapp").href="https://wa.me/"+number;
- const telegramLink=data.telegram||"https://t.me/apexshop90";
- $("shop-telegram").href=/^https:\/\/t\.me\/[A-Za-z0-9_]+\/?$/.test(telegramLink)?telegramLink:"https://t.me/apexshop90";
-}
-
-async function loadShopProfile(){
- try{
-  const snap=await getDoc(doc(db,"shopProfile","main"));
-  const data=snap.exists()?snap.data():{};
-  displayShopProfile(data);
-  return data;
- }catch(error){
-  console.error("Shop profile loading failed:",error);
-  displayShopProfile({});
-  $("profile-message").textContent="Could not load saved shop profile. Check Firestore rules.";
-  return {};
- }
-}
-
-function fillProfileEditor(){
- $("profile-name").value=profileData.name||"APEXSHOP";
- $("profile-tagline-input").value=profileData.tagline||"Premium Free Fire Accounts at the Best Prices";
- $("profile-description-input").value=profileData.description||"Welcome to APEXSHOP MARKETPLACE. Discover quality gaming accounts, premium deals and trusted service.";
- $("profile-whatsapp-input").value=profileData.whatsapp||"2347085785233";
- $("profile-telegram-input").value=profileData.telegram||"https://t.me/apexshop90";
- const area=$("profile-preview-area");area.replaceChildren();
- if(profileData.logoUrl){
-  const img=document.createElement("img");img.className="profile-preview";img.src=profileData.logoUrl;img.alt="Current shop logo";area.append(img);
- }
-}
-
-// SAVE SHOP PROFILE
-$("profile-form").addEventListener("submit",async event=>{
- event.preventDefault();
- if(!currentUser||!isAdmin){$("profile-message").textContent="Administrator access required.";return;}
- const button=$("save-profile-btn");button.disabled=true;$("profile-message").textContent="Saving shop profile...";
- try{
-  if(!(await checkAdmin(currentUser)))throw new Error("Administrator permission is no longer active.");
-  const name=$("profile-name").value.trim();
-  const tagline=$("profile-tagline-input").value.trim();
-  const description=$("profile-description-input").value.trim();
-  const whatsapp=$("profile-whatsapp-input").value.replace(/\D/g,"");
-  const telegram=$("profile-telegram-input").value.trim();
-  const files=Array.from($("profile-logo-input").files||[]);
-  if(!name||!tagline||!description||name.length>60||tagline.length>120||description.length>1000)throw new Error("Please check the shop name, tagline and description.");
-  if(whatsapp.length<10||whatsapp.length>15)throw new Error("Enter a valid WhatsApp number with country code.");
-  if(telegram&&!/^https:\/\/t\.me\/[A-Za-z0-9_]+\/?$/.test(telegram))throw new Error("Enter a valid Telegram link, such as https://t.me/apexshop90.");
-  if(files.length>1)throw new Error("Select only one profile picture.");
-  let logoUrl=profileData.logoUrl||"";
-  if(files.length===1){
-   if(!validateImage(files[0]))throw new Error("The logo must be JPEG, PNG, WEBP or GIF and no larger than 4 MB.");
-   $("profile-message").textContent="Uploading logo to Cloudinary...";
-   logoUrl=await uploadToCloudinary(files[0]);
-  }
-  if(!(await checkAdmin(currentUser)))throw new Error("Administrator permission is no longer active.");
-  const newProfile={name,tagline,description,whatsapp,telegram:telegram||"https://t.me/apexshop90",logoUrl,updatedAt:serverTimestamp(),updatedBy:currentUser.uid};
-  await setDoc(doc(db,"shopProfile","main"),newProfile,{merge:true});
-  const savedSnap=await getDoc(doc(db,"shopProfile","main"));
-  if(!savedSnap.exists())throw new Error("The profile was submitted, but Firestore could not confirm that it was saved.");
-  const savedData=savedSnap.data();
-  if(savedData.name!==name||savedData.tagline!==tagline||savedData.description!==description||savedData.whatsapp!==whatsapp)throw new Error("Firestore did not confirm all profile changes. Check your Firestore rules.");
-  displayShopProfile(savedData);fillProfileEditor();$("profile-logo-input").value="";
-  $("profile-message").textContent="Shop profile saved and verified successfully!";
- }catch(error){
-  $("profile-message").textContent=error.message||"Could not save the shop profile.";
-  console.error("Profile save error:",error);
- }finally{button.disabled=false;}
-});
-
-// ACCOUNT ROLE AND PERMISSIONS
-async function updatePortalForUser(user){
- currentUser=user;currentRole=null;isAdmin=false;isApprovedSeller=false;
- if(await checkAdmin(user)){
-  isAdmin=true;currentRole="admin";
-  $("auth-form").hidden=true;$("signed-in-tools").hidden=false;$("seller-tools").hidden=true;
-  $("profile-editor").hidden=false;$("admin-area").hidden=false;
-  $("auth-status").textContent="Administrator logged in: "+(user.email||"");
-  $("role-status").textContent="Full administrator access is active.";
-  await loadShopProfile();fillProfileEditor();await loadAdminSellers();
-  return "admin";
- }
- $("admin-area").hidden=true;$("profile-editor").hidden=true;
- const roleSnap=await getDoc(doc(db,"users",user.uid));
- currentRole=roleSnap.exists()?roleSnap.data().role:null;
- if(currentRole!=="buyer"&&currentRole!=="seller"){
-  $("auth-form").hidden=true;$("signed-in-tools").hidden=false;$("seller-tools").hidden=true;
-  $("auth-status").textContent="Account role not found.";
-  $("role-status").textContent="This account has no valid buyer/seller role. Please use the correct registration portal.";
-  return "invalid";
- }
- if(currentRole==="seller"){
-  const accessSnap=await getDoc(doc(db,"sellerAccess",user.uid));
-  isApprovedSeller=accessSnap.exists()&&accessSnap.data().approved===true;
- }
- $("auth-form").hidden=true;$("signed-in-tools").hidden=false;
- $("seller-tools").hidden=!(portal==="seller"&&currentRole==="seller"&&isApprovedSeller);
- if(currentRole==="buyer"){
-  $("auth-status").textContent="Logged in as buyer: "+(user.email||"");
-  $("role-status").textContent="Buyer access only. You can browse listings but cannot publish accounts.";
- }else{
-  $("auth-status").textContent="Logged in as seller: "+(user.email||"");
-  $("role-status").textContent=portal!=="seller"?"Use the seller link to manage your seller account.":!isApprovedSeller?"Your seller account is awaiting administrator approval. You cannot publish listings yet.":"Your seller account is approved. You can now publish listings.";
- }
- return currentRole;
-}
-
-// REGISTER
-$("register-btn").addEventListener("click",async()=>{
- const button=$("register-btn");button.disabled=true;message.textContent="";
- try{
-  const {email,password}=credentials();
-  if(!email||password.length<6){message.textContent="Enter an email and a password of at least 6 characters.";return;}
-  const result=await createUserWithEmailAndPassword(auth,email,password);
-  await setDoc(doc(db,"users",result.user.uid),{role:portal,email:result.user.email||"",createdAt:serverTimestamp()});
-  await updatePortalForUser(result.user);
-  message.textContent=portal==="seller"?"Seller account created. Await administrator approval before publishing.":"Buyer account created successfully. Buyer accounts cannot publish listings.";
- }catch(error){showError(error);}
- finally{button.disabled=false;}
-});
-
-// LOGIN
-$("login-btn").addEventListener("click",async()=>{
- const button=$("login-btn");button.disabled=true;message.textContent="";
- try{
-  const {email,password}=credentials();
-  if(!email||!password){message.textContent="Enter your email and password.";return;}
-  const result=await signInWithEmailAndPassword(auth,email,password);
-  if(await checkAdmin(result.user)){message.textContent="Administrator login successful.";return;}
-  const roleSnap=await getDoc(doc(db,"users",result.user.uid));
-  const savedRole=roleSnap.exists()?roleSnap.data().role:null;
-  if(savedRole!=="buyer"&&savedRole!=="seller"){
-   await signOut(auth);message.textContent="This account has no valid buyer/seller role. Register through the correct portal.";return;
-  }
-  if(portal==="buyer"&&savedRole==="seller"){
-   await signOut(auth);message.textContent="This is a seller account. Please use the seller link to log in.";return;
-  }
-  if(portal==="seller"&&savedRole!=="seller"){
-   await signOut(auth);message.textContent="This is a buyer account. Buyer accounts cannot publish listings.";return;
-  }
-  message.textContent="Login successful.";
- }catch(error){showError(error);}
- finally{button.disabled=false;}
-});
-
-// LOGOUT
-$("logout-btn").addEventListener("click",async()=>{
- try{await signOut(auth);message.textContent="You have logged out.";}
- catch(error){showError(error);}
-});
-
-// AUTH STATE
-onAuthStateChanged(auth,async user=>{
- currentUser=user;currentRole=null;isAdmin=false;isApprovedSeller=false;
- $("admin-area").hidden=true;$("seller-tools").hidden=true;$("profile-editor").hidden=true;
- $("auth-form").hidden=!!user;$("signed-in-tools").hidden=!user;
- if(!user){
-  $("auth-status").textContent=portal==="seller"?"Create a seller account or log in.":"Create a buyer account or log in to browse accounts.";
-  return;
- }
- $("auth-status").textContent="Checking account permissions...";
- try{await updatePortalForUser(user);}
- catch(error){
-  console.error("Account permission check failed:",error);
-  $("auth-status").textContent="Could not check account permissions: "+(error.code||error.message||"Unknown error");
-  $("role-status").textContent="Please check your Firestore security rules and refresh the page.";
-  $("seller-tools").hidden=true;$("profile-editor").hidden=true;$("admin-area").hidden=true;
- }
-});
-
-// PUBLISH LISTING
-$("listing-form").addEventListener("submit",async event=>{
- event.preventDefault();
- if(!currentUser){message.textContent="Please log in first.";return;}
- if(isAdmin){message.textContent="Administrator accounts do not use the seller publishing form.";return;}
- if(portal!=="seller"||currentRole!=="seller"){message.textContent="Buyer accounts cannot publish listings.";return;}
- const button=$("publish-btn");button.disabled=true;
- try{
-  const accessSnap=await getDoc(doc(db,"sellerAccess",currentUser.uid));
-  if(!accessSnap.exists()||accessSnap.data().approved!==true){
-   isApprovedSeller=false;$("seller-tools").hidden=true;
-   $("role-status").textContent="Your seller approval is missing or has been revoked.";
-   throw new Error("You are not an approved seller.");
-  }
-  const title=$("listing-title").value.trim();
-  const description=$("listing-description").value.trim();
-  const price=Number($("listing-price").value);
-  const sellerWhatsapp=$("seller-whatsapp").value.replace(/\D/g,"");
-  const files=Array.from($("listing-image").files||[]);
-  if(!title||title.length>80||!description||description.length>1000||sellerWhatsapp.length<10||sellerWhatsapp.length>15||!Number.isSafeInteger(price)||price<1||price>100000000)throw new Error("Check your title, account details, WhatsApp number and whole-number price.");
-  if(files.length>4)throw new Error("You can upload a maximum of 4 pictures.");
-  if(files.some(file=>!validateImage(file)))throw new Error("Each picture must be JPEG, PNG, WEBP or GIF and no larger than 4 MB.");
-  message.textContent="Uploading pictures to Cloudinary...";
-  const imageUrls=[];
-  for(let i=0;i<files.length;i++){
-   message.textContent="Uploading picture "+(i+1)+" of "+files.length+"...";
-   imageUrls.push(await uploadToCloudinary(files[i]));
-  }
-  const finalAccess=await getDoc(doc(db,"sellerAccess",currentUser.uid));
-  if(!finalAccess.exists()||finalAccess.data().approved!==true)throw new Error("Your seller approval was revoked before publishing completed.");
-  await addDoc(collection(db,"listings"),{title,description,price,imageUrls,sellerWhatsapp,sellerId:currentUser.uid,sellerEmail:currentUser.email||"",verified:false,createdAt:serverTimestamp()});
-  $("listing-form").reset();message.textContent="Your listing has been published successfully.";await loadListings();
- }catch(error){showError(error);}
- finally{button.disabled=false;}
-});
-
-// LOAD LISTINGS
-async function loadListings(){
- const container=$("firebase-listings");container.replaceChildren();
- const loading=document.createElement("p");loading.className="sub";loading.textContent="Loading listings...";container.append(loading);
- try{
-  const result=await getDocs(query(collection(db,"listings"),orderBy("createdAt","desc")));
-  container.replaceChildren();
-  if(result.empty){const empty=document.createElement("p");empty.className="sub";empty.textContent="No seller listings yet.";container.append(empty);return;}
-  result.forEach(snapshot=>{
-   const data=snapshot.data();const card=document.createElement("article");card.className="card";card.dataset.category=categoryForText([data.category,data.title,data.description].filter(Boolean).join(" "));
-   const imageUrls=Array.isArray(data.imageUrls)?data.imageUrls:(data.imageUrl?[data.imageUrl]:[]);
-   if(imageUrls.length){
-    const image=document.createElement("img");image.className="account-image";image.src=imageUrls[0];image.alt="Account listing picture";image.loading="lazy";card.append(image);
-    if(imageUrls.length>1){
-     const gallery=document.createElement("div");gallery.className="gallery";
-     imageUrls.slice(1).forEach(url=>{const small=document.createElement("img");small.src=url;small.alt="Additional account picture";small.loading="lazy";gallery.append(small);});
-     card.append(gallery);
-    }
-   }else{const placeholder=document.createElement("div");placeholder.className="image-placeholder";placeholder.textContent="Account picture not provided";card.append(placeholder);}
-   const body=document.createElement("div");body.className="card-body";
-   const heading=document.createElement("h3");heading.textContent=data.title||"Free Fire account";
-   const badge=document.createElement("span");badge.className="badge"+(data.verified===true?" verified":"");badge.textContent=data.verified===true?"✓ Verified seller":"Seller not verified";
-   const details=document.createElement("p");details.textContent=data.description||"";
-   const price=document.createElement("div");price.className="price";price.textContent=Number.isFinite(data.price)?"₦"+data.price.toLocaleString("en-NG"):"Contact seller";
-   body.append(heading,badge,details,price);
-   const favorite=document.createElement("button");favorite.type="button";favorite.className="favorite-btn";favorite.setAttribute("aria-label","Save account to favourites");const savedFavorites=JSON.parse(localStorage.getItem("apexshop-favorites")||"[]");favorite.classList.toggle("saved",savedFavorites.includes(snapshot.id));favorite.textContent=savedFavorites.includes(snapshot.id)?"♥":"♡";favorite.addEventListener("click",()=>{const ids=JSON.parse(localStorage.getItem("apexshop-favorites")||"[]");const index=ids.indexOf(snapshot.id);if(index>=0)ids.splice(index,1);else ids.push(snapshot.id);localStorage.setItem("apexshop-favorites",JSON.stringify(ids));favorite.classList.toggle("saved",index<0);favorite.textContent=index<0?"♥":"♡";});card.append(favorite);
-   const contact=document.createElement("a");contact.className="btn";
-   if(typeof data.sellerWhatsapp==="string"&&/^\d{10,15}$/.test(data.sellerWhatsapp)){contact.textContent="🛒 Buy Now / Contact Seller";contact.href="https://wa.me/"+data.sellerWhatsapp+"?text="+encodeURIComponent("Hello, I am interested in your Free Fire account: "+(data.title||"Account")+" — ₦"+(Number.isFinite(data.price)?data.price.toLocaleString("en-NG"):"Please share price")+". Listing ID: "+snapshot.id);}
-   else{contact.textContent="🛒 Buy Now / Contact Support";contact.href="https://t.me/apexshop90";}
-   contact.target="_blank";contact.rel="noopener";body.append(contact);card.append(body);container.append(card);
-  });
-  filterAccounts();
-  filterAccounts();
- }catch(error){
-  container.replaceChildren();const err=document.createElement("p");err.className="sub";err.textContent="Could not load listings. Check Firestore rules and database setup.";container.append(err);
-  console.error("Loading listings failed:",error);
- }
-}
-
-// ADMIN SELLER VERIFICATION
-async function loadAdminSellers(){
- const container=$("admin-sellers");container.textContent="Loading registered sellers...";
- if(!isAdmin||!currentUser){container.textContent="Administrator access required.";return;}
- try{
-  const adminSnap=await getDoc(doc(db,"admins",currentUser.uid));
-  if(!adminSnap.exists()||adminSnap.data().enabled!==true){
-   isAdmin=false;$("admin-area").hidden=true;$("profile-editor").hidden=true;
-   container.textContent="Administrator access is no longer active.";return;
-  }
-  const usersResult=await getDocs(collection(db,"users"));
-  const sellerUsers=usersResult.docs.filter(item=>item.data().role==="seller");
-  container.replaceChildren();
-  if(!sellerUsers.length){container.textContent="No registered sellers yet.";return;}
-  const sellers=await Promise.all(sellerUsers.map(async item=>{
-   const accessSnap=await getDoc(doc(db,"sellerAccess",item.id));
-   return{uid:item.id,email:item.data().email||"Email not available",approved:accessSnap.exists()&&accessSnap.data().approved===true};
-  }));
-  for(const seller of sellers){
-   const row=document.createElement("div");row.className="admin-row";
-   const information=document.createElement("div");const label=document.createElement("p");
-   label.textContent=seller.email+" — "+(seller.approved?"Approved":"Awaiting approval");information.append(label);
-   const button=document.createElement("button");button.className="btn";button.textContent=seller.approved?"Revoke Approval":"Approve Seller";
-   button.addEventListener("click",async()=>{
-    button.disabled=true;const newApproval=!seller.approved;
-    try{
-     const adminCheck=await getDoc(doc(db,"admins",currentUser.uid));
-     if(!adminCheck.exists()||adminCheck.data().enabled!==true)throw new Error("Administrator permission is no longer active.");
-     await setDoc(doc(db,"sellerAccess",seller.uid),{approved:newApproval,email:seller.email,updatedAt:serverTimestamp()},{merge:true});
-     const listingsResult=await getDocs(collection(db,"listings"));
-     const sellerListings=listingsResult.docs.filter(item=>item.data().sellerId===seller.uid);
-     for(const item of sellerListings)await updateDoc(doc(db,"listings",item.id),{verified:newApproval});
-     $("admin-message").textContent=newApproval?"Seller approved. Publishing access enabled.":"Seller approval revoked. Publishing access disabled.";
-     await loadAdminSellers();await loadListings();
-    }catch(error){
-     $("admin-message").textContent="Seller approval update failed: "+(error.message||"Check Firestore rules.");
-     console.error("Seller approval error:",error);
-    }finally{button.disabled=false;}
-   });
-   row.append(information,button);container.append(row);
-  }
- }catch(error){
-  container.textContent="Could not load sellers. Check administrator permissions and Firestore rules.";
-  console.error("Loading sellers failed:",error);
- }
-}
-
-// INITIAL PAGE LOAD
-await loadShopProfile();
-await loadListings();
+async function checkAdmin(user){const snap=await getDoc(doc(db,"admins",user.uid));return snap.exists()&&snap.data().enabled===true;}
+async function uploadToCloudinary(file){const form=new FormData();form.append("file",file);form.append("upload_preset",CLOUDINARY_UPLOAD_PRESET);const response=await fetch("https://api.cloudinary.com/v1_1/"+CLOUDINARY_CLOUD_NAME+"/image/upload",{method:"POST",body:form});let result={};try{result=await response.json();}catch(_){}if(!response.ok||!result.secure_url)throw new Error(result?.error?.message||"Cloudinary upload failed. Check cloud name and unsigned preset.");return result.secure_url;}
+function validateImage(file){return["image/jpeg","image/png","image/webp","image/gif"].includes(file.type)&&file.size<=4*1024*1024;}
+function displayShopProfile(data){profileData=data||{};}
+async function loadShopProfile(){try{const snap=await getDoc(doc(db,"shopProfile","main"));displayShopProfile(snap.exists()?snap.data():{});return profileData;}catch(error){console.error("Shop profile loading failed:",error);displayShopProfile({});$("profile-message").textContent="Could not load saved shop profile. Check Firestore rules.";return{};}}
+function fillProfileEditor(){ $("profile-name").value=profileData.name||"APEXSHOP";$("profile-tagline-input").value=profileData.tagline||"Premium Free Fire Accounts at the Best Prices";$("profile-description-input").value=profileData.description||"Welcome to APEXSHOP MARKETPLACE."; $("profile-whatsapp-input").value=profileData.whatsapp||"2347085785233";$("profile-telegram-input").value=profileData.telegram||"https://t.me/apexshop90";const area=$("profile-preview-area");area.replaceChildren();if(profileData.logoUrl){const img=document.createElement("img");img.src=profileData.logoUrl;img.alt="Current shop logo";img.style.cssText="width:110px;height:110px;object-fit:cover;border-radius:50%";area.append(img);}}
+$("profile-form").addEventListener("submit",async event=>{event.preventDefault();if(!currentUser||!isAdmin)return;$("save-profile-btn").disabled=true;$("profile-message").textContent="Saving shop profile...";try{if(!(await checkAdmin(currentUser)))throw new Error("Administrator permission is no longer active.");const name=$("profile-name").value.trim(),tagline=$("profile-tagline-input").value.trim(),description=$("profile-description-input").value.trim(),whatsapp=$("profile-whatsapp-input").value.replace(/\D/g,""),telegram=$("profile-telegram-input").value.trim(),files=Array.from($("profile-logo-input").files||[]);if(!name||!tagline||!description||name.length>60||tagline.length>120||description.length>1000)throw new Error("Check the shop name, tagline and description.");if(whatsapp.length<10||whatsapp.length>15)throw new Error("Enter a valid WhatsApp number with country code.");if(telegram&&!/^https:\/\/t\.me\/[A-Za-z0-9_]+\/?$/.test(telegram))throw new Error("Enter a valid Telegram link.");if(files.length>1||files.some(f=>!validateImage(f)))throw new Error("Choose one valid image no larger than 4 MB.");let logoUrl=profileData.logoUrl||"";if(files.length)logoUrl=await uploadToCloudinary(files[0]);const data={name,tagline,description,whatsapp,telegram:telegram||"https://t.me/apexshop90",logoUrl,updatedAt:serverTimestamp(),updatedBy:currentUser.uid};await setDoc(doc(db,"shopProfile","main"),data,{merge:true});profileData=data;fillProfileEditor();$("profile-logo-input").value="";$("profile-message").textContent="Shop profile saved successfully.";}catch(error){$("profile-message").textContent=error.message||"Could not save profile.";console.error(error);}finally{$("save-profile-btn").disabled=false;}});
+async function updatePortalForUser(user){currentUser=user;currentRole=null;isAdmin=false;isApprovedSeller=false;if(await checkAdmin(user)){isAdmin=true;currentRole="admin";$("auth-form").hidden=true;$("signed-in-tools").hidden=false;$("seller-tools").hidden=true;$("profile-editor").hidden=false;$("admin-area").hidden=false;$("auth-status").textContent="Administrator logged in: "+(user.email||"");$("role-status").textContent="Full administrator access is active." ;await loadShopProfile();fillProfileEditor();await loadAdminSellers();return"admin";}
+$("admin-area").hidden=true;$("profile-editor").hidden=true;const roleSnap=await getDoc(doc(db,"users",user.uid));currentRole=roleSnap.exists()?roleSnap.data().role:null;if(!["buyer","seller"].includes(currentRole)){$("auth-form").hidden=true;$("signed-in-tools").hidden=false;$("seller-tools").hidden=true;$("auth-status").textContent="Account role not found.";$("role-status").textContent="This account has no valid buyer/seller role.";return"invalid";}
+if(currentRole==="seller"){const access=await getDoc(doc(db,"sellerAccess",user.uid));isApprovedSeller=access.exists()&&access.data().approved===true;}
+$("auth-form").hidden=true;$("signed-in-tools").hidden=false;$("seller-tools").hidden=!(portal==="seller"&&currentRole==="seller"&&isApprovedSeller);
+if(currentRole==="buyer"){$("auth-status").textContent="Logged in as buyer: "+(user.email||"");$("role-status").textContent="Buyer access only. You cannot publish accounts.";}else{$("auth-status").textContent="Logged in as seller: "+(user.email||"");$("role-status").textContent=portal!=="seller"?"Use the seller link to manage your seller account.":!isApprovedSeller?"Your seller account is awaiting administrator approval.":"Your seller account is approved. You can publish and manage your listings.";if(portal==="seller"&&isApprovedSeller)await loadSellerListings();}
+return currentRole;}
+$("register-btn").addEventListener("click",async()=>{const button=$("register-btn");button.disabled=true;message.textContent="";try{const{email,password}=credentials();if(!email||password.length<6){message.textContent="Enter an email and password of at least 6 characters.";return;}const result=await createUserWithEmailAndPassword(auth,email,password);await setDoc(doc(db,"users",result.user.uid),{role:portal,email:result.user.email||"",createdAt:serverTimestamp()});await updatePortalForUser(result.user);message.textContent=portal==="seller"?"Seller account created. Await administrator approval.":"Buyer account created. Buyer accounts cannot publish listings.";}catch(error){showError(error);}finally{button.disabled=false;}});
+$("login-btn").addEventListener("click",async()=>{const button=$("login-btn");button.disabled=true;message.textContent="";try{const{email,password}=credentials();if(!email||!password){message.textContent="Enter your email and password.";return;}const result=await signInWithEmailAndPassword(auth,email,password);if(await checkAdmin(result.user)){message.textContent="Administrator login successful.";return;}const roleSnap=await getDoc(doc(db,"users",result.user.uid)),role=roleSnap.exists()?roleSnap.data().role:null;if(!["buyer","seller"].includes(role)){await signOut(auth);message.textContent="No valid buyer/seller role. Register through the correct portal.";return;}if((portal==="buyer"&&role==="seller")||(portal==="seller"&&role!=="seller")){await signOut(auth);message.textContent=role==="seller"?"Use the seller link to log in.":"Buyer accounts cannot publish listings.";return;}message.textContent="Login successful.";}catch(error){showError(error);}finally{button.disabled=false;}});
+$("logout-btn").addEventListener("click",async()=>{try{await signOut(auth);message.textContent="You have logged out.";}catch(error){showError(error);}});
+onAuthStateChanged(auth,async user=>{currentUser=user;currentRole=null;isAdmin=false;isApprovedSeller=false;$("admin-area").hidden=true;$("seller-tools").hidden=true;$("profile-editor").hidden=true;$("auth-form").hidden=!!user;$("signed-in-tools").hidden=!user;if(!user){$("auth-status").textContent=portal==="seller"?"Create a seller account or log in.":"Create a buyer account or log in.";return;}$("auth-status").textContent="Checking account permissions...";try{await updatePortalForUser(user);}catch(error){console.error(error);$("auth-status").textContent="Could not check permissions: "+(error.code||error.message);$("role-status").textContent="Check Firestore security rules and refresh.";$("seller-tools").hidden=true;$("profile-editor").hidden=true;$("admin-area").hidden=true;}});
+async function loadSellerListings(){const area=$("seller-listings-management");area.replaceChildren();if(!currentUser||currentRole!=="seller"||!isApprovedSeller){area.textContent="Approved seller access required.";return;}try{const result=await getDocs(collection(db,"listings"));const mine=result.docs.filter(item=>item.data().sellerId===currentUser.uid);if(!mine.length){area.textContent="You have not published any accounts yet.";return;}mine.sort((a,b)=>{const ta=a.data().createdAt?.seconds||0,tb=b.data().createdAt?.seconds||0;return tb-ta;});mine.forEach(item=>{const data=item.data(),sold=data.status==="sold_out",card=document.createElement("div");card.className="seller-manage-card";const title=document.createElement("strong");title.textContent=data.title||"Free Fire account";const status=document.createElement("p");status.className="badge "+(sold?"status-sold":"status-available");status.textContent=sold?"SOLD OUT":"AVAILABLE";const price=document.createElement("p");price.textContent="₦"+Number(data.price||0).toLocaleString("en-NG");const button=document.createElement("button");button.type="button";button.className="btn "+(sold?"secondary":"");button.textContent=sold?"Mark as AVAILABLE":"Mark as SOLD OUT";button.addEventListener("click",async()=>{button.disabled=true;try{const freshUser=auth.currentUser;if(!freshUser||freshUser.uid!==currentUser.uid)throw new Error("Please log in again.");const access=await getDoc(doc(db,"sellerAccess",freshUser.uid));if(!access.exists()||access.data().approved!==true){isApprovedSeller=false;$("seller-tools").hidden=true;throw new Error("Your seller approval is no longer active.");}const freshListing=await getDoc(doc(db,"listings",item.id));if(!freshListing.exists()||freshListing.data().sellerId!==freshUser.uid)throw new Error("You can only update your own listings.");const newStatus=freshListing.data().status==="sold_out"?"available":"sold_out";await updateDoc(doc(db,"listings",item.id),{status:newStatus,statusUpdatedAt:serverTimestamp()});message.textContent="Listing status updated successfully.";await loadSellerListings();await loadListings();}catch(error){message.textContent="Could not update listing: "+(error.message||"Check Firestore rules.");console.error(error);button.disabled=false;}});card.append(title,status,price,button);area.append(card);});}catch(error){console.error(error);area.textContent="Could not load your listings. Check Firestore permissions.";}}
+$("listing-form").addEventListener("submit",async event=>{event.preventDefault();if(!currentUser){message.textContent="Please log in first.";return;}if(isAdmin||portal!=="seller"||currentRole!=="seller"){message.textContent="Only seller accounts can publish listings.";return;}const button=$("publish-btn");button.disabled=true;try{const access=await getDoc(doc(db,"sellerAccess",currentUser.uid));if(!access.exists()||access.data().approved!==true){isApprovedSeller=false;$("seller-tools").hidden=true;throw new Error("You are not an approved seller.");}const title=$("listing-title").value.trim(),description=$("listing-description").value.trim(),price=Number($("listing-price").value),sellerWhatsapp=$("seller-whatsapp").value.replace(/\D/g,""),files=Array.from($("listing-image").files||[]);if(!title||title.length>80||!description||description.length>1000||sellerWhatsapp.length<10||sellerWhatsapp.length>15||!Number.isSafeInteger(price)||price<1||price>100000000)throw new Error("Check your title, account details, WhatsApp number and whole-number price.");if(files.length>4)throw new Error("Maximum 4 pictures allowed.");if(files.some(file=>!validateImage(file)))throw new Error("Each image must be JPEG, PNG, WEBP or GIF and no larger than 4 MB.");const imageUrls=[];for(let i=0;i<files.length;i++){message.textContent="Uploading picture "+(i+1)+" of "+files.length+"...";imageUrls.push(await uploadToCloudinary(files[i]));}const finalAccess=await getDoc(doc(db,"sellerAccess",currentUser.uid));if(!finalAccess.exists()||finalAccess.data().approved!==true)throw new Error("Seller approval was revoked before publishing.");await addDoc(collection(db,"listings"),{title,description,price,imageUrls,sellerWhatsapp,sellerId:currentUser.uid,sellerEmail:currentUser.email||"",verified:false,status:"available",createdAt:serverTimestamp()});$("listing-form").reset();message.textContent="Listing published successfully.";await loadListings();await loadSellerListings();}catch(error){showError(error);}finally{button.disabled=false;}});
+async function loadListings(){const container=$("firebase-listings");container.replaceChildren();const loading=document.createElement("p");loading.className="sub";loading.textContent="Loading listings...";container.append(loading);try{const result=await getDocs(query(collection(db,"listings"),orderBy("createdAt","desc")));container.replaceChildren();if(result.empty){const empty=document.createElement("p");empty.className="sub";empty.textContent="No seller listings yet.";container.append(empty);$("listing-count").textContent="";return;}result.forEach(snapshot=>{const data=snapshot.data(),soldOut=data.status==="sold_out",card=document.createElement("article");card.className="card";card.dataset.category=categoryForText([data.category,data.title,data.description].filter(Boolean).join(" "));const imageUrls=Array.isArray(data.imageUrls)?data.imageUrls:(data.imageUrl?[data.imageUrl]:[]);if(imageUrls.length){const image=document.createElement("img");image.className="account-image";image.src=imageUrls[0];image.alt="Account listing picture";image.loading="lazy";card.append(image);if(imageUrls.length>1){const gallery=document.createElement("div");gallery.className="gallery";imageUrls.slice(1).forEach(url=>{const small=document.createElement("img");small.src=url;small.alt="Additional account picture";small.loading="lazy";gallery.append(small);});card.append(gallery);}}else{const placeholder=document.createElement("div");placeholder.className="image-placeholder";placeholder.textContent="Account picture not provided";card.append(placeholder);}if(soldOut){const overlay=document.createElement("div");overlay.className="sold-out-overlay";const label=document.createElement("span");label.className="sold-out-label";label.textContent="SOLD OUT";overlay.append(label);card.append(overlay);}const body=document.createElement("div");body.className="card-body";const heading=document.createElement("h3");heading.textContent=data.title||"Free Fire account";const verified=document.createElement("span");verified.className="badge"+(data.verified===true?" verified":"");verified.textContent=data.verified===true?"✓ Verified seller":"Seller not verified";const details=document.createElement("p");details.textContent=data.description||"";const price=document.createElement("div");price.className="price";price.textContent=Number.isFinite(data.price)?"₦"+data.price.toLocaleString("en-NG"):"Contact seller";body.append(heading,verified);if(soldOut){const status=document.createElement("span");status.className="badge status-sold";status.textContent="SOLD OUT";body.append(status);}body.append(details,price);const favorite=document.createElement("button");favorite.type="button";favorite.className="favorite-btn";favorite.setAttribute("aria-label","Save account to favourites");let favorites=[];try{favorites=JSON.parse(localStorage.getItem("apexshop-favorites")||"[]");if(!Array.isArray(favorites))favorites=[];}catch(_){favorites=[];}favorite.classList.toggle("saved",favorites.includes(snapshot.id));favorite.textContent=favorites.includes(snapshot.id)?"♥":"♡";favorite.addEventListener("click",()=>{let ids=[];try{ids=JSON.parse(localStorage.getItem("apexshop-favorites")||"[]");if(!Array.isArray(ids))ids=[];}catch(_){}const index=ids.indexOf(snapshot.id);if(index>=0)ids.splice(index,1);else ids.push(snapshot.id);localStorage.setItem("apexshop-favorites",JSON.stringify(ids));favorite.classList.toggle("saved",index<0);favorite.textContent=index<0?"♥":"♡";});card.append(favorite);const contact=document.createElement("a");contact.className="btn";if(soldOut){contact.textContent="SOLD OUT";contact.removeAttribute("href");contact.setAttribute("aria-disabled","true");contact.style.cursor="not-allowed";contact.style.opacity=".7";}else if(typeof data.sellerWhatsapp==="string"&&/^\d{10,15}$/.test(data.sellerWhatsapp)){contact.textContent="🛒 Buy Now / Contact Seller";contact.href="https://wa.me/"+data.sellerWhatsapp+"?text="+encodeURIComponent("Hello, I am interested in your Free Fire account: "+(data.title||"Account")+" — ₦"+(Number.isFinite(data.price)?data.price.toLocaleString("en-NG"):"Please share price")+". Listing ID: "+snapshot.id);contact.target="_blank";contact.rel="noopener";}else{contact.textContent="🛒 Buy Now / Contact Support";contact.href="https://t.me/apexshop90";contact.target="_blank";contact.rel="noopener";}body.append(contact);card.append(body);container.append(card);});filterAccounts();}catch(error){container.replaceChildren();const err=document.createElement("p");err.className="sub";err.textContent="Could not load listings. Check Firestore rules and database setup.";container.append(err);console.error("Loading listings failed:",error);}}
+async function loadAdminSellers(){const container=$("admin-sellers");container.textContent="Loading registered sellers...";if(!isAdmin||!currentUser){container.textContent="Administrator access required.";return;}try{const adminSnap=await getDoc(doc(db,"admins",currentUser.uid));if(!adminSnap.exists()||adminSnap.data().enabled!==true){isAdmin=false;$("admin-area").hidden=true;$("profile-editor").hidden=true;container.textContent="Administrator access is no longer active.";return;}const users=await getDocs(collection(db,"users")),sellerUsers=users.docs.filter(item=>item.data().role==="seller");container.replaceChildren();if(!sellerUsers.length){container.textContent="No registered sellers yet.";return;}const sellers=await Promise.all(sellerUsers.map(async item=>{const access=await getDoc(doc(db,"sellerAccess",item.id));return{uid:item.id,email:item.data().email||"Email not available",approved:access.exists()&&access.data().approved===true};}));for(const seller of sellers){const row=document.createElement("div");row.className="admin-row";const info=document.createElement("p");info.textContent=seller.email+" — "+(seller.approved?"Approved":"Awaiting approval");const button=document.createElement("button");button.className="btn";button.textContent=seller.approved?"Revoke Approval":"Approve Seller";button.addEventListener("click",async()=>{button.disabled=true;try{const check=await getDoc(doc(db,"admins",currentUser.uid));if(!check.exists()||check.data().enabled!==true)throw new Error("Administrator permission is no longer active.");const newApproval=!seller.approved;await setDoc(doc(db,"sellerAccess",seller.uid),{approved:newApproval,email:seller.email,updatedAt:serverTimestamp()},{merge:true});const listings=await getDocs(collection(db,"listings"));for(const item of listings.docs.filter(x=>x.data().sellerId===seller.uid))await updateDoc(doc(db,"listings",item.id),{verified:newApproval});$("admin-message").textContent=newApproval?"Seller approved. Publishing access enabled.":"Seller approval revoked. Publishing access disabled.";await loadAdminSellers();await loadListings();}catch(error){$("admin-message").textContent="Seller approval update failed: "+error.message;console.error(error);}finally{button.disabled=false;}});row.append(info,button);container.append(row);}}catch(error){container.textContent="Could not load sellers. Check administrator permissions and Firestore rules.";console.error(error);}}
+await loadShopProfile();await loadListings();
 </script>
 </body>
 </html>
