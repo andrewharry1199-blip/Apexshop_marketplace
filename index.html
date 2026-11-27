@@ -715,10 +715,14 @@ async function loadPublicSellerPage(uid){
  const content=$("public-seller-content");content.replaceChildren();
  const loading=document.createElement("p");loading.className="sub";loading.textContent="Loading seller profile...";content.append(loading);
  try{
-  const [profile,verified,listingsSnap,reviewsSnap]=await Promise.all([
-   readSellerProfile(uid),isSellerVerified(uid),getDocs(collection(db,"listings")),getDocs(collection(db,"sellerReviews",uid,"reviews"))
+  const [profile,listingsSnap,reviewsSnap]=await Promise.all([
+   readSellerProfile(uid),getDocs(collection(db,"listings")),getDocs(collection(db,"sellerReviews",uid,"reviews"))
   ]);
   const ownListings=[];listingsSnap.forEach(d=>{if(d.data().sellerId===uid)ownListings.push({id:d.id,data:d.data()});});
+  // Use the public seller badge first, then fall back to the verified flag
+  // already published on this seller's listings. This keeps View Profile
+  // consistent with the marketplace cards for previously approved sellers.
+  const verified=profile.verified===true||ownListings.some(item=>item.data.verified===true);
   const reviews=[];let total=0;reviewsSnap.forEach(d=>{const r=d.data();if(Number.isInteger(r.rating)&&r.rating>=1&&r.rating<=5){reviews.push({id:d.id,data:r});total+=r.rating;}});
   const available=ownListings.filter(x=>x.data.status!=="sold_out").length;const sold=ownListings.length-available;
   content.replaceChildren();const head=document.createElement("div");head.className="public-seller-head";
