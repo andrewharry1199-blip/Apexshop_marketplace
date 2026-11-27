@@ -97,6 +97,16 @@ textarea{min-height:100px;resize:vertical}
 .current-images img{width:75px;height:65px;object-fit:cover;border-radius:7px;border:1px solid #394252}
 .editor-note{font-size:11px;color:#aab3c2;line-height:1.5}
 .header-image-preview{width:110px;height:110px;object-fit:cover;border-radius:50%;border:2px solid var(--red);background:#151b27;margin:8px 0}
+
+.seller-profile-link{display:block;margin:8px 0 12px;padding:9px 10px;border:1px solid #394252;border-radius:8px;background:#090d14;font-size:12px;color:#f2f4f8}
+.seller-profile-link strong{color:#fff}.seller-profile-link:hover{border-color:var(--red)}
+.public-seller-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:18px;background:#0d1119;border:1px solid #343d4d;border-radius:12px;margin:14px 0}
+.public-seller-avatar{width:92px;height:92px;border-radius:50%;object-fit:cover;border:2px solid var(--red);background:#171d28}
+.public-seller-name{font-size:25px;font-weight:900;margin:0 0 7px}.public-seller-bio{color:#c2cad6;line-height:1.5;white-space:pre-wrap}
+.profile-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:14px 0}.profile-stat{padding:12px;background:#0d1119;border:1px solid #303a49;border-radius:9px}.profile-stat span{display:block;color:var(--muted);font-size:11px}.profile-stat strong{display:block;font-size:22px;margin-top:5px}
+.review-card{padding:13px;margin:9px 0;background:#0d1119;border:1px solid #303a49;border-radius:9px}.review-stars{color:#ffbd45;letter-spacing:2px}.review-card p{white-space:pre-wrap;overflow-wrap:anywhere}.profile-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:650px){.profile-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.profile-form-grid{grid-template-columns:1fr}}
+
 footer{border-top:1px solid #272e39;text-align:center;padding:25px 16px;color:var(--muted);margin-top:20px;background:#080a0f}
 .footer-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;font-size:12px;margin:15px 0}
 .notice{font-size:12px}
@@ -197,6 +207,26 @@ hr{border:0;border-top:1px solid #303746;margin:20px 0}
 </section>
 
 <main>
+<section class="section" id="public-seller-page" hidden>
+ <p><a class="btn secondary" href="./">← Back to marketplace</a></p>
+ <h2>Seller Profile</h2>
+ <div id="public-seller-content"><p class="sub">Loading seller profile...</p></div>
+ <div class="panel" id="seller-review-panel">
+  <h3>Buyer Reviews</h3><p class="sub" id="review-summary">Loading reviews...</p>
+  <div id="seller-reviews-list"></div>
+  <div id="review-form-wrap" hidden>
+   <hr><h3>Leave a review</h3>
+   <form id="seller-review-form">
+    <label for="review-rating">Rating</label>
+    <select id="review-rating" required><option value="5">★★★★★ — Excellent</option><option value="4">★★★★ — Very good</option><option value="3">★★★ — Good</option><option value="2">★★ — Fair</option><option value="1">★ — Poor</option></select>
+    <label for="review-comment">Comment (maximum 500 characters)</label>
+    <textarea id="review-comment" maxlength="500" placeholder="Share your experience with this seller..."></textarea>
+    <button class="btn" id="submit-review-btn" type="submit">Submit review</button>
+   </form><p id="review-message" class="message"></p>
+  </div>
+  <p id="review-login-note" class="notice" hidden>Log in with your buyer account to leave a review. <a href="?portal=buyer#account-portal" style="color:#ff5368;text-decoration:underline">Buyer login</a></p>
+ </div>
+</section>
 
 <section class="section section-anchor" id="marketplace">
 <div class="category-bar" id="category-bar">
@@ -287,6 +317,17 @@ hr{border:0;border-top:1px solid #303746;margin:20px 0}
 </div>
 <p id="role-status" class="sub"></p>
 
+<div id="seller-profile-editor" hidden>
+ <hr><h3 class="profile-title">My Public Seller Profile</h3>
+ <p class="notice">Set the name, picture and short bio buyers will see on your seller profile. Your verification badge is controlled by APEXSHOP administration.</p>
+ <form id="seller-profile-form">
+  <label for="seller-display-name">Public display name</label><input id="seller-display-name" maxlength="50" required placeholder="Your seller name">
+  <label for="seller-avatar-file">Profile picture</label><input id="seller-avatar-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+  <div id="seller-avatar-preview"></div>
+  <label for="seller-bio">Short bio (maximum 300 characters)</label><textarea id="seller-bio" maxlength="300" placeholder="Tell buyers a little about yourself..."></textarea>
+  <button class="btn" id="save-seller-profile" type="submit">Save seller profile</button>
+ </form><p id="seller-profile-message" class="message"></p>
+</div>
 <div id="profile-editor" hidden>
 <hr>
 <h3 class="profile-title">Edit APEXSHOP Profile</h3>
@@ -573,6 +614,9 @@ document.addEventListener("keydown",event=>{
 const message=$("listing-message");
 
 const portal=new URLSearchParams(location.search).get("portal")==="seller"?"seller":"buyer";
+const publicSellerUid=new URLSearchParams(location.search).get("seller");
+const sellerProfileCache=new Map();
+let activePublicSellerUid=null;
 
 let currentUser=null;
 let currentRole=null;
@@ -628,6 +672,82 @@ async function verifyApprovedSeller(user){
  const access=await getDoc(doc(db,"sellerAccess",user.uid));
  return access.exists()&&access.data().approved===true;
 }
+
+async function readSellerProfile(uid){
+ if(sellerProfileCache.has(uid))return sellerProfileCache.get(uid);
+ const snap=await getDoc(doc(db,"sellerProfiles",uid));
+ const value=snap.exists()?snap.data():{};
+ sellerProfileCache.set(uid,value);return value;
+}
+async function isSellerVerified(uid){
+ // Public, admin-controlled mirror of sellerAccess/{uid}.approved.
+ // sellerAccess also contains seller email addresses, so it must remain private.
+ try{const snap=await getDoc(doc(db,"sellerProfiles",uid));return snap.exists()&&snap.data().verified===true;}
+ catch(error){console.warn("Seller badge lookup failed",error);return false;}
+}
+function setAvatarPreview(url){
+ const wrap=$("seller-avatar-preview");wrap.replaceChildren();
+ if(url){const img=document.createElement("img");img.src=url;img.alt="Seller profile picture preview";img.className="public-seller-avatar";wrap.append(img);}
+}
+async function loadSellerProfileEditor(){
+ const form=$("seller-profile-form");if(!form||!currentUser)return;
+ const data=await readSellerProfile(currentUser.uid);
+ $("seller-display-name").value=data.displayName||currentUser.displayName||"";
+ $("seller-bio").value=data.bio||"";setAvatarPreview(data.avatarUrl||"");
+}
+$("seller-profile-form")?.addEventListener("submit",async event=>{
+ event.preventDefault();if(!currentUser||currentRole!=="seller")return;
+ const button=$("save-seller-profile");button.disabled=true;$("seller-profile-message").textContent="Saving...";
+ try{
+  const displayName=$("seller-display-name").value.trim();const bio=$("seller-bio").value.trim();
+  if(!displayName||displayName.length>50||bio.length>300)throw new Error("Check your display name and bio length.");
+  let avatarUrl=(await readSellerProfile(currentUser.uid)).avatarUrl||"";
+  const file=$("seller-avatar-file").files[0];if(file){if(!validateImage(file))throw new Error("Choose a JPG, PNG, WEBP or GIF image up to 4 MB.");avatarUrl=await uploadToCloudinary(file);}
+  const data={displayName,avatarUrl,bio,updatedAt:serverTimestamp()};
+  await setDoc(doc(db,"sellerProfiles",currentUser.uid),data,{merge:true});
+  sellerProfileCache.set(currentUser.uid,{displayName,avatarUrl,bio});setAvatarPreview(avatarUrl);$("seller-avatar-file").value="";
+  $("seller-profile-message").textContent="Seller profile saved successfully.";
+ }catch(error){$("seller-profile-message").textContent=error.message||"Could not save seller profile.";console.error(error);}
+ finally{button.disabled=false;}
+});
+async function loadPublicSellerPage(uid){
+ activePublicSellerUid=uid;$("public-seller-page").hidden=false;
+ const content=$("public-seller-content");content.replaceChildren();
+ const loading=document.createElement("p");loading.className="sub";loading.textContent="Loading seller profile...";content.append(loading);
+ try{
+  const [profile,verified,listingsSnap,reviewsSnap]=await Promise.all([
+   readSellerProfile(uid),isSellerVerified(uid),getDocs(collection(db,"listings")),getDocs(collection(db,"sellerReviews",uid,"reviews"))
+  ]);
+  const ownListings=[];listingsSnap.forEach(d=>{if(d.data().sellerId===uid)ownListings.push({id:d.id,data:d.data()});});
+  const reviews=[];let total=0;reviewsSnap.forEach(d=>{const r=d.data();if(Number.isInteger(r.rating)&&r.rating>=1&&r.rating<=5){reviews.push({id:d.id,data:r});total+=r.rating;}});
+  const available=ownListings.filter(x=>x.data.status!=="sold_out").length;const sold=ownListings.length-available;
+  content.replaceChildren();const head=document.createElement("div");head.className="public-seller-head";
+  const avatar=document.createElement("img");avatar.className="public-seller-avatar";avatar.alt="Seller avatar";avatar.src=profile.avatarUrl||"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect width='120' height='120' rx='60' fill='%23171d28'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='48' fill='%23f0142f' font-family='Arial'%3EA%3C/text%3E%3C/svg%3E";
+  const info=document.createElement("div");info.style.flex="1";
+  const name=document.createElement("h2");name.className="public-seller-name";name.textContent=profile.displayName||"APEXSHOP Seller";
+  const badge=document.createElement("span");badge.className="badge"+(verified?" verified":"");badge.textContent=verified?"✓ Verified seller":"Seller not verified";
+  const bio=document.createElement("p");bio.className="public-seller-bio";bio.textContent=profile.bio||"This seller has not added a bio yet.";
+  info.append(name,badge,bio);head.append(avatar,info);content.append(head);
+  const stats=document.createElement("div");stats.className="profile-stat-grid";
+  [["Total listings",ownListings.length],["Available",available],["Sold out",sold],["Buyer rating",reviews.length?(total/reviews.length).toFixed(1)+" / 5":"—"]].forEach(([label,value])=>{const box=document.createElement("div");box.className="profile-stat";const l=document.createElement("span");l.textContent=label;const v=document.createElement("strong");v.textContent=value;box.append(l,v);stats.append(box);});content.append(stats);
+  const listingTitle=document.createElement("h3");listingTitle.textContent="This seller’s listings";content.append(listingTitle);
+  const grid=document.createElement("div");grid.className="listings";
+  ownListings.forEach(({id,data})=>{const card=document.createElement("article");card.className="card";const urls=Array.isArray(data.imageUrls)?data.imageUrls:(data.imageUrl?[data.imageUrl]:[]);if(urls[0]){const im=document.createElement("img");im.className="account-image";im.src=urls[0];im.alt="Account listing";card.append(im);}const body=document.createElement("div");body.className="card-body";const h=document.createElement("h3");h.textContent=data.title||"Free Fire account";const price=document.createElement("div");price.className="price";price.textContent="₦"+(Number(data.price)||0).toLocaleString("en-NG");const status=document.createElement("span");status.className="badge"+(data.status==="sold_out"?" status-sold":" status-available");status.textContent=data.status==="sold_out"?"SOLD OUT":"AVAILABLE";const desc=document.createElement("p");desc.textContent=data.description||"";body.append(h,status,desc,price);card.append(body);grid.append(card);});
+  if(!ownListings.length){const empty=document.createElement("p");empty.className="sub";empty.textContent="This seller has no listings yet.";content.append(empty);}else content.append(grid);
+  $("review-summary").textContent=reviews.length?`${(total/reviews.length).toFixed(1)} out of 5 · ${reviews.length} buyer review${reviews.length===1?"":"s"}`:"No buyer reviews yet.";
+  const list=$("seller-reviews-list");list.replaceChildren();reviews.sort((a,b)=>(b.data.updatedAt?.seconds||b.data.createdAt?.seconds||0)-(a.data.updatedAt?.seconds||a.data.createdAt?.seconds||0));
+  reviews.forEach(({id,data})=>{const card=document.createElement("div");card.className="review-card";const stars=document.createElement("div");stars.className="review-stars";stars.textContent="★".repeat(data.rating)+"☆".repeat(5-data.rating);const comment=document.createElement("p");comment.textContent=data.comment||"No written comment.";card.append(stars,comment);if(currentUser&&currentUser.uid===id){const del=document.createElement("button");del.className="btn secondary";del.type="button";del.textContent="Delete my review";del.addEventListener("click",async()=>{if(!confirm("Delete your review?"))return;try{await deleteDoc(doc(db,"sellerReviews",uid,"reviews",id));await loadPublicSellerPage(uid);}catch(e){$("review-message").textContent=e.message;}});card.append(del);}list.append(card);});
+  const isBuyer=currentUser&&currentRole==="buyer"&&currentUser.uid!==uid;
+  $("review-form-wrap").hidden=!isBuyer;$("review-login-note").hidden=!!isBuyer||!!currentUser;
+  if(currentUser&&currentRole!=="buyer"){$("review-login-note").hidden=false;$("review-login-note").textContent="Only buyer accounts can leave seller reviews.";}
+  const own=reviews.find(x=>x.id===currentUser?.uid);if(own){$("review-rating").value=String(own.data.rating);$("review-comment").value=own.data.comment||"";$("submit-review-btn").textContent="Update my review";}
+ }catch(error){content.textContent="Could not load this seller profile. Please check the Firestore rules.";console.error(error);}
+}
+$("seller-review-form")?.addEventListener("submit",async event=>{
+ event.preventDefault();const user=auth.currentUser;if(!user||currentRole!=="buyer"||!activePublicSellerUid||user.uid===activePublicSellerUid){$("review-message").textContent="Log in with a different buyer account to review this seller.";return;}
+ const button=$("submit-review-btn");button.disabled=true;
+ try{const rating=Number($("review-rating").value);const comment=$("review-comment").value.trim();if(!Number.isInteger(rating)||rating<1||rating>5||comment.length>500)throw new Error("Enter a rating from 1 to 5 and a comment under 500 characters.");const ref=doc(db,"sellerReviews",activePublicSellerUid,"reviews",user.uid);const old=await getDoc(ref);const payload={rating,comment,updatedAt:serverTimestamp()};if(!old.exists())payload.createdAt=serverTimestamp();await setDoc(ref,payload,{merge:true});$("review-message").textContent="Your buyer review has been saved.";await loadPublicSellerPage(activePublicSellerUid);}catch(error){$("review-message").textContent=error.message||"Could not save review.";console.error(error);}finally{button.disabled=false;}
+});
 
 async function uploadToCloudinary(file){
  const form=new FormData();
@@ -958,6 +1078,7 @@ async function updatePortalForUser(user){
   $("signed-in-tools").hidden=false;
   $("seller-tools").hidden=true;
   $("profile-editor").hidden=false;
+  $("seller-profile-editor").hidden=true;
   $("admin-area").hidden=false;
   $("auth-status").textContent="Administrator logged in: "+(user.email||"");
   $("role-status").textContent="Full administrator access is active.";
@@ -979,6 +1100,7 @@ async function updatePortalForUser(user){
   $("auth-form").hidden=true;
   $("signed-in-tools").hidden=false;
   $("seller-tools").hidden=true;
+  $("seller-profile-editor").hidden=true;
   $("auth-status").textContent="Account role not found.";
   $("role-status").textContent="This account has no valid buyer/seller role. Register through the correct portal.";
   return"invalid";
@@ -988,6 +1110,9 @@ async function updatePortalForUser(user){
   permissionStep="Checking seller approval";
   isApprovedSeller=await verifyApprovedSeller(user);
  }
+
+ $("seller-profile-editor").hidden=!(portal==="seller"&&currentRole==="seller");
+ if(portal==="seller"&&currentRole==="seller")await loadSellerProfileEditor();
 
  $("auth-form").hidden=true;
  $("signed-in-tools").hidden=false;
@@ -1078,6 +1203,8 @@ onAuthStateChanged(auth,async user=>{
  $("signed-in-tools").hidden=!user;
 
  if(!user){
+  $("seller-profile-editor").hidden=true;
+  $("public-seller-page").hidden=!publicSellerUid;
   $("auth-status").textContent=portal==="seller"
    ?"Create a seller account or log in."
    :"Create a buyer account or log in.";
@@ -1090,6 +1217,7 @@ onAuthStateChanged(auth,async user=>{
 
  try{
   await updatePortalForUser(user);
+  if(publicSellerUid)await loadPublicSellerPage(publicSellerUid);
  }catch(error){
   console.error("Permission check failed at:",permissionStep,error);
   $("auth-status").textContent=
@@ -1578,6 +1706,16 @@ async function loadListings(){
     ?"₦"+data.price.toLocaleString("en-NG"):"Contact seller";
 
    body.append(heading,verified);
+   if(data.sellerId){
+    const sellerLink=document.createElement("a");sellerLink.className="seller-profile-link";
+    sellerLink.href="?seller="+encodeURIComponent(data.sellerId);
+    sellerLink.textContent="View seller profile";
+    body.append(sellerLink);
+    readSellerProfile(data.sellerId).then(profile=>{
+     const label=profile.displayName||"Seller";
+     sellerLink.textContent="👤 "+label+" · View profile";
+    }).catch(()=>{});
+   }
    if(soldOut){
     const status=document.createElement("span");
     status.className="badge status-sold";
@@ -1719,6 +1857,10 @@ async function loadAdminSellers(){
      await setDoc(doc(db,"sellerAccess",seller.uid),{
       approved:newApproval,email:seller.email,updatedAt:serverTimestamp()
      },{merge:true});
+     // Publish a safe badge mirror; never expose sellerAccess because it contains email.
+     await setDoc(doc(db,"sellerProfiles",seller.uid),{
+      verified:newApproval,verificationUpdatedAt:serverTimestamp()
+     },{merge:true});
 
      const listings=await getDocs(collection(db,"listings"));
      for(const item of listings.docs.filter(x=>x.data().sellerId===seller.uid)){
@@ -1750,6 +1892,10 @@ async function loadAdminSellers(){
 
 await loadPublicHeaderImage();
 await loadListings();
+if(publicSellerUid){
+ await loadPublicSellerPage(publicSellerUid);
+ document.title="Seller Profile | APEXSHOP MARKETPLACE";
+}
 
 </script>
 </body>
