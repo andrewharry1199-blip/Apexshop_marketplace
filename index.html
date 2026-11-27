@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +32,9 @@ header{position:sticky;top:0;z-index:20;background:#04060af5;border-bottom:1px s
 .hero h1{font-size:clamp(38px,6vw,76px);line-height:.96;margin:16px 0}
 .hero h1 span,.accent{color:var(--red)}
 .hero p{color:#d2d6df;line-height:1.55}
-.hero-art{text-align:center;font-size:130px}
+.hero-art{min-width:0;min-height:220px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #64101e;border-radius:16px;background:linear-gradient(135deg,#18050b,#090b12);padding:12px}
+.hero-art img{display:block;width:100%;max-height:320px;object-fit:contain;border-radius:10px}
+.hero-banner-placeholder{font-size:110px}
 .eyebrow{font-size:12px;font-weight:900;letter-spacing:3px}
 .hero-ribbon{display:inline-block;background:var(--red);padding:10px 18px;margin:8px 0 18px;font-weight:900}
 .section{max-width:1280px;margin:auto;padding:26px 22px}
@@ -97,7 +98,8 @@ hr{border:0;border-top:1px solid #303746;margin:20px 0}
 .topbar{flex-wrap:wrap}
 .topbar nav{order:3;width:100%;justify-content:center}
 .hero{grid-template-columns:1fr}
-.hero-art{display:none}
+.hero-art{min-height:170px}
+.hero-art img{max-height:220px}
 .listings{grid-template-columns:repeat(2,minmax(0,1fr))}
 .category-bar{grid-template-columns:repeat(4,1fr)}
 }
@@ -110,6 +112,9 @@ hr{border:0;border-top:1px solid #303746;margin:20px 0}
 .brand-avatar{width:40px;height:40px}
 .hero{padding:34px 18px;min-height:300px}
 .hero h1{font-size:44px}
+.hero-art{min-height:140px}
+.hero-art img{max-height:180px}
+.hero-banner-placeholder{font-size:75px}
 .section{padding:22px 14px}
 .listings{gap:9px}
 .account-image,.image-placeholder{height:125px}
@@ -163,7 +168,10 @@ hr{border:0;border-top:1px solid #303746;margin:20px 0}
 <a class="btn secondary" href="?portal=seller#account-portal">START SELLING</a>
 </div>
 </div>
-<div class="hero-art">🔥</div>
+<div class="hero-art" id="hero-banner-area">
+ <img id="hero-banner-image" alt="APEXSHOP Marketplace banner" hidden>
+ <span id="hero-banner-placeholder" class="hero-banner-placeholder">🔥</span>
+</div>
 </section>
 
 <main>
@@ -311,7 +319,7 @@ hr{border:0;border-top:1px solid #303746;margin:20px 0}
 
 <section class="section" id="admin-area" hidden>
 <h2 class="admin-heading">APEXSHOP ADMIN DASHBOARD</h2>
-<p class="sub">Manage seller verification, publishing permissions and your public header image.</p>
+<p class="sub">Manage seller verification, publishing permissions and your public header image and homepage banner.</p>
 
 <!-- ADMIN-ONLY HEADER IMAGE UPLOADER -->
 <div class="panel">
@@ -329,6 +337,24 @@ hr{border:0;border-top:1px solid #303746;margin:20px 0}
 <button class="btn" id="save-header-image-btn" type="submit">Upload Header Image</button>
 </form>
 <p id="header-image-message" class="message"></p>
+</div>
+
+<!-- ADMIN-ONLY HERO BANNER UPLOADER -->
+<div class="panel">
+<h3>Homepage Hero Banner</h3>
+<p class="notice">Upload the large image displayed in the homepage hero/banner area. This is separate from your small header character image. Only an enabled administrator can upload it.</p>
+<div>
+<p class="notice">Current homepage banner:</p>
+<img id="hero-banner-current-preview" style="width:100%;max-width:420px;max-height:220px;object-fit:contain;border-radius:10px;border:1px solid #394252;background:#080b12" alt="Current homepage banner" hidden>
+<p id="hero-banner-current-empty" class="notice">No homepage banner has been uploaded yet.</p>
+</div>
+<form id="hero-banner-form">
+<label for="hero-banner-file">Choose homepage banner image</label>
+<input id="hero-banner-file" type="file" accept="image/jpeg,image/png,image/webp,image/gif" required>
+<p class="notice">JPEG, PNG, WEBP or GIF. Maximum size: 4 MB.</p>
+<button class="btn" id="save-hero-banner-btn" type="submit">Upload Homepage Banner</button>
+</form>
+<p id="hero-banner-message" class="message"></p>
 </div>
 
 <div class="panel">
@@ -545,19 +571,51 @@ function showHeaderImagePreview(url){
  }
 }
 
-/* PUBLIC HEADER IMAGE LOAD
-   The public website reads only the image URL from shopProfile/main.
+/* HOMEPAGE HERO BANNER DISPLAY */
+
+function applyHeroBanner(url){
+ const image=$("hero-banner-image");
+ const placeholder=$("hero-banner-placeholder");
+ if(url){
+  image.src=url;
+  image.hidden=false;
+  placeholder.hidden=true;
+ }else{
+  image.removeAttribute("src");
+  image.hidden=true;
+  placeholder.hidden=false;
+ }
+}
+
+function showHeroBannerPreview(url){
+ const preview=$("hero-banner-current-preview");
+ const empty=$("hero-banner-current-empty");
+ if(url){
+  preview.src=url;
+  preview.hidden=false;
+  empty.hidden=true;
+ }else{
+  preview.removeAttribute("src");
+  preview.hidden=true;
+  empty.hidden=false;
+ }
+}
+
+/* PUBLIC IMAGE LOAD
+   Public visitors can see both published image URLs.
    Upload controls remain inside the hidden admin dashboard.
 */
 
 async function loadPublicHeaderImage(){
  try{
   const snap=await getDoc(doc(db,"shopProfile","main"));
-  const url=snap.exists()?(snap.data().headerImageUrl||""):"";
-  applyHeaderImage(url);
+  const data=snap.exists()?snap.data():{};
+  applyHeaderImage(data.headerImageUrl||"");
+  applyHeroBanner(data.heroBannerUrl||"");
  }catch(error){
-  console.warn("Public header image could not be loaded:",error);
+  console.warn("Public images could not be loaded:",error);
   applyHeaderImage("");
+  applyHeroBanner("");
  }
 }
 
@@ -598,7 +656,6 @@ $("header-image-form").addEventListener("submit",async event=>{
   status.textContent="Uploading image to Cloudinary...";
   const imageUrl=await uploadToCloudinary(file);
 
-  // Verify admin access again immediately before saving.
   if(!(await checkAdmin(currentUser))){
    isAdmin=false;
    $("admin-area").hidden=true;
@@ -619,6 +676,69 @@ $("header-image-form").addEventListener("submit",async event=>{
 
  }catch(error){
   console.error("Header image upload failed:",error);
+  status.textContent="Upload failed: "+(error.message||"Please try again.");
+ }finally{
+  button.disabled=false;
+ }
+});
+
+/* ADMIN-ONLY HOMEPAGE HERO BANNER UPLOAD */
+
+$("hero-banner-form").addEventListener("submit",async event=>{
+ event.preventDefault();
+
+ const status=$("hero-banner-message");
+ const button=$("save-hero-banner-btn");
+ const file=$("hero-banner-file").files?.[0];
+
+ if(!currentUser||!isAdmin){
+  status.textContent="Administrator access is required.";
+  return;
+ }
+
+ if(!file){
+  status.textContent="Please choose an image first.";
+  return;
+ }
+
+ if(!validateImage(file)){
+  status.textContent="Choose a JPEG, PNG, WEBP or GIF image no larger than 4 MB.";
+  return;
+ }
+
+ button.disabled=true;
+
+ try{
+  status.textContent="Checking administrator access...";
+  if(!(await checkAdmin(currentUser))){
+   isAdmin=false;
+   $("admin-area").hidden=true;
+   throw new Error("Administrator permission is no longer active.");
+  }
+
+  status.textContent="Uploading banner to Cloudinary...";
+  const imageUrl=await uploadToCloudinary(file);
+
+  if(!(await checkAdmin(currentUser))){
+   isAdmin=false;
+   $("admin-area").hidden=true;
+   throw new Error("Administrator permission was removed. The banner was uploaded but not published.");
+  }
+
+  status.textContent="Saving homepage banner...";
+  await setDoc(doc(db,"shopProfile","main"),{
+   heroBannerUrl:imageUrl,
+   heroBannerUpdatedAt:serverTimestamp(),
+   heroBannerUpdatedBy:currentUser.uid
+  },{merge:true});
+
+  applyHeroBanner(imageUrl);
+  showHeroBannerPreview(imageUrl);
+  $("hero-banner-file").value="";
+  status.textContent="Homepage banner uploaded successfully.";
+
+ }catch(error){
+  console.error("Hero banner upload failed:",error);
   status.textContent="Upload failed: "+(error.message||"Please try again.");
  }finally{
   button.disabled=false;
@@ -736,6 +856,7 @@ async function updatePortalForUser(user){
   await loadShopProfile();
   fillProfileEditor();
   showHeaderImagePreview(profileData.headerImageUrl||"");
+  showHeroBannerPreview(profileData.heroBannerUrl||"");
   await loadAdminSellers();
 
   return"admin";
@@ -1186,15 +1307,23 @@ $("listing-form").addEventListener("submit",async event=>{
    imageUrls.push(await uploadToCloudinary(files[i]));
   }
 
-  await checkSellerPermission();
+  // Re-check approval immediately before publishing. A newly published
+  // listing from an approved seller is marked verified straight away.
+  const approvedNow=await verifyApprovedSeller(user);
+  if(!approvedNow){
+   isApprovedSeller=false;
+   $("seller-tools").hidden=true;
+   throw new Error("Your seller approval is no longer active.");
+  }
+
   await addDoc(collection(db,"listings"),{
    title,description,price,imageUrls,sellerWhatsapp,
    sellerId:user.uid,sellerEmail:user.email||"",
-   verified:false,status:"available",createdAt:serverTimestamp()
+   verified:true,status:"available",createdAt:serverTimestamp()
   });
 
   $("listing-form").reset();
-  message.textContent="Listing published successfully.";
+  message.textContent="Listing published successfully. Your verified seller badge is active.";
   await loadListings();
   await loadSellerListings();
  }catch(error){showError(error);}
