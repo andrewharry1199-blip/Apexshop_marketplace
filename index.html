@@ -80,6 +80,14 @@ textarea{min-height:100px;resize:vertical}
 .trust-item strong{display:block;color:var(--red);font-size:20px}
 .seller-manage-card,.admin-row{padding:13px;margin:10px 0;background:#111722;border:1px solid #303b4b;border-radius:9px}
 .seller-manage-card .btn{margin:5px 5px 0 0}
+.seller-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}
+.seller-stat{background:#0a0e15;border:1px solid #303b4b;border-radius:10px;padding:13px;min-width:0}
+.seller-stat span{display:block;color:var(--muted);font-size:11px;margin-bottom:7px}
+.seller-stat strong{display:block;color:#fff;font-size:clamp(17px,2.5vw,24px);overflow-wrap:anywhere}
+.seller-tools-bar{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.seller-tools-bar input,.seller-tools-bar select{flex:1;min-width:150px;margin:0}
+.seller-empty{padding:18px;text-align:center;border:1px dashed #394252;border-radius:10px;color:var(--muted)}
+@media(max-width:600px){.seller-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .admin-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .admin-row p{margin:0}
 .admin-heading,.profile-title{color:var(--red)}
@@ -328,8 +336,8 @@ hr{border:0;border-top:1px solid #303746;margin:20px 0}
 </form>
 
 <hr>
-<h3>Manage My Listings</h3>
-<p class="notice">Edit your account details, replace pictures, update prices, mark accounts SOLD OUT or delete your listings.</p>
+<h3>My Seller Dashboard</h3>
+<p class="notice">Track your account listings and manage availability, prices, pictures and details.</p>
 <div id="seller-listings-management">
 <p class="sub">Your listings will appear here.</p>
 </div>
@@ -1214,11 +1222,53 @@ async function loadSellerListings(){
   }
   mine.sort((a,b)=>(b.data().createdAt?.seconds||0)-(a.data().createdAt?.seconds||0));
 
+  const total=mine.length;
+  const soldCount=mine.filter(item=>item.data().status==="sold_out").length;
+  const availableCount=total-soldCount;
+  const listedValue=mine.reduce((sum,item)=>sum+Math.max(0,Number(item.data().price)||0),0);
+  const stats=document.createElement("div");
+  stats.className="seller-stats";
+  [
+   ["TOTAL LISTINGS",total.toLocaleString("en-NG")],
+   ["AVAILABLE",availableCount.toLocaleString("en-NG")],
+   ["SOLD OUT",soldCount.toLocaleString("en-NG")],
+   ["TOTAL LISTED VALUE","₦"+listedValue.toLocaleString("en-NG")]
+  ].forEach(([label,value])=>{
+   const tile=document.createElement("div");tile.className="seller-stat";
+   const caption=document.createElement("span");caption.textContent=label;
+   const number=document.createElement("strong");number.textContent=value;
+   tile.append(caption,number);stats.append(tile);
+  });
+  area.append(stats);
+
+  const toolbar=document.createElement("div");toolbar.className="seller-tools-bar";
+  const search=document.createElement("input");search.type="search";search.placeholder="Search your listings...";search.setAttribute("aria-label","Search your listings");
+  const filter=document.createElement("select");filter.setAttribute("aria-label","Filter listings by status");
+  [["all","All listings"],["available","Available only"],["sold_out","Sold out only"]].forEach(([value,label])=>{
+   const option=document.createElement("option");option.value=value;option.textContent=label;filter.append(option);
+  });
+  toolbar.append(search,filter);area.append(toolbar);
+  const cardsArea=document.createElement("div");area.append(cardsArea);
+  const updateVisible=()=>{
+   const query=search.value.trim().toLowerCase();let shown=0;
+   Array.from(cardsArea.children).forEach(card=>{
+    const matchesText=(card.dataset.search||"").includes(query);
+    const matchesStatus=filter.value==="all"||card.dataset.status===filter.value;
+    card.hidden=!(matchesText&&matchesStatus);if(!card.hidden)shown++;
+   });
+   let empty=cardsArea.querySelector(".seller-empty");
+   if(!shown){if(!empty){empty=document.createElement("p");empty.className="seller-empty";cardsArea.append(empty);}empty.textContent=query||filter.value!=="all"?"No listings match your search or filter.":"You have not published any accounts yet.";}
+   else if(empty)empty.remove();
+  };
+  search.addEventListener("input",updateVisible);filter.addEventListener("change",updateVisible);
+
   mine.forEach(item=>{
    const data=item.data();
    const sold=data.status==="sold_out";
    const card=document.createElement("div");
    card.className="seller-manage-card";
+   card.dataset.status=sold?"sold_out":"available";
+   card.dataset.search=String(data.title||"").toLowerCase()+" "+String(data.description||"").toLowerCase();
 
    const title=document.createElement("strong");
    title.textContent=data.title||"Free Fire account";
@@ -1365,8 +1415,9 @@ async function loadSellerListings(){
    deleteButton.addEventListener("click",()=>deleteSellerListing(item,deleteButton));
 
    card.append(title,status,price,statusButton,editButton,deleteButton,editorPanel);
-   area.append(card);
+   cardsArea.append(card);
   });
+  updateVisible();
  }catch(error){
   console.error("Seller listing loading failed:",error);
   area.textContent="Could not load your listings. Check Firestore permissions.";
