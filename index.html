@@ -1829,10 +1829,17 @@ async function loadAdminSellers(){
 
   const sellers=await Promise.all(sellerUsers.map(async item=>{
    const access=await getDoc(doc(db,"sellerAccess",item.id));
+   const approved=access.exists()&&access.data().approved===true;
+   // Keep the public profile badge synchronized with the private admin approval record.
+   // This also backfills sellers who were approved before public profiles were added.
+   await setDoc(doc(db,"sellerProfiles",item.id),{
+    verified:approved,
+    verificationUpdatedAt:serverTimestamp()
+   },{merge:true});
    return{
     uid:item.id,
     email:item.data().email||"Email not available",
-    approved:access.exists()&&access.data().approved===true
+    approved
    };
   }));
 
