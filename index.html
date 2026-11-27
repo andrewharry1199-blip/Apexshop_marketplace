@@ -1602,7 +1602,7 @@ $("listing-form").addEventListener("submit",async event=>{
 
   await addDoc(collection(db,"listings"),{
    title,description,price,imageUrls,sellerWhatsapp,
-   sellerId:user.uid,sellerEmail:user.email||"",
+   sellerId:user.uid,
    verified:true,status:"available",createdAt:serverTimestamp()
   });
 
