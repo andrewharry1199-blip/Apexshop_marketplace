@@ -97,6 +97,13 @@ textarea{min-height:100px;resize:vertical}
 .current-images img{width:75px;height:65px;object-fit:cover;border-radius:7px;border:1px solid #394252}
 .editor-note{font-size:11px;color:#aab3c2;line-height:1.5}
 .header-image-preview{width:110px;height:110px;object-fit:cover;border-radius:50%;border:2px solid var(--red);background:#151b27;margin:8px 0}
+.tournament-room-card{background:#0d1119;border:1px solid #394252;border-radius:12px;padding:15px;margin:12px 0}
+.tournament-room-card h3{color:#ff5368;margin:0 0 8px}
+.room-secret{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:#080c13;border:1px solid #303746;border-radius:8px;padding:10px;margin-top:9px;overflow-wrap:anywhere}
+.room-secret strong{color:#fff;letter-spacing:.5px}
+.room-secret button,.room-action{background:#202938;color:#fff;border:1px solid #465064;border-radius:7px;padding:8px 10px;font-weight:700}
+.tournament-meta{color:#aab3c2;font-size:12px}
+
 
 .seller-profile-link{display:block;margin:8px 0 12px;padding:9px 10px;border:1px solid #394252;border-radius:8px;background:#090d14;font-size:12px;color:#f2f4f8}
 .seller-profile-link strong{color:#fff}.seller-profile-link:hover{border-color:var(--red)}
@@ -159,6 +166,11 @@ hr{border:0;border-top:1px solid #303746;margin:20px 0}
 .promo-grid{grid-template-columns:1fr}
 .trust-strip{grid-template-columns:repeat(2,1fr);padding:8px 14px 22px}
 }
+
+.tourney-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.tourney-card{background:#0d1119;border:1px solid #394252;border-radius:12px;padding:16px;margin:10px 0}
+.tourney-card h3{color:#ff5368;margin:0 0 8px}.tourney-stat{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid #252c38;font-size:13px}.tourney-stat span{color:#aab3c2}.tourney-card .btn{margin:8px 5px 0 0}.tourney-private{border:1px solid #a72a3d;background:#170b11;padding:12px;border-radius:9px;margin-top:10px}.tourney-admin-row{padding:12px;margin:10px 0;border:1px solid #394252;border-radius:9px;background:#101620}.tourney-admin-row img{max-width:180px;max-height:120px;object-fit:contain;display:block;margin:8px 0}.tourney-card small{color:#aab3c2}
+@media(max-width:600px){.tourney-grid{grid-template-columns:1fr}}
 </style>
 </head>
 
@@ -179,6 +191,7 @@ hr{border:0;border-top:1px solid #303746;margin:20px 0}
 <a href="#home">Home</a>
 <a href="#marketplace">Buy Accounts</a>
 <a href="?portal=seller#account-portal">Sell Account</a>
+<a href="#tournament-area">Tournament</a>
 <a href="#how-it-works">How It Works</a>
 <a href="#support">Support</a>
 </nav>
@@ -428,6 +441,14 @@ hr{border:0;border-top:1px solid #303746;margin:20px 0}
 <p id="hero-banner-message" class="message"></p>
 </div>
 
+<div class="panel" id="tournament-admin-panel">
+<h3>Tournament Control Centre</h3>
+<p class="notice">Create the three APEXSHOP prize categories, verify incoming Moniepoint transfers manually, approve participants, publish private room details and invite winners to review their prizes.</p>
+<button class="btn" id="seed-tournaments-btn" type="button">Create / Update 3 Tournament Categories</button>
+<p id="tournament-admin-message" class="message"></p>
+<div id="tournament-admin-list"></div>
+<div class="panel"><h3>Winner Review Moderation</h3><div id="tournament-review-admin-list">No reviews loaded.</div></div>
+</div>
 <div class="panel">
 <h3>Seller Verification</h3>
 <p class="notice">Approve trusted sellers to allow publishing. Revoking approval disables publishing access.</p>
@@ -436,6 +457,13 @@ hr{border:0;border-top:1px solid #303746;margin:20px 0}
 </div>
 </section>
 
+<section class="section" id="tournament-area">
+<h2>🏆 <span class="accent">APEXSHOP</span> Tournaments</h2>
+<p class="sub">Tournament details are public. Register and submit your transfer receipt to enter. Room ID and password are visible only after admin payment verification and participant approval.</p>
+<div class="panel"><h3>💳 Tournament Payment Account</h3><div class="tourney-stat"><span>Bank</span><strong>MONIEPOINT</strong></div><div class="tourney-stat"><span>Account name</span><strong>SEPIRIBO OPAKIRIBA HARRY</strong></div><div class="tourney-stat"><span>Account number</span><strong>708 578 5233</strong></div><p class="notice">After transferring the exact entry fee, upload your transfer receipt during registration. APEXSHOP manually checks the Moniepoint account before confirming payment. A receipt upload alone does not reserve or approve a slot.</p></div>
+<div id="tournament-room-list"><p class="notice">Loading tournaments...</p></div>
+<div class="panel"><h3>🏅 Winner Reviews & Prize Confirmation</h3><p class="notice">Only winners personally invited by APEXSHOP administration can submit a review. Approved reviews appear here for everyone to read.</p><div id="tournament-public-reviews">Loading approved winner reviews...</div></div>
+</section>
 <section class="section section-anchor" id="support">
 <h2>Need <span class="accent">Help?</span></h2>
 <p class="sub">Our support team can help with listings and account questions.</p>
@@ -548,7 +576,7 @@ import{
 
 import{
  getFirestore,collection,addDoc,getDocs,doc,getDoc,setDoc,
- updateDoc,deleteDoc,query,orderBy,serverTimestamp
+ updateDoc,deleteDoc,query,where,orderBy,serverTimestamp,runTransaction
 }from"https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
 const firebaseConfig={
@@ -1066,6 +1094,45 @@ $("profile-form").addEventListener("submit",async event=>{
  }
 });
 
+/* APEXSHOP TOURNAMENTS — REGISTRATION, MANUAL PAYMENT CHECK, PRIVATE ROOMS & WINNER REVIEWS */
+const tournamentDefaults=[
+ {id:'apex-prize-40000',title:'₦40,000 Prize Tournament',prize:40000,entryFee:1000,slots:50},
+ {id:'apex-prize-80000',title:'₦80,000 Prize Tournament',prize:80000,entryFee:2000,slots:50},
+ {id:'apex-prize-20000',title:'₦20,000 Prize Tournament',prize:20000,entryFee:500,slots:50}
+];
+const money=n=>'₦'+Number(n||0).toLocaleString('en-NG');
+function tournamentDateLabel(value){if(!value)return 'Date to be announced';const d=new Date(value);return Number.isNaN(d.getTime())?value:d.toLocaleString([], {dateStyle:'medium',timeStyle:'short'});}
+function safeText(tag,txt,cls){const el=document.createElement(tag);el.textContent=txt||'';if(cls)el.className=cls;return el;}
+async function uploadTournamentImage(file){if(!file)return '';if(!validateImage(file))throw new Error('Choose a JPG, PNG, WEBP or GIF image up to 4 MB.');return await uploadToCloudinary(file);}
+async function loadPublicTournamentReviews(){const box=$('tournament-public-reviews');if(!box)return;box.replaceChildren();try{const snap=await getDocs(query(collection(db,'tournamentReviews'),where('approved','==',true)));const rows=snap.docs.map(d=>({id:d.id,data:d.data()})).filter(x=>x.data.approved===true).sort((a,b)=>(b.data.createdAt?.seconds||0)-(a.data.createdAt?.seconds||0));if(!rows.length){box.append(safeText('p','No approved winner reviews yet.'));return;}rows.forEach(({data})=>{const card=document.createElement('article');card.className='tourney-card';card.append(safeText('h3',data.winnerName||'APEXSHOP Winner'),safeText('p',data.tournamentTitle||'Tournament'),safeText('p',data.review||''));card.append(safeText('p',data.prizeReceived?'✅ Winner confirmed prize received':'⚠️ Winner reported prize not yet received','notice'));box.append(card);});}catch(e){box.textContent='Could not load reviews. Check tournamentReviews Firestore rules.';console.error(e);}}
+function makeTournamentForm(t){const wrap=document.createElement('div');wrap.className='tourney-card';wrap.append(safeText('h3',t.title));[['Prize',money(t.prize)],['Entry fee',money(t.entryFee)],['Participant limit',String(t.slots)],['Registered',String(t.registeredCount||0)],['Available slots',String(Math.max(0,(t.slots||0)-(t.registeredCount||0)))],['Match time',t.matchAt?tournamentDateLabel(t.matchAt):'To be announced']].forEach(([a,b])=>{const row=document.createElement('div');row.className='tourney-stat';row.append(safeText('span',a),safeText('strong',b));wrap.append(row);});if(t.description)wrap.append(safeText('p',t.description,'notice'));
+ const status=safeText('p','', 'message');wrap.append(status);
+ if(!currentUser){const a=document.createElement('a');a.className='btn secondary';a.href='?portal=buyer#account-portal';a.textContent='Log in to register';wrap.append(a);}
+ else if(t.status==='closed'||(t.registeredCount||0)>=(t.slots||0)){wrap.append(safeText('p','Registration is currently full or closed.','notice'));}
+ else{const form=document.createElement('form');form.innerHTML='<label>Display name</label><input name="displayName" maxlength="50" required placeholder="Your in-game / display name"><label>Upload transfer receipt (image, max 4 MB)</label><input name="receipt" type="file" accept="image/jpeg,image/png,image/webp,image/gif" required><p class="notice">Transfer manually to the Moniepoint account shown below. Do not upload card PINs, passwords or other confidential information.</p><button class="btn" type="submit">Register & Submit Receipt</button>';form.addEventListener('submit',async e=>{e.preventDefault();const b=form.querySelector('button');b.disabled=true;status.textContent='Submitting registration...';try{const prior=await getDoc(doc(db,'tournaments',t.id,'registrations',currentUser.uid));if(prior.exists())throw new Error('You already have a registration for this tournament.');const receiptUrl=await uploadTournamentImage(form.elements.receipt.files[0]);await runTransaction(db,async tx=>{const tournamentRef=doc(db,'tournaments',t.id),registrationRef=doc(db,'tournaments',t.id,'registrations',currentUser.uid);const tournamentSnap=await tx.get(tournamentRef),registrationSnap=await tx.get(registrationRef);if(!tournamentSnap.exists())throw new Error('Tournament is no longer available.');if(registrationSnap.exists())throw new Error('You already have a registration for this tournament.');const tournamentData=tournamentSnap.data(),count=Number(tournamentData.registeredCount||0),limit=Number(tournamentData.slots||0);if(tournamentData.status!=='open'||count>=limit)throw new Error('This tournament is full or registration is closed.');tx.set(registrationRef,{userId:currentUser.uid,email:currentUser.email||'',displayName:form.elements.displayName.value.trim(),receiptUrl,paymentReceived:false,approved:false,status:'pending',createdAt:serverTimestamp()});tx.update(tournamentRef,{registeredCount:count+1});});status.textContent='Registration submitted. Payment is pending admin verification; room details remain locked until approval.';form.remove();await loadTournamentSystem();}catch(err){status.textContent=err.message||'Could not submit registration.';b.disabled=false;}});wrap.append(form);}
+ if(currentUser){getDoc(doc(db,'tournaments',t.id,'registrations',currentUser.uid)).then(async snap=>{if(!snap.exists())return;const r=snap.data();const line=safeText('p',`Your registration: ${r.paymentReceived?'Payment received':'Payment not yet verified'} • ${r.approved?'Approved':'Awaiting approval'}`,'notice');wrap.append(line);if(r.paymentReceived&&r.approved){try{const secret=await getDoc(doc(db,'tournaments',t.id,'secrets','room'));if(secret.exists()){const box=document.createElement('div');box.className='tourney-private';box.append(safeText('strong','🔐 Participant room access'),safeText('p','Room ID: '+(secret.data().roomId||'')),safeText('p','Password: '+(secret.data().roomPassword||'')));wrap.append(box);}}catch(err){console.warn('Private room not available:',err);}}}).catch(console.error);}
+ return wrap;}
+async function loadTournamentSystem(){const list=$('tournament-room-list'),adminList=$('tournament-admin-list');if(!list)return;list.replaceChildren();if(adminList)adminList.replaceChildren();try{const snap=await getDocs(collection(db,'tournaments'));const ts=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.prize||0)-(b.prize||0));if(!ts.length){list.append(safeText('p','Tournament registration has not opened yet.'));}else{const grid=document.createElement('div');grid.className='tourney-grid';for(const t of ts){t.registeredCount=Number(t.registeredCount||0);grid.append(makeTournamentForm(t));}list.append(grid);}if(isAdmin&&adminList){const h=safeText('h4','Tournament setup & participant verification');adminList.append(h);const setup=document.createElement('p');setup.className='notice';setup.textContent='Use the button above to create/update the three standard categories. Edit match dates and room details below. Check your Moniepoint account yourself before marking any transfer received.';adminList.append(setup);for(const t of ts){const panel=document.createElement('div');panel.className='tourney-admin-row';panel.append(safeText('h4',t.title+' — '+money(t.prize)));const date=document.createElement('input');date.type='datetime-local';date.value=t.matchAt||'';const desc=document.createElement('input');desc.placeholder='Tournament notes / mode / map';desc.value=t.description||'';const fee=document.createElement('input');fee.type='number';fee.min='0';fee.step='50';fee.value=String(t.entryFee||0);fee.placeholder='Entry fee in naira';const save=document.createElement('button');save.className='btn secondary';save.type='button';save.textContent='Save date, entry fee & details';save.onclick=async()=>{try{if(!Number.isFinite(Number(fee.value))||Number(fee.value)<=0)throw new Error('Enter a valid entry fee.');await updateDoc(doc(db,'tournaments',t.id),{matchAt:date.value,entryFee:Number(fee.value),description:desc.value,updatedAt:serverTimestamp()});$('tournament-admin-message').textContent='Tournament updated.';await loadTournamentSystem();}catch(e){$('tournament-admin-message').textContent=e.message;}};const rid=document.createElement('input');rid.placeholder='Room ID';const pass=document.createElement('input');pass.placeholder='Room password';const room=document.createElement('button');room.className='btn';room.type='button';room.textContent='Save private room details';room.onclick=async()=>{try{if(!rid.value.trim()||!pass.value.trim())throw new Error('Enter both room ID and password.');await setDoc(doc(db,'tournaments',t.id,'secrets','room'),{roomId:rid.value.trim(),roomPassword:pass.value.trim(),updatedAt:serverTimestamp(),updatedBy:currentUser.uid});$('tournament-admin-message').textContent='Private room details saved. Only approved, payment-verified participants can read them.';}catch(e){$('tournament-admin-message').textContent=e.message;}};panel.append(safeText('p','Match date & time'),date,safeText('p','Entry fee (₦)'),fee,desc,save,safeText('p','Private room credentials'),rid,pass,room);const regs=await getDocs(collection(db,'tournaments',t.id,'registrations'));panel.append(safeText('h4','Registrations ('+regs.size+')'));regs.forEach(ds=>{const r=ds.data(),row=document.createElement('div');row.className='tourney-admin-row';row.append(safeText('strong',r.displayName||r.email||ds.id),safeText('p',`Payment: ${r.paymentReceived?'Received':'Not verified'} | Approval: ${r.approved?'Approved':'Pending'}`));if(r.receiptUrl){const a=document.createElement('a');a.href=r.receiptUrl;a.target='_blank';a.rel='noopener';a.textContent='View submitted receipt';row.append(a);}const pay=document.createElement('button');pay.className='btn secondary';pay.type='button';pay.textContent=r.paymentReceived?'Mark payment not received':'Confirm payment received';pay.onclick=async()=>{try{await updateDoc(doc(db,'tournaments',t.id,'registrations',ds.id),{paymentReceived:!r.paymentReceived,paymentCheckedBy:currentUser.uid,paymentCheckedAt:serverTimestamp(),status:!r.paymentReceived?'payment_received':'pending'});await loadTournamentSystem();}catch(e){alert(e.message);}};const approve=document.createElement('button');approve.className='btn';approve.type='button';approve.textContent=r.approved?'Revoke approval':'Approve participant';approve.onclick=async()=>{try{if(!r.paymentReceived)throw new Error('Verify the incoming transfer first.');await updateDoc(doc(db,'tournaments',t.id,'registrations',ds.id),{approved:!r.approved,approvedBy:currentUser.uid,approvedAt:serverTimestamp(),status:!r.approved?'approved':'payment_received'});await loadTournamentSystem();}catch(e){alert(e.message);}};row.append(pay,approve);const invite=document.createElement('button');invite.className='btn secondary';invite.type='button';invite.textContent='Invite as winner';invite.onclick=async()=>{try{await setDoc(doc(db,'tournaments',t.id,'reviewInvites',ds.id),{userId:ds.id,tournamentTitle:t.title,prize:t.prize,invited:true,invitedBy:currentUser.uid,invitedAt:serverTimestamp()});alert('Winner review invitation created for this user.');}catch(e){alert(e.message);}};row.append(invite);panel.append(row);});adminList.append(panel);}}
+ }catch(e){console.error(e);list.textContent='Could not load tournaments. Publish the tournament Firestore rules supplied with this update.';if(adminList)adminList.textContent=e.message;}}
+$('seed-tournaments-btn')?.addEventListener('click',async()=>{const msg=$('tournament-admin-message');if(!currentUser||!isAdmin){msg.textContent='Administrator access required.';return;}try{if(!(await checkAdmin(currentUser)))throw new Error('Admin permission is not active.');for(const t of tournamentDefaults){const ref=doc(db,'tournaments',t.id),existing=await getDoc(ref);await setDoc(ref,{title:t.title,prize:t.prize,entryFee:existing.exists()?Number(existing.data().entryFee||t.entryFee):t.entryFee,slots:existing.exists()?Number(existing.data().slots||50):50,registeredCount:existing.exists()?Number(existing.data().registeredCount||0):0,status:existing.exists()?(existing.data().status||'open'):'open',description:existing.exists()?(existing.data().description||''):'',matchAt:existing.exists()?(existing.data().matchAt||''):'',createdAt:existing.exists()?(existing.data().createdAt||serverTimestamp()):serverTimestamp(),createdBy:currentUser.uid},{merge:true});}msg.textContent='Three tournament categories created. The ₦20,000 category is currently set to ₦500 entry; you can change it in Firestore if needed.';await loadTournamentSystem();}catch(e){msg.textContent='Could not create tournaments: '+e.message;}});
+async function loadAdminTournamentReviews(){
+ const box=$('tournament-review-admin-list');if(!box||!isAdmin)return;box.replaceChildren();
+ try{
+  const snap=await getDocs(collection(db,'tournamentReviews'));
+  const pending=snap.docs.filter(d=>d.data().approved!==true);
+  if(!pending.length){box.textContent='No pending winner reviews.';return;}
+  for(const ds of pending){
+   const d=ds.data(),row=document.createElement('div');row.className='tourney-admin-row';
+   row.append(safeText('strong',d.winnerName||ds.id),safeText('p',d.tournamentTitle||''),safeText('p',d.review||''),safeText('p',d.prizeReceived?'Winner confirms prize received':'Winner says prize not received'));
+   if(d.tournamentId&&d.winnerUid){try{const proof=await getDoc(doc(db,'tournaments',d.tournamentId,'winnerProofs',d.winnerUid));if(proof.exists()){const link=document.createElement('a');link.href=proof.data().imageUrl;link.target='_blank';link.rel='noopener';link.textContent='View private prize proof (admin)';row.append(link);}}catch(proofError){console.warn('Winner proof lookup failed',proofError);}}
+   const approve=document.createElement('button');approve.className='btn';approve.textContent='Approve public review';approve.onclick=async()=>{try{await updateDoc(doc(db,'tournamentReviews',ds.id),{approved:true,approvedBy:currentUser.uid,approvedAt:serverTimestamp()});await loadAdminTournamentReviews();await loadPublicTournamentReviews();}catch(e){alert(e.message);}};
+   const reject=document.createElement('button');reject.className='btn danger';reject.textContent='Delete review';reject.onclick=async()=>{if(!confirm('Delete this review?'))return;try{await deleteDoc(doc(db,'tournamentReviews',ds.id));await loadAdminTournamentReviews();}catch(e){alert(e.message);}};
+   row.append(approve,reject);box.append(row);
+  }
+ }catch(e){box.textContent='Could not load review queue: '+e.message;}
+}
+async function loadMyWinnerReviewInvite(){if(!currentUser)return;try{const ts=await getDocs(collection(db,'tournaments'));for(const t of ts.docs){const inv=await getDoc(doc(db,'tournaments',t.id,'reviewInvites',currentUser.uid));if(!inv.exists())continue;const old=await getDoc(doc(db,'tournamentReviews',t.id+'_'+currentUser.uid));if(old.exists())continue;const box=document.createElement('div');box.className='tourney-card';box.append(safeText('h3','You are invited to review: '+(inv.data().tournamentTitle||t.data().title)));const form=document.createElement('form');form.innerHTML='<label>Your review</label><textarea name="review" maxlength="700" required placeholder="Share your tournament experience..."></textarea><label>Did you receive your prize money?</label><select name="received" required><option value="">Choose an answer</option><option value="yes">Yes, I received it</option><option value="no">No, I have not received it</option></select><label>Your display name</label><input name="winnerName" maxlength="50" required><label>Optional prize payment screenshot (max 4 MB)</label><input name="proof" type="file" accept="image/jpeg,image/png,image/webp,image/gif"><p class="notice">Optional proof is for admin review only and will not be shown publicly. Hide sensitive banking details before uploading.</p><button class="btn" type="submit">Submit winner review</button>';form.addEventListener('submit',async e=>{e.preventDefault();const f=form.elements;try{const proofFile=f.proof.files[0];if(proofFile){const proofUrl=await uploadTournamentImage(proofFile);await setDoc(doc(db,'tournaments',t.id,'winnerProofs',currentUser.uid),{imageUrl:proofUrl,uploadedAt:serverTimestamp(),uploadedBy:currentUser.uid});}await setDoc(doc(db,'tournamentReviews',t.id+'_'+currentUser.uid),{tournamentId:t.id,tournamentTitle:inv.data().tournamentTitle||t.data().title,prize:inv.data().prize||t.data().prize,winnerUid:currentUser.uid,winnerName:f.winnerName.value.trim(),review:f.review.value.trim(),prizeReceived:f.received.value==='yes',approved:false,createdAt:serverTimestamp()});form.replaceWith(safeText('p','Your review was submitted and is awaiting admin approval.'));await loadAdminTournamentReviews();}catch(err){alert('Could not submit review: '+err.message);}});box.append(form);$('tournament-room-list').append(box);}}catch(e){console.warn('Winner invite lookup:',e);}}
+async function refreshTournamentFeatures(){await loadTournamentSystem();await loadPublicTournamentReviews();if(isAdmin)await loadAdminTournamentReviews();else await loadMyWinnerReviewInvite();}
 /* ACCOUNT AND PORTAL ACCESS */
 
 async function updatePortalForUser(user){
@@ -1092,6 +1159,7 @@ async function updatePortalForUser(user){
   showHeaderImagePreview(profileData.headerImageUrl||"");
   showHeroBannerPreview(profileData.heroBannerUrl||"");
   await loadAdminSellers();
+  await refreshTournamentFeatures();
 
   return"admin";
  }
@@ -1140,6 +1208,7 @@ async function updatePortalForUser(user){
   if(portal==="seller"&&isApprovedSeller)await loadSellerListings();
  }
 
+ await refreshTournamentFeatures();
  if(adminLookupWarning)$("role-status").textContent+=" "+adminLookupWarning;
  return currentRole;
 }
@@ -1212,6 +1281,7 @@ onAuthStateChanged(auth,async user=>{
   $("auth-status").textContent=portal==="seller"
    ?"Create a seller account or log in."
    :"Create a buyer account or log in.";
+  await refreshTournamentFeatures();
   return;
  }
 
